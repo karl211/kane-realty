@@ -50,14 +50,7 @@
                     ></v-text-field>
                 </v-col>
                 <v-col cols="6"></v-col>
-                <v-col cols="4">
-                    <!-- <v-text-field
-                        label="Date of Birth"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                    ></v-text-field> -->
+                <v-col cols="3">
                     <v-menu
                         ref="menu"
                         v-model="menu"
@@ -89,7 +82,7 @@
                         ></v-date-picker>
                     </v-menu>
                 </v-col>
-                <v-col cols="4">
+                <v-col cols="3">
                     <v-select
                         v-model="form.gender"
                         :items="['Male', 'Female']"
@@ -100,27 +93,7 @@
                         hide-details
                     ></v-select>
                 </v-col>
-                <v-col cols="4">
-                    <v-text-field
-                        v-model="form.civil_status"
-                        label="Civil Status"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                    ></v-text-field>
-                </v-col>
-                <v-col cols="6">
-                    <v-text-field
-                        v-model="form.regligion"
-                        label="Religion"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                    ></v-text-field>
-                </v-col>
-                <v-col cols="6">
+                <v-col cols="3">
                     <v-text-field
                         v-model="form.tin"
                         label="TIN"
@@ -130,30 +103,10 @@
                         hide-details
                     ></v-text-field>
                 </v-col>
-                <v-col cols="12">
-                    <v-text-field
-                        v-model="form.address"
-                        label="Address"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                    ></v-text-field>
-                </v-col>
-                <v-col cols="6">
-                    <v-text-field
-                        v-model="form.zip_code"
-                        label="Zip code"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                    ></v-text-field>
-                </v-col>
-                <v-col cols="6">
+                <v-col cols="3">
                     <v-text-field
                         v-model="form.contact_no"
-                        label="Contact no."
+                        label="Contact Number"
                         required
                         dense
                         outlined
@@ -166,9 +119,13 @@
 </template>
 <script>
 export default {
-    name: "ReservationCreate",
+    name: "CommonInformationCreate",
     props: {
         title: {
+            type: String,
+            default: ''
+        },
+        emitKey: {
             type: String,
             default: ''
         }
@@ -185,7 +142,7 @@ export default {
     watch: {
         form: {
             handler(val){
-                this.$emit('inputPersonalInformation', val)
+                this.$emit(this.emitKey, val)
             },
             deep: true
         },
