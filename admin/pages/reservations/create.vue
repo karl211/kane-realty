@@ -19,19 +19,19 @@
                     <v-divider></v-divider>
                     <br>
                     
-                    <ReservationSpouse title="Spouse' Information"/>
+                    <ReservationCommonInformation @spouseInformation="spouseInformation" emitKey="spouseInformation" title="Spouse' Information"/>
                     
                     <br>
                     <v-divider></v-divider>
                     <br>
                     
-                    <ReservationSpouse title="Co-Borrower's Information"/>
+                    <ReservationCommonInformation @coBorrowerInformation="coBorrowerInformation" emitKey="coBorrowerInformation" title="Co-Borrower's Information"/>
 
                     <br>
                     <v-divider></v-divider>
                     <br>
                     
-                    <ReservationSpouse title="Attorney In-Fact's Information"/>
+                    <ReservationCommonInformation @attorneyInformation="attorneyInformation" emitKey="attorneyInformation" title="Attorney In-Fact's Information"/>
 
                     <br>
                     <v-divider></v-divider>
@@ -78,6 +78,11 @@ export default {
         form: {
             chooseProperty: {},
             personalInformation: {},
+            spouseInformation: {},
+            coBorrowerInformation: {},
+            attorneyInformation: {},
+            employmentStatus: {},
+            documents: {}
         }
     }),
 
@@ -88,7 +93,24 @@ export default {
 
         inputPersonalInformation (form) {
             this.form.personalInformation = form
+        },
+
+        spouseInformation (form) {
+            this.form.spouseInformation = form
+        },
+
+        coBorrowerInformation (form) {
+            this.form.coBorrowerInformation = form
+        },
+
+        attorneyInformation (form) {
+            this.form.attorneyInformation = form
         }
+
+        
+        
+
+        
     },
 }
 </script>
