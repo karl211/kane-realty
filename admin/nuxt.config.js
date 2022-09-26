@@ -50,6 +50,7 @@ export default {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     // baseURL: '/',
     // baseURL: 'http://localhost:8000', // 419 unknown status
+    baseUrl: 'http://localhost:8000',
     credentials: true
   },
 
@@ -88,17 +89,12 @@ export default {
   env: {
     BASE_URL: 'https://localhost:3000',
     API_URL: 'http://localhost:8000/api',
-    ADMIN_URL: 'http://localhost:8000/manage-accounts',
     PUSHER_APP_KEY: 'a09b83e01c87d6e7d627',
     FACEBOOK_APP_ID: '1114622708942647',
     GOOGLE_CLIENT_ID: '650426771780-gtuja1ir2o7snasnvvaboa2df5b05co5.apps.googleusercontent.com'
   },
 
   auth: {
-    token: {
-      prefix: '_token.',
-      global: true,
-    },
     redirect: {
       login: '/login',
       logout: '/login',
