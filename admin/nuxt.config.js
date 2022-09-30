@@ -95,12 +95,12 @@ export default {
   },
 
   auth: {
-    redirect: {
-      login: '/login',
-      logout: '/login',
-      callback: '/login',
-      home: '/dashboard'
-    },
+    // redirect: {
+    //   login: '/login',
+    //   logout: '/login',
+    //   callback: '/login',
+    //   home: '/dashboard'
+    // },
     strategies: {
       laravelSanctum: {
         provider: 'laravel/sanctum',
@@ -110,10 +110,10 @@ export default {
             url: '/api/login',
             home: '/dashboard'
           },
-          logout: {
-            url: '/api/logout',
-            home: '/dashboard'
-          },
+          // logout: {
+          //   url: '/api/logout',
+          //   home: '/dashboard'
+          // },
         }
       },
     }
@@ -123,6 +123,6 @@ export default {
     middleware: ['auth']
   },
 
-  basePath: "/login",
+  // basePath: "/login",
   
 }
