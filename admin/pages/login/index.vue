@@ -98,38 +98,55 @@ export default {
         },
     },
     methods: {
-        sample() {
-            alert(2)
-        },
         async submit() {
-            this.loading = true
-            this.$refs.form.validate();
-            
-            if (this.$refs.form.validate(true)) {
-                await this.$auth.loginWith('laravelSanctum', {
-                    data: {
+            this.$nuxt.$loading.start();
+            try {
+                const response = await this.$auth.loginWith("laravelSanctum", { data: {
                         email: this.email,
                         password: this.password
-                    }
-                }).then((response)=>{
-                    this.loading = false
+                    } 
+                });
 
-                    if (response.status === 200) {
-                        localStorage.setItem( 'auth_token', response.data.token );
-                    }
-                }).catch((error) => {
-                    this.loading = false
-
-                    if (error.response) {
-                        this.hasErrorMessage = true
-                    }
-                })
-
-                this.$router.push('/')
-            } else {
-                this.loading = false
+                if (response.status === 200) {
+                    localStorage.setItem( 'auth_token', response.data.token );
+                }
+                this.$router.push({
+                    path: "/",
+                });
+            } catch (err) {
+                console.log(err);
             }
-        }
-    }
+            this.$nuxt.$loading.finish()
+        },
+        // async submit() {
+        //     this.loading = true
+        //     this.$refs.form.validate();
+            
+        //     if (this.$refs.form.validate(true)) {
+        //         await this.$auth.loginWith('laravelSanctum', {
+        //             data: {
+        //                 email: this.email,
+        //                 password: this.password
+        //             }
+        //         }).then((response)=>{
+        //             this.loading = false
+
+        //             if (response.status === 200) {
+        //                 localStorage.setItem( 'auth_token', response.data.token );
+        //             }
+        //         }).catch((error) => {
+        //             this.loading = false
+
+        //             if (error.response) {
+        //                 this.hasErrorMessage = true
+        //             }
+        //         })
+
+        //         this.$router.push('/')
+        //     } else {
+        //         this.loading = false
+        //     }
+        // }
+    },
 };
 </script>

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('employment_statuses', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('buyer_id');
-            $table->string('status');
+            $table->string('employment');
             $table->string('company_name');
             $table->string('location_of_work');
             $table->string('type_of_work');

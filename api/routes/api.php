@@ -7,7 +7,8 @@ use App\Http\Controllers\Api\{
     DashboardController,
     PaymentController,
     LocationController,
-    UserController
+    UserController,
+    ReservationController
 };
 
 /*
@@ -34,6 +35,8 @@ Route::middleware('auth:sanctum')
         Route::get('/locations', [LocationController::class, 'index']);
 
         Route::get('/networks', [UserController::class, 'getNetworks']);
+
+        Route::post('/reservations', [ReservationController::class, 'store']);
 
         // Route::get('/sales-managers', [UserController::class, 'getSalesManagers']);
     }

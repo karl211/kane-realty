@@ -142,6 +142,7 @@ export default {
     watch: {
         form: {
             handler(val){
+                console.log(val)
                 this.$emit(this.emitKey, val)
             },
             deep: true
