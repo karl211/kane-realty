@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\ProfileSeeder;
+use Database\Seeders\DocumentSeeder;
 use Database\Seeders\LocationSeeder;
 use Database\Seeders\PropertySeeder;
 use Database\Seeders\ReservationSeeder;
@@ -25,6 +26,7 @@ class DatabaseSeeder extends Seeder
             ProfileSeeder::class,
             LocationPropertySeeder::class,
             ReservationSeeder::class,
+            DocumentSeeder::class,
         ]);
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

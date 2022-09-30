@@ -13,6 +13,10 @@ const reservationsService = class ReservationsService extends BaseService
     salesManager(params = {}){
         return super.get(`${this.baseURL}/sales-managers`, params);
     }
+
+    create(params = {}){
+        return super.post(`${this.baseURL}/reservations`, params);
+    }
 };
 
 export default reservationsService

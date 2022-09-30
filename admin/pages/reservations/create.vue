@@ -7,47 +7,44 @@
             <v-divider></v-divider>
             <v-form>
                 <v-container class="pa-10">
-                    <ReservationChooseProperty @chooseProperty="chooseProperty"/>
+                    <ReservationChooseProperty @chooseProperty="updateForm($event, 'chooseProperty')"/>
 
                     <br>
                     <v-divider></v-divider>
                     <br>
 
-                    <ReservationPersonalInformation @inputPersonalInformation="inputPersonalInformation" title="Personal Information"/>
+                    <ReservationPersonalInformation title="Personal Information" @inputPersonalInformation="updateForm($event, 'personalInformation')"/>
 
                     <br>
                     <v-divider></v-divider>
                     <br>
                     
-                    <ReservationCommonInformation @spouseInformation="spouseInformation" emitKey="spouseInformation" title="Spouse' Information"/>
+                    <ReservationCommonInformation title="Spouse' Information" emit-key="spouseInformation" @spouseInformation="updateForm($event, 'spouseInformation')"/>
                     
                     <br>
                     <v-divider></v-divider>
                     <br>
                     
-                    <ReservationCommonInformation @coBorrowerInformation="coBorrowerInformation" emitKey="coBorrowerInformation" title="Co-Borrower's Information"/>
+                    <ReservationCommonInformation title="Co-Borrower's Information" emit-key="coBorrowerInformation" @coBorrowerInformation="updateForm($event, 'coBorrowerInformation')"/>
 
                     <br>
                     <v-divider></v-divider>
                     <br>
                     
-                    <ReservationCommonInformation @attorneyInformation="attorneyInformation" emitKey="attorneyInformation" title="Attorney In-Fact's Information"/>
+                    <ReservationCommonInformation title="Attorney In-Fact's Information" emit-key="attorneyInformation" @attorneyInformation="updateForm($event, 'attorneyInformation')"/>
 
                     <br>
                     <v-divider></v-divider>
                     <br>
                     
-                    <ReservationEmploymentStatus title="Employment Status"/>
+                    <ReservationEmploymentStatus title="Employment Status" @employmentStatus="updateForm($event, 'employmentStatus')"/>
 
                     <br>
                     <v-divider></v-divider>
                     <br>
                     
-                    <ReservationDocument title="Documents"/>
-
+                    <ReservationDocument title="Documents" @documents="updateForm($event, 'documents')"/>
                     <br>
-
-                    
                 </v-container>
             </v-form>
         </v-card>
@@ -63,6 +60,7 @@
                 class="ml-2"
                 elevation="0"
                 color="primary"
+                @click="submit"
             >
                 Submit
             </v-btn>
@@ -71,7 +69,7 @@
     </v-container>
 </template>
 <script>
-
+import { Reservations } from '../../services/reservations'
 export default {
     name: "ReservationCreate",
     data: vm => ({
@@ -87,30 +85,22 @@ export default {
     }),
 
     methods: {
-        chooseProperty (form) {
-            this.form.chooseProperty = form
+        updateForm (form, key) {
+            this.form[key] = form
         },
 
-        inputPersonalInformation (form) {
-            this.form.personalInformation = form
-        },
-
-        spouseInformation (form) {
-            this.form.spouseInformation = form
-        },
-
-        coBorrowerInformation (form) {
-            this.form.coBorrowerInformation = form
-        },
-
-        attorneyInformation (form) {
-            this.form.attorneyInformation = form
+        submit () {
+            Reservations.create(this.form).then((response) => {
+                console.log(response.data)
+                // this.locations = response.data.data
+                // this.mapLocations = this.locations.map(function(data) {
+                //     return {
+                //         text: data.location,
+                //         value: data.id
+                //     }
+                // })
+            });
         }
-
-        
-        
-
-        
     },
 }
 </script>

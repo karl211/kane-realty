@@ -7,101 +7,183 @@
         <v-col cols="8">
             <v-row>
                 <v-col cols="6">
-                    <v-file-input
-                        accept="image/*"
-                        label="Post Dated Cheque"
-                    ></v-file-input>
-                    <v-checkbox
-                    label="Post Dated Cheque"
-                    hide-details
-                    ></v-checkbox>
+                    <div class="d-flex">
+                        <v-checkbox
+                            v-model="form.post_dated_cheque"
+                            readonly
+                            hide-details
+                        ></v-checkbox>
+                        <v-file-input
+                            v-model="form.post_dated_cheque"
+                            accept="image/*"
+                            prepend-icon=""
+                            label="Post Dated Cheque"
+                        ></v-file-input>
+                    </div>
                 </v-col>
                 <v-col cols="6">
-                    <v-checkbox
-                    label="Photocopy of Marriage Certificate/Birth Certificate"
-                    hide-details
-                    ></v-checkbox>
+                    <div class="d-flex">
+                        <v-checkbox
+                            v-model="form.birth_or_marriage_certificate"
+                            readonly
+                            hide-details
+                        ></v-checkbox>
+                        <v-file-input
+                            v-model="form.birth_or_marriage_certificate"
+                            accept="image/*"
+                            prepend-icon=""
+                            label="Photocopy of Marriage Certificate/Birth Certificate"
+                        ></v-file-input>
+                    </div>
                 </v-col>
                 <v-col cols="6">
-                    <v-checkbox
-                    label="2 pcs 2x2 picture"
-                    hide-details
-                    ></v-checkbox>
+                    <div class="d-flex">
+                        <v-checkbox
+                            v-model="form.picture_by_2"
+                            readonly
+                            hide-details
+                        ></v-checkbox>
+                        <v-file-input
+                            v-model="form.picture_by_2"
+                            accept="image/*"
+                            prepend-icon=""
+                            label="2 pcs 2x2 picture"
+                        ></v-file-input>
+                    </div>
                 </v-col>
                 <v-col cols="6">
-                    <v-checkbox
-                    label="Community Tax Certificate"
-                    hide-details
-                    ></v-checkbox>
+                    <div class="d-flex">
+                        <v-checkbox
+                            v-model="form.tax_certificate"
+                            readonly
+                            hide-details
+                        ></v-checkbox>
+                        <v-file-input
+                            v-model="form.tax_certificate"
+                            accept="image/*"
+                            prepend-icon=""
+                            label="Community Tax Certificate"
+                        ></v-file-input>
+                    </div>
                 </v-col>
                 <v-col cols="6">
-                    <v-checkbox
-                    label="Proof of Billing"
-                    hide-details
-                    ></v-checkbox>
+                    <div class="d-flex">
+                        <v-checkbox
+                            v-model="form.proof_of_billing"
+                            readonly
+                            hide-details
+                        ></v-checkbox>
+                        <v-file-input
+                            v-model="form.proof_of_billing"
+                            accept="image/*"
+                            prepend-icon=""
+                            label="Proof of Billing"
+                        ></v-file-input>
+                    </div>
                 </v-col>
                 <v-col cols="6">
-                    <v-checkbox
-                    label="2 Valid ID's (Company and Government)"
-                    hide-details
-                    ></v-checkbox>
+                    <div class="d-flex">
+                        <v-checkbox
+                            v-model="form.valid_id"
+                            readonly
+                            hide-details
+                        ></v-checkbox>
+                        <v-file-input
+                            v-model="form.valid_id"
+                            accept="image/*"
+                            prepend-icon=""
+                            label="2 Valid ID's (Company and Government)"
+                        ></v-file-input>
+                    </div>
                 </v-col>
                 <v-col cols="6">
-                    <v-checkbox
-                    label="Tax Identification Number"
-                    hide-details
-                    ></v-checkbox>
+                    <div class="d-flex">
+                        <v-checkbox
+                            v-model="form.tin"
+                            readonly
+                            hide-details
+                        ></v-checkbox>
+                        <v-file-input
+                            v-model="form.tin"
+                            accept="image/*"
+                            prepend-icon=""
+                            label="Tax Identification Number"
+                        ></v-file-input>
+                    </div>
                 </v-col>
                 <v-col cols="6">
-                    <v-checkbox
-                    label="House Sketch"
-                    hide-details
-                    ></v-checkbox>
+                    <div class="d-flex">
+                        <v-checkbox
+                            v-model="form.house_sketch"
+                            readonly
+                            hide-details
+                        ></v-checkbox>
+                        <v-file-input
+                            v-model="form.house_sketch"
+                            accept="image/*"
+                            prepend-icon=""
+                            label="House Sketch"
+                        ></v-file-input>
+                    </div>
                 </v-col>
                 <v-col cols="6">
-                    <v-checkbox
-                    label="3 pcs 1x1 picture"
-                    hide-details
-                    ></v-checkbox>
+                    <div class="d-flex">
+                        <v-checkbox
+                            v-model="form.picture_by_1"
+                            readonly
+                            hide-details
+                        ></v-checkbox>
+                        <v-file-input
+                            v-model="form.picture_by_1"
+                            accept="image/*"
+                            prepend-icon=""
+                            label="3 pcs 1x1 picture"
+                        ></v-file-input>
+                    </div>
                 </v-col>
                 <v-col cols="6">
-                    <v-checkbox
-                    label="SPA (with Consular Seal if notarized abroad)"
-                    hide-details
-                    ></v-checkbox>
+                    <div class="d-flex">
+                        <v-checkbox
+                            v-model="form.spa"
+                            readonly
+                            hide-details
+                        ></v-checkbox>
+                        <v-file-input
+                            v-model="form.spa"
+                            accept="image/*"
+                            prepend-icon=""
+                            label="SPA (with Consular Seal if notarized abroad)"
+                        ></v-file-input>
+                    </div>
                 </v-col>
             </v-row>
         </v-col>
     </v-row>
 </template>
 <script>
-    export default {
-      name: "ReservationCreate",
-      props: {
-            title: {
-                type: String,
-                default: ''
-            }
-        },
-      data: vm => ({
-            date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-            dateFormatted: vm.formatDate((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)),
-            menu1: false,
-        }),
+export default {
+    name: "ReservationCreate",
+    props: {
+        title: {
+            type: String,
+            default: ''
+        }
+    },
+    data: vm => ({
+        form: {}
+    }),
 
-        watch: {
-            date (val) {
-                this.dateFormatted = this.formatDate(this.date)
+    watch: {
+        form: {
+            handler(val){
+                this.$emit('documents', val)
             },
-        },
+            deep: true
+        }
+    },
 
-        methods: {
-            formatDate (date) {
-                if (!date) return null
-
-                const [year, month, day] = date.split('-')
-                return `${month}/${day}/${year}`
-            },
-        },
-    }
+    methods: {
+        
+    },
+}
 </script>
