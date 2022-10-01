@@ -94,7 +94,7 @@
                                         <v-card-text class="text-left pt-0">
                                             <div>
                                                 <!-- <h3>Location:</h3> -->
-                                                <h3 class="mb-3">Braulio Ryan</h3>
+                                                <h2 class="mb-3">Tiniwisan</h2>
                                                 <p class="ma-0">Block 36</p>
                                                 <p class="ma-0">Lot 18</p>
                                                 <p>Phase 2</p>
@@ -134,12 +134,21 @@
                                         <template v-slot:default>
                                         <thead>
                                             <tr>
-                                            <th class="text-left">
-                                                Name
-                                            </th>
-                                            <th class="text-left">
-                                                Calories
-                                            </th>
+                                                <th class="text-left">
+                                                    Date
+                                                </th>
+                                                <th class="text-left">
+                                                    Amount
+                                                </th>
+                                                <th class="text-left">
+                                                    Type
+                                                </th>
+                                                <th class="text-left">
+                                                    Mode
+                                                </th>
+                                                <th class="text-left">
+                                                    Balance
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -147,8 +156,11 @@
                                             v-for="item in desserts"
                                             :key="item.name"
                                             >
-                                            <td>{{ item.name }}</td>
-                                            <td>{{ item.calories }}</td>
+                                            <td>{{ item.date }}</td>
+                                            <td>{{ item.amount }}</td>
+                                            <td>{{ item.type }}</td>
+                                            <td>{{ item.mode }}</td>
+                                            <td>{{ item.balance }}</td>
                                             </tr>
                                         </tbody>
                                         </template>
@@ -169,44 +181,53 @@
         return {
           desserts: [
             {
-              name: 'Frozen Yogurt',
-              calories: 159,
+              date: 'Oct 01, 2022',
+              amount: '10,000',
+              type: 'reservation',
+              mode: 'cash',
+              balance: '136,500',
             },
             {
-              name: 'Ice cream sandwich',
-              calories: 237,
+              date: 'Oct 02, 2022',
+              amount: '10,000',
+              type: 'reservation',
+              mode: 'cash',
+              balance: '136,500',
             },
             {
-              name: 'Eclair',
-              calories: 262,
+              date: 'Oct 03, 2022',
+              amount: '10,000',
+              type: 'reservation',
+              mode: 'cash',
+              balance: '136,500',
             },
             {
-              name: 'Cupcake',
-              calories: 305,
+              date: 'Oct 04, 2022',
+              amount: '10,000',
+              type: 'reservation',
+              mode: 'cash',
+              balance: '136,500',
             },
             {
-              name: 'Gingerbread',
-              calories: 356,
+              date: 'Oct 05, 2022',
+              amount: '10,000',
+              type: 'reservation',
+              mode: 'cash',
+              balance: '136,500',
             },
             {
-              name: 'Jelly bean',
-              calories: 375,
+              date: 'Oct 06, 2022',
+              amount: '10,000',
+              type: 'reservation',
+              mode: 'cash',
+              balance: '136,500',
             },
             {
-              name: 'Lollipop',
-              calories: 392,
-            },
-            {
-              name: 'Honeycomb',
-              calories: 408,
-            },
-            {
-              name: 'Donut',
-              calories: 452,
-            },
-            {
-              name: 'KitKat',
-              calories: 518,
+              date: 'Oct 07, 2022',
+              amount: '10,000',
+              type: 'reservation',
+              mode: 'cash',
+              balance: '136,500',
             },
           ],
         }

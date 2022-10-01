@@ -1,39 +1,66 @@
 <template>
     <div>
       <section v-if="loaded">
-        <h1 class="title">Manage Reservations</h1>
-        <br>
+        <h1 class="title">Manage Report</h1>
         <v-row>
-          <v-col>
-            <v-btn
-                class="ml-2"
-                elevation="0"
-                color="info"
-                @click="$router.push('/reservations/create')"
-            >
-                <v-icon>mdi-home-plus</v-icon> Add Reservation
-            </v-btn>
-          </v-col>
+          <v-col></v-col>
           <v-col sm="5">
             <section class="d-flex">
+                <v-menu
+                    ref="date"
+                    v-model="date"
+                    :close-on-content-click="false"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="auto"
+                    
+                >
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                        v-model="dateFormatted"
+                        label="Date From"
+                        persistent-hint
+                        v-bind="attrs"
+                        v-on="on"
+                        dense
+                        outlined
+                        hide-details
+                        class="pr-2"
+                        ></v-text-field>
+                    </template>
+                    <v-date-picker
+                        no-title
+                        @input="date = false"
+                    ></v-date-picker>
+                </v-menu>
                 
-                <v-text-field
-                    label="Name, Email, Address, User Type"
-                    dense
-                    outlined
-                    class="mx-1"
-                    @input="searchPayment"
-                ></v-text-field>
-                <v-select
-                    v-model="prof_title_id"
-                    item-text="title"
-                    item-value="id"
-                    label="Account Title"
-                    placeholder="Select Account Title"
-                    dense
-                    outlined
-                    class="mx-1"
-                />
+                <v-menu
+                    ref="date"
+                    v-model="date"
+                    :close-on-content-click="false"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="auto"
+                >
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                        v-model="dateFormatted"
+                        label="Date To"
+                        persistent-hint
+                        v-bind="attrs"
+                        v-on="on"
+                        dense
+                        outlined
+                        hide-details
+                        ></v-text-field>
+                    </template>
+                    <v-date-picker
+                        no-title
+                        @input="date = false"
+                    ></v-date-picker>
+                </v-menu>
             </section>
           </v-col>
         </v-row>
@@ -61,16 +88,6 @@
                       <v-btn
                           elevation="0"
                           depressed
-                          color="primary"
-                          small
-                          icon
-                          @click="show(item.ar_number)"
-                      >
-                          <v-icon>mdi-eye-arrow-right</v-icon>
-                      </v-btn>
-                      <v-btn
-                          elevation="0"
-                          depressed
                           color="warning"
                           small
                           icon
@@ -78,6 +95,7 @@
                           <v-icon>mdi-file-edit-outline</v-icon>
                       </v-btn>
                       <v-btn
+                          class="ml-2"
                           elevation="0"
                           color="danger"
                           small
@@ -108,9 +126,11 @@
   import _ from "lodash";
   import { Auth } from '../../services/auth'
   export default {
-    name: "ReservationIndex",
+    name: "PaymentsIndex",
     data () {
       return {
+        dateFormatted: this.formatDate((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)),
+        date: false,
         loading: false,
         loaded: false,
         prof_title_id: "",
@@ -168,9 +188,12 @@
   
         this.getPayments(this.search)
       },
-      show(id) {
-        this.$router.push({path: `/reservations/${id}`});
-      }
+      formatDate (date) {
+            if (!date) return null
+
+            const [year, month, day] = date.split('-')
+            return `${month}/${day}/${year}`
+        },
     }
   }
   </script>
