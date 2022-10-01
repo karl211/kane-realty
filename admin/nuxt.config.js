@@ -45,15 +45,6 @@ export default {
     '@nuxtjs/auth-next'
   ],
 
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    // baseURL: '/',
-    // baseURL: 'http://localhost:8000', // 419 unknown status
-    baseUrl: 'http://localhost:8000',
-    credentials: true
-  },
-
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
@@ -83,40 +74,38 @@ export default {
     },
   },
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
-
-  env: {
-    BASE_URL: 'https://localhost:3000',
-    API_URL: 'http://localhost:8000/api',
-    PUSHER_APP_KEY: 'a09b83e01c87d6e7d627',
-    FACEBOOK_APP_ID: '1114622708942647',
-    GOOGLE_CLIENT_ID: '650426771780-gtuja1ir2o7snasnvvaboa2df5b05co5.apps.googleusercontent.com'
-  },
-
   auth: {
     // redirect: {
     //   login: '/login',
-    //   logout: '/login',
+    //   logout: '/',
     //   callback: '/login',
     //   home: '/dashboard'
     // },
     strategies: {
       laravelSanctum: {
         provider: 'laravel/sanctum',
-        url: 'http://localhost:8000',
+        url: process.env.API_BASE_URL,
         endpoints: {
           login: {
             url: '/api/login',
-            home: '/dashboard'
           },
-          // logout: {
-          //   url: '/api/logout',
-          //   home: '/dashboard'
-          // },
-        }
+          logout: {
+            url: '/api/logout',
+            // home: '/dashboard'
+          },
+          user: false
+        },
       },
     }
+  },
+
+  // Axios module configuration: https://go.nuxtjs.dev/config-axios
+  axios: {
+    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
+    // baseURL: '/',
+    // baseURL: process.env.API_URL, // 419 unknown status
+    // baseUrl: process.env.API_BASE,
+    credentials: true
   },
 
   router: {
@@ -124,5 +113,12 @@ export default {
   },
 
   // basePath: "/login",
+
+  // Build Configuration: https://go.nuxtjs.dev/config-build
+  build: {},
+
+  env: {
+    API_URL: process.env.API_URL,
+  },
   
 }

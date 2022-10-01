@@ -68,6 +68,7 @@
 </v-row>
 </template>
 <script>
+import { Auth } from '../../services/auth'
 export default {
     name: "loginPage",
     layout (context) {
@@ -108,6 +109,20 @@ export default {
                 });
 
                 if (response.status === 200) {
+                    Auth.user().then((response) => {
+                        console.log(response.data.data)
+                        // this.$auth.setUser(response.data.data)
+                        // this.$auth.setUser(response.data.data)
+                        // this.$auth.$storage.setUniversal('user', response.data.data)
+                        // this.$auth.$storage.setUniversal('loggedIn', true)
+                    });
+
+                    this.$axios.$get('/user')
+                    .then(res => {
+                        console.log(res.data)
+                        // this.$auth.setUser(res.data)
+                    })
+
                     localStorage.setItem( 'auth_token', response.data.token );
                 }
                 this.$router.push({
@@ -118,6 +133,8 @@ export default {
             }
             this.$nuxt.$loading.finish()
         },
+
+        
         // async submit() {
         //     this.loading = true
         //     this.$refs.form.validate();

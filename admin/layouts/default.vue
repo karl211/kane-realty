@@ -27,7 +27,17 @@
         this.$auth.logout('laravelSanctum').then((res) => {
           this.$router.replace({ name: "login" });
         });
-      }
+      },
+
+      // beforeCreate() {
+      //   if (!this.$auth.user || this.$auth.user.length) {
+      //     alert()
+      //     this.$axios.$get('/api/user')
+      //     .then(res => {
+      //       this.$auth.setUser(res.data)
+      //     })
+      //   }
+      // }
     },
   }
 </script>
