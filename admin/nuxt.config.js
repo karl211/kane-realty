@@ -75,44 +75,38 @@ export default {
   },
 
   auth: {
-    // redirect: {
-    //   login: '/login',
-    //   logout: '/',
-    //   callback: '/login',
-    //   home: '/dashboard'
-    // },
     strategies: {
-      laravelSanctum: {
-        provider: 'laravel/sanctum',
-        url: process.env.API_BASE_URL,
+      local: {
+        user: {
+          property: "data"
+        },
         endpoints: {
           login: {
-            url: '/api/login',
+            url: '/auth/login',
+            method: 'post'
           },
           logout: {
-            url: '/api/logout',
-            // home: '/dashboard'
+            url: '/auth/logout',
+            method: 'post'
           },
-          user: false
+          user: {
+            url: '/auth/user',
+            method: 'get'
+          },
         },
-      },
+      }
     }
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    // baseURL: '/',
-    // baseURL: process.env.API_URL, // 419 unknown status
-    // baseUrl: process.env.API_BASE,
+    baseUrl: process.env.API_URL,
     credentials: true
   },
 
   router: {
     middleware: ['auth']
   },
-
-  // basePath: "/login",
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},

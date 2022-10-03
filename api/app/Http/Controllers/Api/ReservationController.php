@@ -15,7 +15,7 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        //
+        return Reservation::all();
     }
 
     /**

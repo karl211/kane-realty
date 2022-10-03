@@ -68,7 +68,6 @@
 </v-row>
 </template>
 <script>
-import { Auth } from '../../services/auth'
 export default {
     name: "loginPage",
     layout (context) {
@@ -100,70 +99,30 @@ export default {
     },
     methods: {
         async submit() {
-            this.$nuxt.$loading.start();
-            try {
-                const response = await this.$auth.loginWith("laravelSanctum", { data: {
-                        email: this.email,
-                        password: this.password
-                    } 
-                });
+            this.loading = true
+            this.$refs.form.validate();
 
-                if (response.status === 200) {
-                    Auth.user().then((response) => {
-                        console.log(response.data.data)
-                        // this.$auth.setUser(response.data.data)
-                        // this.$auth.setUser(response.data.data)
-                        // this.$auth.$storage.setUniversal('user', response.data.data)
-                        // this.$auth.$storage.setUniversal('loggedIn', true)
-                    });
-
-                    this.$axios.$get('/user')
-                    .then(res => {
-                        console.log(res.data)
-                        // this.$auth.setUser(res.data)
+            if (this.$refs.form.validate(true)) {
+                try {
+                    const response = await this.$auth.loginWith("local", { data: {
+                            email: this.email,
+                            password: this.password
+                        } 
                     })
 
-                    localStorage.setItem( 'auth_token', response.data.token );
+                    if (response.status === 200) {
+                        localStorage.setItem( 'auth_token', response.data.token );
+                    }
+
+                    this.$router.push({name: "index"});
+                } catch (error) {
+                    this.hasErrorMessage = true
+                    this.loading = false
                 }
-                this.$router.push({
-                    path: "/",
-                });
-            } catch (err) {
-                console.log(err);
+            } else {
+                this.loading = false
             }
-            this.$nuxt.$loading.finish()
         },
-
-        
-        // async submit() {
-        //     this.loading = true
-        //     this.$refs.form.validate();
-            
-        //     if (this.$refs.form.validate(true)) {
-        //         await this.$auth.loginWith('laravelSanctum', {
-        //             data: {
-        //                 email: this.email,
-        //                 password: this.password
-        //             }
-        //         }).then((response)=>{
-        //             this.loading = false
-
-        //             if (response.status === 200) {
-        //                 localStorage.setItem( 'auth_token', response.data.token );
-        //             }
-        //         }).catch((error) => {
-        //             this.loading = false
-
-        //             if (error.response) {
-        //                 this.hasErrorMessage = true
-        //             }
-        //         })
-
-        //         this.$router.push('/')
-        //     } else {
-        //         this.loading = false
-        //     }
-        // }
     },
 };
 </script>
