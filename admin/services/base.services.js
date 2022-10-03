@@ -29,9 +29,8 @@ const baseService = class BaseService
             return response
         }, error=>{
             if(error.response.status === 401){
-                // localStorage.removeItem('auth_token');
-                // localStorage.removeItem('user');
-                // location.replace('/login')
+                localStorage.removeItem('auth_token');
+                location.replace('/login')
             }
         } )
     }
