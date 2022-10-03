@@ -50,14 +50,18 @@
                     ></v-text-field>
                 </v-col>
                 <v-col cols="6"></v-col>
-                <v-col cols="4">
-                    <!-- <v-text-field
-                        label="Date of Birth"
+                <v-col cols="6">
+                    <v-text-field
+                        v-model="form.email"
+                        label="Email"
                         required
                         dense
                         outlined
                         hide-details
-                    ></v-text-field> -->
+                    ></v-text-field>
+                </v-col>
+                <v-col cols="6"></v-col>
+                <v-col cols="4">
                     <v-menu
                         ref="menu"
                         v-model="menu"
@@ -112,7 +116,7 @@
                 </v-col>
                 <v-col cols="6">
                     <v-text-field
-                        v-model="form.regligion"
+                        v-model="form.religion"
                         label="Religion"
                         required
                         dense
@@ -152,8 +156,28 @@
                 </v-col>
                 <v-col cols="6">
                     <v-text-field
-                        v-model="form.contact_no"
+                        v-model="form.contact_number"
                         label="Contact no."
+                        required
+                        dense
+                        outlined
+                        hide-details
+                    ></v-text-field>
+                </v-col>
+                <v-col cols="6">
+                    <v-text-field
+                        v-model="form.facebook_url"
+                        label="Facebook URL Profile"
+                        required
+                        dense
+                        outlined
+                        hide-details
+                    ></v-text-field>
+                </v-col>
+                <v-col cols="6">
+                    <v-text-field
+                        v-model="form.instagram_url"
+                        label="Instagram URL Profile"
                         required
                         dense
                         outlined
@@ -208,8 +232,8 @@ export default {
         },
 
         save (date) {
-            this.form.date_of_birth = date
-            this.$refs.menu.save(date)
+            this.form.date_of_birth = this.formatDate(date)
+            this.$refs.menu.save(this.formatDate(date))
         },
     },
 }

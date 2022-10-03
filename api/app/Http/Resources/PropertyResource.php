@@ -23,6 +23,9 @@ class PropertyResource extends JsonResource
             'full_property' => $this->full_property,
             'status' => $this->status,
             'photo' => $this->photo,
+            'contract_price' => $this->contract_price,
+            'default_monthly_amortization' => $this->default_monthly_amortization,
+            'term' => $this->term,
         ];
     }
 }

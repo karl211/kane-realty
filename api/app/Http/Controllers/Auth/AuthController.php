@@ -37,11 +37,4 @@ class AuthController extends Controller
             'data' => auth()->user()
         ], 200);
     }
-
-    public function me(Request $request)
-    {
-        return response()->json([
-            'data' => $request->user(),
-        ]);
-    }
 }

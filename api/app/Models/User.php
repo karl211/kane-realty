@@ -50,8 +50,11 @@ class User extends Authenticatable
 
     public function salesManagerAgents()
     {
-        // return $this->hasMany(SalesManagerAgent::class, 'manager_id');
-
         return $this->belongsToMany(User::class, 'sales_manager_agents', 'manager_id', 'agent_id');
+    }
+
+    public function coBorrower()
+    {
+        return $this->hasOne(BuyerCoBorrower::class, 'buyer_id');
     }
 }

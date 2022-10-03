@@ -24,6 +24,12 @@
                     <br>
                     <v-divider></v-divider>
                     <br>
+
+                    <ReservationEmploymentStatus title="Employment Status" @employmentStatus="updateForm($event, 'employmentStatus')"/>
+
+                    <br>
+                    <v-divider></v-divider>
+                    <br>
                     
                     <ReservationCommonInformation title="Co-Borrower's Information" emit-key="coBorrowerInformation" @coBorrowerInformation="updateForm($event, 'coBorrowerInformation')"/>
 
@@ -32,12 +38,6 @@
                     <br>
                     
                     <ReservationCommonInformation title="Attorney In-Fact's Information" emit-key="attorneyInformation" @attorneyInformation="updateForm($event, 'attorneyInformation')"/>
-
-                    <br>
-                    <v-divider></v-divider>
-                    <br>
-                    
-                    <ReservationEmploymentStatus title="Employment Status" @employmentStatus="updateForm($event, 'employmentStatus')"/>
 
                     <br>
                     <v-divider></v-divider>

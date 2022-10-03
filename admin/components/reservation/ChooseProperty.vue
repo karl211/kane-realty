@@ -105,7 +105,7 @@
                 </v-col>
                 <v-col cols="4">
                     <v-text-field
-                        v-model="form.terms"
+                        v-model="form.term"
                         label="Terms"
                         required
                         dense
@@ -274,6 +274,19 @@ export default {
             this.lots = this.getLots(location.properties)
 
             this.phases = this.getPhases(location.properties)
+
+            if (type === 'phase') {
+                const propery = location.properties.find(function(data) {
+                    return data.block === self.form.selectedLocation.block && data.lot === self.form.selectedLocation.lot && data.phase === self.form.selectedLocation.phase
+                })
+
+                if (propery) {
+                    this.form.contract_price = propery.contract_price
+                    this.form.monthly_amortization = propery.default_monthly_amortization
+                    this.form.term = propery.term
+                }
+                console.log(propery)
+            }
         },
 
         selectNetwork(value) {
