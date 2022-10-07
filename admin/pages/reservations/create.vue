@@ -86,38 +86,16 @@ export default {
 
     methods: {
         updateForm (form, key) {
-            
+            if (key === 'spouseInformation') {
+                const newForm = {}
 
-            // formData.append(key, JSON.stringify(form))
+                for (const key in form) {
+                   newForm[`spouse_${key}`] = form[key]
+                }
 
-            // if (key === 'documents') {
-                
-            // }
+                form = newForm
+            }
 
-            // Object.entries(form).forEach(([objkey, val]) => {
-            //     if (val) {
-            //         // const obj = {}
-            //         // obj[objkey] = val
-            //         // formData.append(`${key}_${objkey}`, obj);
-
-            //         formData.append(objkey, val);
-            //     }
-            // })
-
-            // formData.append(key, JSON.stringify(form));
-
-            // if (key === 'spouseInformation') {
-            //     const newForm = {}
-
-            //     for (const key in form) {
-            //        console.log(key)
-            //        newForm[`spouse_${key}`] = form[key]
-            //     }
-
-            //     form = newForm
-            // }
-
-            // this.form = formData
             this.form[key] = form
         },
 

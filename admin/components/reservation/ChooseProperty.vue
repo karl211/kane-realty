@@ -285,7 +285,6 @@ export default {
                     this.form.monthly_amortization = propery.default_monthly_amortization
                     this.form.term = propery.term
                 }
-                console.log(propery)
             }
         },
 
