@@ -115,7 +115,7 @@
                 </v-col>
                 <v-col cols="6">
                     <v-autocomplete
-                        v-model="form.network"
+                        v-model="form.network_id"
                         :items="mapNetworks"
                         label="Network"
                         required
@@ -128,7 +128,7 @@
                 <v-col cols="6"></v-col>
                 <v-col cols="6">
                     <v-select
-                        v-model="form.sales_manager"
+                        v-model="form.sales_manager_id"
                         :items="salesManagers"
                         label="Sales Manager"
                         required
@@ -140,7 +140,7 @@
                 </v-col>
                 <v-col cols="6">
                     <v-select
-                        v-model="form.sales_agent"
+                        v-model="form.sales_agent_id"
                         :items="salesAgents"
                         label="Sales Agent"
                         required
@@ -181,9 +181,9 @@ export default {
             contract_price: null,
             monthly_amortization: null,
             terms: null,
-            network: null,
-            sales_manager: null,
-            sales_agent: null,
+            network_id: null,
+            sales_manager_id: null,
+            sales_agent_id: null,
         }
         
     }),
@@ -290,11 +290,11 @@ export default {
         },
 
         selectNetwork(value) {
-            this.form.sales_manager =  null
-            this.form.sales_agent =  null
+            this.form.sales_manager_id =  null
+            this.form.sales_agent_id =  null
             this.salesManagers = []
 
-            this.form.network = value
+            this.form.network_id = value
 
             if (value) {
                 const network = this.networks.find(function(data) {
@@ -306,18 +306,18 @@ export default {
         },
 
         selectManager(value) {
-            this.form.sales_agent =  null
+            this.form.sales_agent_id =  null
             this.salesAgents = []
-            this.form.sales_manager = value
+            this.form.sales_manager_id = value
 
             if (value) {
                 const self = this
                 const network = this.networks.find(function(data) {
-                    return data.id === self.form.network
+                    return data.id === self.form.network_id
                 })
-         
+                
                 const manager = network.sales_managers.find(function(item) {
-                    return item.id === self.form.sales_manager
+                    return item.id === self.form.sales_manager_id
                 })
 
                 if (manager.sales_manager_agents.length) {
@@ -327,7 +327,7 @@ export default {
         },
 
         selectAgent(value) {
-            this.form.sales_agent = value
+            this.form.sales_agent_id = value
         },
     },
 }

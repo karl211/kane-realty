@@ -16,18 +16,18 @@ return new class extends Migration
         Schema::create('employment_statuses', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('buyer_id');
-            $table->string('employment');
-            $table->string('company_name');
-            $table->string('location_of_work');
-            $table->string('type_of_work');
-            $table->string('date_employed');
-            $table->string('profession');
-            $table->string('position');
-            $table->string('business_name');
-            $table->string('business_location');
-            $table->string('business_industry');
-            $table->string('business_date_establish');
-            $table->string('business_type');
+            $table->string('employment')->nullable();
+            $table->string('company_name')->nullable();
+            $table->string('location_of_work')->nullable();
+            $table->string('type_of_work')->nullable();
+            $table->date('date_employed')->nullable();
+            $table->string('profession')->nullable();
+            $table->string('position')->nullable();
+            $table->string('business_name')->nullable();
+            $table->string('business_location')->nullable();
+            $table->string('business_industry')->nullable();
+            $table->string('business_date_establish')->nullable();
+            $table->string('business_type')->nullable();
             $table->timestamps();
 
             $table->foreign('buyer_id')

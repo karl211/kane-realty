@@ -20,7 +20,7 @@ class ReservationFactory extends Factory
      */
     public function definition()
     {
-        $buyer = User::with('coBorrower')->where('role_id', 5)->inRandomOrder()->first();
+        $buyer = User::with('coBorrowers')->where('role_id', 5)->inRandomOrder()->first();
         $attorny = Attorney::inRandomOrder()->first();
         $network = Network::inRandomOrder()->first();
         $manager = User::where('role_id', 3)->inRandomOrder()->first();
@@ -28,7 +28,7 @@ class ReservationFactory extends Factory
 
         return [
             'buyer_id' => $buyer->id,
-            'co_borrower_id' => $buyer->coBorrower->id,
+            'co_borrower_id' => $buyer->coBorrowers()->first()->id,
             'attorney_id' => $attorny->id,
             'property_id' => random_int(1, 500),
             'network_id' => $network->id,

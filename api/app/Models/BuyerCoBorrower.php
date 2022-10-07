@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class BuyerCoBorrower extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'buyer_id',
+        'first_name',
+        'last_name',
+        'middle_name',
+        'suffix',
+        'gender',
+        'tin',
+        'date_of_birth',
+        'contact_number',
+    ];
+
 }

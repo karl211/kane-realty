@@ -18,6 +18,7 @@
                             accept="image/*"
                             prepend-icon=""
                             label="Post Dated Cheque"
+                            @change="selectFile"
                         ></v-file-input>
                     </div>
                 </v-col>
@@ -183,7 +184,9 @@ export default {
     },
 
     methods: {
-        
+        selectFile (file) {
+            console.log(file)
+        }
     },
 }
 </script>

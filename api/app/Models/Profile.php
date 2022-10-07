@@ -31,9 +31,11 @@ class Profile extends Model
         'spouse_first_name',
         'spouse_last_name',
         'spouse_middle_name',
+        'spouse_suffix',
         'spouse_date_of_birth',
         'spouse_gender',
         'spouse_tin',
+        'spouse_contact_number',
     ];
 
     public function getFullNameAttribute()
