@@ -41,10 +41,10 @@
         <v-data-table
           hide-default-footer
           :loading="loading"
-          :items="payments"
+          :items="reservations"
           :headers="headers"
           :items-per-page="5"
-          :server-items-length="payments.length"
+          :server-items-length="reservations.length"
         >
           <template #item="{ item }">
             <tr>
@@ -94,7 +94,7 @@
           <v-col></v-col>
           <v-col class="text-right">
             <TablePagination
-              v-if="payments.length"
+              v-if="reservations.length"
               :paginate-data="paginateData"
               @paginate="paginate"
             />
@@ -106,7 +106,7 @@
   
   <script>
   import _ from "lodash";
-  import { Auth } from '../../services/auth'
+  import { Reservations } from '../../services/reservations'
   export default {
     name: "ReservationIndex",
     data () {
@@ -127,7 +127,7 @@
         ],
        
         paginateData: null,
-        payments: [],
+        reservations: [],
         search: {
           page: 1,
           search: ''
@@ -140,33 +140,33 @@
       }
     },
     created() {
-      this.getPayments()
+      this.getReservations()
       this.searchPayment = _.debounce(this.searchPayment, 400);
     },
     mounted() {
       
     },
     methods: {
-       getPayments() {
+       getReservations() {
         this.loading = true
         
-         Auth.payments(this.search).then((response) => {
+        Reservations.allReservations(this.search).then((response) => {
           this.paginateData = response.data
-          this.payments = response.data.data
+          this.reservations = response.data.data
           this.loaded = true
           this.loading = false
         });
       },
       paginate(pageNumber) {
         this.search.page = pageNumber
-        this.getPayments(this.search);
+        this.getReservations(this.search);
       },
       searchPayment(value) {
-        this.payments = []
+        this.reservations = []
         this.search.page = 1
         this.search.search = value
   
-        this.getPayments(this.search)
+        this.getReservations(this.search)
       },
       show(id) {
         this.$router.push({path: `/reservations/${id}`});

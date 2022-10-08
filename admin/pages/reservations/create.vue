@@ -24,6 +24,12 @@
                     <br>
                     <v-divider></v-divider>
                     <br>
+
+                    <ReservationEmploymentStatus title="Employment Status" @employmentStatus="updateForm($event, 'employmentStatus')"/>
+
+                    <br>
+                    <v-divider></v-divider>
+                    <br>
                     
                     <ReservationCommonInformation title="Co-Borrower's Information" emit-key="coBorrowerInformation" @coBorrowerInformation="updateForm($event, 'coBorrowerInformation')"/>
 
@@ -32,12 +38,6 @@
                     <br>
                     
                     <ReservationCommonInformation title="Attorney In-Fact's Information" emit-key="attorneyInformation" @attorneyInformation="updateForm($event, 'attorneyInformation')"/>
-
-                    <br>
-                    <v-divider></v-divider>
-                    <br>
-                    
-                    <ReservationEmploymentStatus title="Employment Status" @employmentStatus="updateForm($event, 'employmentStatus')"/>
 
                     <br>
                     <v-divider></v-divider>
@@ -86,11 +86,39 @@ export default {
 
     methods: {
         updateForm (form, key) {
+            if (key === 'spouseInformation') {
+                const newForm = {}
+
+                for (const key in form) {
+                   newForm[`spouse_${key}`] = form[key]
+                }
+
+                form = newForm
+            }
+
             this.form[key] = form
         },
 
         submit () {
-            Reservations.create(this.form).then((response) => {
+            const formData = new FormData()
+
+            Object.entries(this.form).forEach(([key, obj]) => {
+                if (obj) {
+                    if (key === 'documents') {
+                        Object.entries(obj).forEach(([fileKey, fileVal]) => {
+                            formData.append(fileKey, fileVal);
+                        })
+                    } else {
+                        formData.append(key, JSON.stringify(obj));
+                    }
+                }
+            })
+
+            Reservations.create(formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then((response) => {
                 console.log(response.data)
                 // this.locations = response.data.data
                 // this.mapLocations = this.locations.map(function(data) {

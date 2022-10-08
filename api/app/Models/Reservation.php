@@ -13,6 +13,20 @@ class Reservation extends Model
 
     protected $appends = ['balance'];
 
+    protected $fillable = [
+        'property_id',
+        'buyer_id',
+        'co_borrower_id',
+        'attorney_id',
+        'network_id',
+        'sales_manager_id',
+        'sales_agent_id',
+        'contract_price',
+        'monthly_amortization',
+        'term',
+        'transaction_at',
+    ];
+
     public function getBalanceAttribute()
     {
         return ($this->contract_price / 100) - ($this->payments->pluck('amount')->sum() / 100);

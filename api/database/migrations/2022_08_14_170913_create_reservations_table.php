@@ -15,20 +15,21 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('buyer_id');
-            $table->unsignedBigInteger('co_borrower_id');
-            $table->unsignedBigInteger('attorney_id');
-
             $table->unsignedBigInteger('property_id');
-            $table->unsignedBigInteger('network_id');
-            $table->unsignedBigInteger('sales_manager_id');
-            $table->unsignedBigInteger('sales_agent_id');
+            $table->unsignedBigInteger('buyer_id');
+            $table->unsignedBigInteger('co_borrower_id')->nullable();
+            $table->unsignedBigInteger('attorney_id')->nullable();
+            $table->unsignedBigInteger('network_id')->nullable();
+            $table->unsignedBigInteger('sales_manager_id')->nullable();
+            $table->unsignedBigInteger('sales_agent_id')->nullable();
             $table->integer('contract_price');
             $table->integer('monthly_amortization');
-            $table->integer('terms');
-            $table->timestamp('transaction_at');
+            $table->string('term');
+            $table->date('transaction_at');
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
+
+            $table->unique(["buyer_id", "property_id"]);
 
             $table->foreign('buyer_id')
                 ->references('id')
@@ -71,8 +72,6 @@ return new class extends Migration
                 ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-
-            
         });
     }
 

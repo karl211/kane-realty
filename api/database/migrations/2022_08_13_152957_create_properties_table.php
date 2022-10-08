@@ -24,11 +24,14 @@ return new class extends Migration
             $table->string('model')->nullable();
             $table->string('photo')->nullable();
             $table->text('description')->nullable();
+            $table->integer('contract_price');
+            $table->integer('default_monthly_amortization');
+            $table->string('term');
             $table->text('status'); // available, reserved, ocuppied
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
             
-            $table->unique(["block", "lot", "phase"]);
+            $table->unique(["location_id", "block", "lot", "phase"]);
 
             $table->foreign('location_id')
                 ->references('id')

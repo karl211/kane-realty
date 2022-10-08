@@ -105,7 +105,7 @@
                 </v-col>
                 <v-col cols="3">
                     <v-text-field
-                        v-model="form.contact_no"
+                        v-model="form.contact_number"
                         label="Contact Number"
                         required
                         dense

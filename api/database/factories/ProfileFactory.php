@@ -32,7 +32,6 @@ class ProfileFactory extends Factory
 
         return [
             'user_id' => User::inRandomOrder()->first()->id,
-            'profile_type' => fake()->randomElement(['client', 'network', 'co_borrower', 'attorney', 'cashier', 'sales manager', 'sales agent']),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'middle_name' => fake()->lastName(),
@@ -41,6 +40,7 @@ class ProfileFactory extends Factory
             'tin' => fake()->ean8(),
             'date_of_birth' => fake()->dateTime($max = 'now', $timezone = null),
             'civil_status' => fake()->randomElement(['single', 'married']),
+            'religion' => fake()->randomElement(['Roman Catholic', 'Alliance']),
             'contact_number' => fake()->ean8(),
             'zip_code' => fake()->ean8(),
             'address' => fake()->address(),
