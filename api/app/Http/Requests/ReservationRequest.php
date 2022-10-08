@@ -41,7 +41,7 @@ class ReservationRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            // 'choose_property.monthly_amortization' => 'required',
         ];
     }
 
