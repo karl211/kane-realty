@@ -69,6 +69,7 @@
     </v-container>
 </template>
 <script>
+import Swal from 'sweetalert2'
 import { Reservations } from '../../services/reservations'
 export default {
     name: "ReservationCreate",
@@ -119,14 +120,12 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 }
             }).then((response) => {
-                console.log(response.data)
-                // this.locations = response.data.data
-                // this.mapLocations = this.locations.map(function(data) {
-                //     return {
-                //         text: data.location,
-                //         value: data.id
-                //     }
-                // })
+                if (response.data) {
+                    Swal.fire(
+                        'Success',
+                    'success'
+                    )
+                }
             });
         }
     },

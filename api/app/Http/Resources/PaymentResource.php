@@ -19,7 +19,7 @@ class PaymentResource extends JsonResource
             'amount_paid' => $this->amount,
             'type_of_payment' => $this->type_of_payment,
             'mode_of_payment' => $this->mode_of_payment,
-            'name' => $this->reservation->buyer->profile->full_name,
+            'name' => $this->reservation->buyer->name,
             'property' => $this->reservation->property->full_property,
             'contract_price' => $this->reservation->contract_price,
             'balance' => $this->reservation->contract_price,

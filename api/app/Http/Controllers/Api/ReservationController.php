@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReservationRequest;
+use App\Http\Resources\ReservationResource;
 use Symfony\Component\HttpFoundation\Response;
 
 class ReservationController extends Controller
@@ -18,14 +19,9 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        // $reservations = Reservation::select(['ar_number', 'amount', 'type_of_payment', 'mode_of_payment', 'reservation_id'])
-        //     ->with('reservation.buyer', 'reservation.property')
-        //     ->search(request('search'))
-        //     ->paginate(10);
+        $reservations = Reservation::with('property', 'buyer')->paginate(10);
 
-        // return PaymentResource::collection($reservations);
-
-        return Reservation::with('property', 'buyer')->paginate(10);
+        return ReservationResource::collection($reservations);
     }
 
     /**

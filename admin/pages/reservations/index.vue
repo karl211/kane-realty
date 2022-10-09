@@ -48,15 +48,14 @@
         >
           <template #item="{ item }">
             <tr>
-              <td>{{ item.ar_number }}</td>
-              <td>{{ item.name }}</td>
+              <td @click="show(item.buyer_id)">
+                <span class="blue--text pointer">{{ item.name }}</span>
+              </td>
               <td>{{ item.property }}</td>
               <td>{{ item.contract_price }}</td>
               <td>{{ item.balance }}</td>
-              <td>{{ item.amount_paid }}</td>
-              <td>{{ item.type_of_payment }}</td>
-              <td>{{ item.mode_of_payment }}</td>
-              <td>
+              <td>{{ item.date_of_transaction }}</td>
+              <td class="d-flex justify-center mt-3">
                   <div class="d-flex justify-content">
                       <v-btn
                           elevation="0"
@@ -64,7 +63,7 @@
                           color="primary"
                           small
                           icon
-                          @click="show(item.ar_number)"
+                          @click="show(item.buyer_id)"
                       >
                           <v-icon>mdi-eye-arrow-right</v-icon>
                       </v-btn>
@@ -115,14 +114,11 @@
         loaded: false,
         prof_title_id: "",
         headers: [
-          { text: "AR No." },
           { text: "Name" },
           { text: "Property" },
           { text: "Contract Price" },
           { text: "Balance" },
-          { text: "Amount paid" },
-          { text: "Type" },
-          { text: "Mode" },
+          { text: "Date Of Transaction" },
           { text: "Actions", align: "center" },
         ],
        
