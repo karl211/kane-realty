@@ -1,9 +1,19 @@
 <template>
   <div>
     <section v-if="loaded">
-      <h1 class="title">Manage account</h1>
+      <h1 class="title">Manage Payments</h1>
+      <br>
       <v-row>
-        <v-col></v-col>
+        <v-col>
+          <v-btn
+                class="ml-2"
+                elevation="0"
+                color="info"
+                @click="$router.push('/payments/create')"
+            >
+                <v-icon>mdi-cash-clock</v-icon> &nbsp; New Payment
+            </v-btn>
+        </v-col>
         <v-col sm="5">
           <section class="d-flex">
             <v-text-field
@@ -41,8 +51,8 @@
             <td>{{ item.name }}</td>
             <td>{{ item.property }}</td>
             <td>{{ item.contract_price }}</td>
-            <td>{{ item.balance }}</td>
             <td>{{ item.amount_paid }}</td>
+            <td>{{ item.balance }}</td>
             <td>{{ item.type_of_payment }}</td>
             <td>{{ item.mode_of_payment }}</td>
             <td>
@@ -99,8 +109,8 @@ export default {
         { text: "Name" },
         { text: "Property" },
         { text: "Contract Price" },
-        { text: "Balance" },
         { text: "Amount paid" },
+        { text: "Balance" },
         { text: "Type" },
         { text: "Mode" },
         { text: "Actions", align: "center" },
