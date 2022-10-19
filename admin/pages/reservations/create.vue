@@ -7,43 +7,47 @@
             <v-divider></v-divider>
             <v-form>
                 <v-container class="pa-10">
-                    <ReservationChooseProperty @chooseProperty="updateForm($event, 'chooseProperty')"/>
+                    <ReservationChooseProperty :errors="errors" @chooseProperty="updateForm($event, 'chooseProperty')"/>
 
                     <br>
                     <v-divider></v-divider>
                     <br>
 
-                    <ReservationPersonalInformation title="Personal Information" @inputPersonalInformation="updateForm($event, 'personalInformation')"/>
+                    <ReservationPersonalInformation title="Personal Information" :errors="errors" @inputPersonalInformation="updateForm($event, 'personalInformation')" @onChangeCivilStatus="handleCivilStatus"/>
+
+                    <v-expand-transition>
+                        <div v-if="isShowSpouseInformation">
+                            <br>
+                            <v-divider></v-divider>
+                            <br>
+                            
+                            <ReservationCommonInformation  title="Spouse' Information" emit-key="spouseInformation" :is-reset-spouse="resetSpouse" :errors="errors" @spouseInformation="updateForm($event, 'spouseInformation')"/>
+                        </div>
+                    </v-expand-transition>
+                    
+                    <br>
+                    <v-divider></v-divider>
+                    <br>
+
+                    <ReservationEmploymentStatus title="Employment Status" :errors="errors" @employmentStatus="updateForm($event, 'employmentStatus')"/>
 
                     <br>
                     <v-divider></v-divider>
                     <br>
                     
-                    <ReservationCommonInformation title="Spouse' Information" emit-key="spouseInformation" @spouseInformation="updateForm($event, 'spouseInformation')"/>
-                    
-                    <br>
-                    <v-divider></v-divider>
-                    <br>
-
-                    <ReservationEmploymentStatus title="Employment Status" @employmentStatus="updateForm($event, 'employmentStatus')"/>
+                    <ReservationCommonInformation title="Co-Borrower's Information" emit-key="coBorrowerInformation" :errors="errors" @coBorrowerInformation="updateForm($event, 'coBorrowerInformation')"/>
 
                     <br>
                     <v-divider></v-divider>
                     <br>
                     
-                    <ReservationCommonInformation title="Co-Borrower's Information" emit-key="coBorrowerInformation" @coBorrowerInformation="updateForm($event, 'coBorrowerInformation')"/>
+                    <ReservationCommonInformation title="Attorney In-Fact's Information" emit-key="attorneyInformation" :errors="errors" @attorneyInformation="updateForm($event, 'attorneyInformation')"/>
 
                     <br>
                     <v-divider></v-divider>
                     <br>
                     
-                    <ReservationCommonInformation title="Attorney In-Fact's Information" emit-key="attorneyInformation" @attorneyInformation="updateForm($event, 'attorneyInformation')"/>
-
-                    <br>
-                    <v-divider></v-divider>
-                    <br>
-                    
-                    <ReservationDocument title="Documents" @documents="updateForm($event, 'documents')"/>
+                    <ReservationDocument title="Documents" :errors="errors" @documents="updateForm($event, 'documents')"/>
                     <br>
                 </v-container>
             </v-form>
@@ -74,6 +78,9 @@ import { Reservations } from '../../services/reservations'
 export default {
     name: "ReservationCreate",
     data: vm => ({
+        resetSpouse: false,
+        isShowSpouseInformation: false,
+        errors: {},
         form: {
             chooseProperty: {},
             personalInformation: {},
@@ -86,17 +93,16 @@ export default {
     }),
 
     methods: {
-        updateForm (form, key) {
-            if (key === 'spouseInformation') {
-                const newForm = {}
-
-                for (const key in form) {
-                   newForm[`spouse_${key}`] = form[key]
-                }
-
-                form = newForm
+        handleCivilStatus (data) {
+            if (data !== 'Single') {
+                this.isShowSpouseInformation = true
+            } else {
+                this.isShowSpouseInformation = false
             }
+            this.resetSpouse = !this.resetSpouse
+        },
 
+        updateForm (form, key) {
             this.form[key] = form
         },
 
@@ -121,12 +127,29 @@ export default {
                 }
             }).then((response) => {
                 if (response.data) {
-                    Swal.fire(
-                        'Success',
-                    'success'
-                    )
+
+                    Swal.fire({
+                        title: 'Done!',
+                        text: 'Successfully reserved',
+                        confirmButtonText: 'Okay',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.$router.push({path: `/reservations`});
+                        } 
+                    })
                 }
-            });
+            }).catch(error => {
+                // Handle error
+                if (error.response) {
+                    Swal.fire(
+                        'Ops.',
+                        'Something went wrong',
+                        'warning'
+                    )
+                    this.errors = error.response.data.errors
+                }
+            })
+            
         }
     },
 }
@@ -137,5 +160,8 @@ export default {
     }
     .w-50 {
         width: 50%;
+    }
+    .swal2-container {
+        font-family: 'Roboto' !important;
     }
 </style>

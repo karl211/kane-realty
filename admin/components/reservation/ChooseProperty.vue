@@ -1,163 +1,182 @@
 <template>
-    <v-row>
-        <v-col cols="4">
-            <h3>Choose Property</h3>
-        </v-col>
+    <v-form ref="form" class="mx-2" lazy-validation>
+        <v-row>
+            <v-col cols="4">
+                <h3>Choose Property</h3>
+            </v-col>
 
-        <v-col cols="8">
-            <v-row>
-                <v-col cols="6">
-                    <v-menu
-                        ref="date"
-                        v-model="date"
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        offset-y
-                        max-width="290px"
-                        min-width="auto"
-                    >
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-text-field
-                            v-model="dateFormatted"
-                            label="Date of Transaction"
-                            persistent-hint
-                            v-bind="attrs"
-                            v-on="on"
+            <v-col cols="8">
+                <v-row>
+                    <v-col cols="6" class="pb-0">
+                        <v-menu
+                            ref="date"
+                            v-model="date"
+                            :close-on-content-click="false"
+                            transition="scale-transition"
+                            offset-y
+                            max-width="290px"
+                            min-width="auto"
+                        >
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
+                                v-model="dateFormatted"
+                                label="Date of Transaction"
+                                persistent-hint
+                                v-bind="attrs"
+                                v-on="on"
+                                dense
+                                outlined
+                                hide-details
+                                ></v-text-field>
+                            </template>
+                            <v-date-picker
+                                v-model="form.transaction_at"
+                                no-title
+                                @input="date = false"
+                            ></v-date-picker>
+                        </v-menu>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="6" class="pb-0">
+                        <v-select
+                            :items="mapLocations"
+                            label="Location"
+                            required
+                            dense
+                            outlined
+                            hide-details="auto"
+                            :error-messages="error.selectedLocation.location_id"
+                            @change="selectLocation($event, 'location_id')"
+                        ></v-select>
+                    </v-col>
+                    <v-col cols="2" class="pb-0">
+                        <v-select
+                            :items="blocks"
+                            label="Block"
+                            required
+                            dense
+                            outlined
+                            hide-details="auto"
+                            :error-messages="error.selectedLocation.block"
+                            @change="selectLocation($event, 'block')"
+                        ></v-select>
+                    </v-col>
+                    <v-col cols="2" class="pb-0">
+                        <v-select
+                            :items="lots"
+                            label="Lot"
+                            required
+                            dense
+                            outlined
+                            hide-details="auto"
+                            :error-messages="error.selectedLocation.lot"
+                            @change="selectLocation($event, 'lot')"
+                        ></v-select>
+                    </v-col>
+                    <v-col cols="2" class="pb-0">
+                        <v-select
+                            :items="phases"
+                            label="Phase"
+                            required
+                            dense
+                            outlined
+                            hide-details="auto"
+                            :error-messages="error.selectedLocation.phase"
+                            @change="selectLocation($event, 'phase')"
+                        ></v-select>
+                    </v-col>
+                    <v-col cols="4" class="pb-0">
+                        <v-text-field
+                            v-model="form.contract_price"
+                            prepend-inner-icon="mdi-currency-php"
+                            label="Contract Price"
+                            required
+                            dense
+                            outlined
+                            hide-details="auto"
+                            :error-messages="error.contract_price"
+                            readonly
+                            type="number"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="4" class="pb-0">
+                        <v-text-field
+                            v-model="form.monthly_amortization"
+                            label="Monthly Amortization"
+                            required
+                            dense
+                            outlined
+                            hide-details="auto"
+                            :error-messages="error.monthly_amortization"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="4" class="pb-0">
+                        <v-text-field
+                            v-model="form.term"
+                            label="Term"
+                            required
+                            dense
+                            outlined
+                            hide-details="auto"
+                            :error-messages="error.term"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="6" class="pb-0">
+                        <v-autocomplete
+                            v-model="form.network_id"
+                            :items="mapNetworks"
+                            label="Network"
+                            required
                             dense
                             outlined
                             hide-details
-                            ></v-text-field>
-                        </template>
-                        <v-date-picker
-                            v-model="form.transaction_at"
-                            no-title
-                            @input="date = false"
-                        ></v-date-picker>
-                    </v-menu>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col cols="6">
-                    <v-select
-                        :items="mapLocations"
-                        label="Location"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                        @change="selectLocation($event, 'location_id')"
-                    ></v-select>
-                </v-col>
-                <v-col cols="2">
-                    <v-select
-                        :items="blocks"
-                        label="Block"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                        @change="selectLocation($event, 'block')"
-                    ></v-select>
-                </v-col>
-                <v-col cols="2">
-                    <v-select
-                        :items="lots"
-                        label="Lot"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                        @change="selectLocation($event, 'lot')"
-                    ></v-select>
-                </v-col>
-                <v-col cols="2">
-                    <v-select
-                        :items="phases"
-                        label="Phase"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                        @change="selectLocation($event, 'phase')"
-                    ></v-select>
-                </v-col>
-                <v-col cols="4">
-                    <v-text-field
-                        v-model="form.contract_price"
-                        prepend-inner-icon="mdi-currency-php"
-                        label="Contract Price"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                        type="number"
-                    ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                    <v-text-field
-                        v-model="form.monthly_amortization"
-                        label="Monthly Amortization"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                    ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                    <v-text-field
-                        v-model="form.term"
-                        label="Terms"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                    ></v-text-field>
-                </v-col>
-                <v-col cols="6">
-                    <v-autocomplete
-                        v-model="form.network_id"
-                        :items="mapNetworks"
-                        label="Network"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                        @change="selectNetwork"
-                    ></v-autocomplete>
-                </v-col>
-                <v-col cols="6"></v-col>
-                <v-col cols="6">
-                    <v-select
-                        v-model="form.sales_manager_id"
-                        :items="salesManagers"
-                        label="Sales Manager"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                        @change="selectManager"
-                    ></v-select>
-                </v-col>
-                <v-col cols="6">
-                    <v-select
-                        v-model="form.sales_agent_id"
-                        :items="salesAgents"
-                        label="Sales Agent"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                        @change="selectAgent"
-                    ></v-select>
-                </v-col>
-            </v-row>
-        </v-col>
-    </v-row>
+                            @change="selectNetwork"
+                        ></v-autocomplete>
+                    </v-col>
+                    <v-col cols="6" class="pb-0"></v-col>
+                    <v-col cols="6" class="pb-0">
+                        <v-select
+                            v-model="form.sales_manager_id"
+                            :items="salesManagers"
+                            label="Sales Manager"
+                            required
+                            dense
+                            outlined
+                            hide-details
+                            @change="selectManager"
+                        ></v-select>
+                    </v-col>
+                    <v-col cols="6" class="pb-0">
+                        <v-select
+                            v-model="form.sales_agent_id"
+                            :items="salesAgents"
+                            label="Sales Agent"
+                            required
+                            dense
+                            outlined
+                            hide-details
+                            @change="selectAgent"
+                        ></v-select>
+                    </v-col>
+                </v-row>
+            </v-col>
+        </v-row>
+    </v-form>
 </template>
 <script>
 import { Reservations } from '../../services/reservations'
+import ReservationMixin from "~/mixins/ReservationMixin.js"
+
 export default {
     name: "ReservationCreate",
+    mixins: [ReservationMixin],
+    props: {
+        errors: {
+            type: Object,
+            default: () => {}
+        }
+    },
     data: vm => ({
         dateFormatted: vm.formatDate((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)),
         date: false,
@@ -170,6 +189,8 @@ export default {
         phases: [],
         salesManagers: [],
         salesAgents: [],
+        componentName: 'chooseProperty',
+        error: {},
         form: {
             transaction_at: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
             selectedLocation: {
@@ -180,7 +201,7 @@ export default {
             },
             contract_price: null,
             monthly_amortization: null,
-            terms: null,
+            term: null,
             network_id: null,
             sales_manager_id: null,
             sales_agent_id: null,
@@ -191,6 +212,7 @@ export default {
     watch: {
         form: {
             handler(val){
+                this.clear()
                 this.$emit('chooseProperty', val)
             },
             deep: true
@@ -206,6 +228,7 @@ export default {
     },
 
     methods: {
+
         getLocations () {
             Reservations.locations().then((response) => {
                 this.locations = response.data.data
@@ -223,13 +246,6 @@ export default {
                 this.networks = response.data.data
                 this.mapNetworks = this.mapArray(this.networks, 'name', 'id')
             });
-        },
-
-        formatDate (date) {
-            if (!date) return null
-
-            const [year, month, day] = date.split('-')
-            return `${month}/${day}/${year}`
         },
 
         mapArray(arr, text, value) {
@@ -275,9 +291,9 @@ export default {
 
             this.phases = this.getPhases(location.properties)
 
-            if (type === 'phase') {
+            if (type === 'lot') {
                 const propery = location.properties.find(function(data) {
-                    return data.block === self.form.selectedLocation.block && data.lot === self.form.selectedLocation.lot && data.phase === self.form.selectedLocation.phase
+                    return data.block === self.form.selectedLocation.block && data.lot === self.form.selectedLocation.lot
                 })
 
                 if (propery) {

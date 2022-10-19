@@ -21,6 +21,14 @@
                             @change="selectFile"
                         ></v-file-input>
                     </div>
+                    <br>
+                    <v-img
+                        v-if="form.post_dated_cheque"
+                        contain
+                        max-height="400"
+                        max-width="500"
+                        :src="url('post_dated_cheque')"
+                    />
                 </v-col>
                 <v-col cols="6">
                     <div class="d-flex">
@@ -36,6 +44,14 @@
                             label="Photocopy of Marriage Certificate/Birth Certificate"
                         ></v-file-input>
                     </div>
+                    <br>
+                    <v-img
+                        v-if="form.birth_or_marriage_certificate"
+                        contain
+                        max-height="400"
+                        max-width="500"
+                        :src="url('birth_or_marriage_certificate')"
+                    />
                 </v-col>
                 <v-col cols="6">
                     <div class="d-flex">
@@ -51,6 +67,14 @@
                             label="2 pcs 2x2 picture"
                         ></v-file-input>
                     </div>
+                    <br>
+                    <v-img
+                        v-if="form.picture_by_2"
+                        contain
+                        max-height="400"
+                        max-width="500"
+                        :src="url('picture_by_2')"
+                    />
                 </v-col>
                 <v-col cols="6">
                     <div class="d-flex">
@@ -66,6 +90,14 @@
                             label="Community Tax Certificate"
                         ></v-file-input>
                     </div>
+                    <br>
+                    <v-img
+                        v-if="form.tax_certificate"
+                        contain
+                        max-height="400"
+                        max-width="500"
+                        :src="url('tax_certificate')"
+                    />
                 </v-col>
                 <v-col cols="6">
                     <div class="d-flex">
@@ -81,6 +113,14 @@
                             label="Proof of Billing"
                         ></v-file-input>
                     </div>
+                    <br>
+                    <v-img
+                        v-if="form.proof_of_billing"
+                        contain
+                        max-height="400"
+                        max-width="500"
+                        :src="url('proof_of_billing')"
+                    />
                 </v-col>
                 <v-col cols="6">
                     <div class="d-flex">
@@ -94,8 +134,19 @@
                             accept="image/*"
                             prepend-icon=""
                             label="2 Valid ID's (Company and Government)"
+                            hide-details="auto"
+                            :error-messages="error.valid_id"
                         ></v-file-input>
+                        
                     </div>
+                    <br>
+                    <v-img
+                        v-if="form.valid_id"
+                        contain
+                        max-height="400"
+                        max-width="500"
+                        :src="url('valid_id')"
+                    />
                 </v-col>
                 <v-col cols="6">
                     <div class="d-flex">
@@ -111,6 +162,14 @@
                             label="Tax Identification Number"
                         ></v-file-input>
                     </div>
+                    <br>
+                    <v-img
+                        v-if="form.tin"
+                        contain
+                        max-height="400"
+                        max-width="500"
+                        :src="url('tin')"
+                    />
                 </v-col>
                 <v-col cols="6">
                     <div class="d-flex">
@@ -126,6 +185,14 @@
                             label="House Sketch"
                         ></v-file-input>
                     </div>
+                    <br>
+                    <v-img
+                        v-if="form.house_sketch"
+                        contain
+                        max-height="400"
+                        max-width="500"
+                        :src="url('house_sketch')"
+                    />
                 </v-col>
                 <v-col cols="6">
                     <div class="d-flex">
@@ -141,6 +208,14 @@
                             label="3 pcs 1x1 picture"
                         ></v-file-input>
                     </div>
+                    <br>
+                    <v-img
+                        v-if="form.picture_by_1"
+                        contain
+                        max-height="400"
+                        max-width="500"
+                        :src="url('picture_by_1')"
+                    />
                 </v-col>
                 <v-col cols="6">
                     <div class="d-flex">
@@ -156,27 +231,47 @@
                             label="SPA (with Consular Seal if notarized abroad)"
                         ></v-file-input>
                     </div>
+                    <br>
+                    <v-img
+                        v-if="form.spa"
+                        contain
+                        max-height="400"
+                        max-width="500"
+                        :src="url('spa')"
+                    />
                 </v-col>
             </v-row>
         </v-col>
     </v-row>
 </template>
 <script>
+import ReservationMixin from "~/mixins/ReservationMixin.js"
 export default {
     name: "ReservationCreate",
+    mixins: [ReservationMixin],
     props: {
         title: {
             type: String,
             default: ''
+        },
+
+        errors: {
+            type: Object,
+            default: () => {}
         }
     },
     data: vm => ({
-        form: {}
+        componentName: 'documents',
+        error: {},
+        form: {
+            valid_id: null
+        }
     }),
 
     watch: {
         form: {
             handler(val){
+                this.clear()
                 this.$emit('documents', val)
             },
             deep: true
@@ -186,6 +281,11 @@ export default {
     methods: {
         selectFile (file) {
             console.log(file)
+        },
+
+        url(key) {
+            if (!this.form[key]) return;
+            return URL.createObjectURL(this.form[key]);
         }
     },
 }

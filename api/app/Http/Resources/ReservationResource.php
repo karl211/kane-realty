@@ -16,7 +16,7 @@ class ReservationResource extends JsonResource
     {
         return [
             'buyer_id' => $this->buyer->id,
-            'name' => $this->buyer->name,
+            'name' => $this->buyer->profile->full_name,
             'property' => $this->property->location->location,
             'contract_price' => $this->contract_price,
             'balance' => $this->contract_price,

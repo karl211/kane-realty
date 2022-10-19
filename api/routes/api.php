@@ -38,7 +38,10 @@ Route::middleware('auth:sanctum')
 
         Route::get('/networks', [UserController::class, 'getNetworks']);
 
+        Route::get('/users/search', [UserController::class, 'searchBuyer']);
+
         Route::get('/reservations', [ReservationController::class, 'index']);
+
 
         Route::post('/reservations', [ReservationController::class, 'store']);
 
