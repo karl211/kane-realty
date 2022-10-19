@@ -6,11 +6,12 @@
 
         <v-col cols="8">
             <v-row>
-                <v-col cols="12">
+                <v-col cols="12" class="pb-0">
                     <v-radio-group 
                         v-model="form.employment"
                         class="mt-0"
-                        hide-details
+                        hide-details="auto"
+                        :error-messages="error.employment"
                     >
                         <h5 class="pb-2">Employed</h5>
                         <v-radio
@@ -21,7 +22,7 @@
                         ></v-radio>
                     </v-radio-group>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="6" class="pb-0">
                     <v-text-field
                         v-model="form.company_name"
                         label="Company Name"
@@ -31,7 +32,7 @@
                         hide-details
                     ></v-text-field>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="6" class="pb-0">
                     <v-text-field
                         v-model="form.location_of_work"
                         label="Location of Work"
@@ -41,7 +42,7 @@
                         hide-details
                     ></v-text-field>
                 </v-col>
-                <v-col cols="3">
+                <v-col cols="3" class="pb-0">
                     <v-text-field
                         v-model="form.type_of_work"
                         label="Industry/Type of Work"
@@ -51,17 +52,36 @@
                         hide-details
                     ></v-text-field>
                 </v-col>
-                <v-col cols="3">
-                    <v-text-field
-                        v-model="form.date_employed"
-                        label="Date Employed"
-                        required
-                        dense
-                        outlined
-                        hide-details
-                    ></v-text-field>
+                <v-col cols="3" class="pb-0">
+                    <v-menu
+                        ref="date"
+                        v-model="date"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
+                        max-width="290px"
+                        min-width="auto"
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                            v-model="dateFormatted"
+                            label="Date Employed"
+                            persistent-hint
+                            v-bind="attrs"
+                            v-on="on"
+                            dense
+                            outlined
+                            hide-details
+                            ></v-text-field>
+                        </template>
+                        <v-date-picker
+                            v-model="form.date_employed"
+                            no-title
+                            @input="date = false"
+                        ></v-date-picker>
+                    </v-menu>
                 </v-col>
-                <v-col cols="3">
+                <v-col cols="3" class="pb-0">
                     <v-text-field
                         v-model="form.profession"
                         label="Profession"
@@ -71,7 +91,7 @@
                         hide-details
                     ></v-text-field>
                 </v-col>
-                <v-col cols="3">
+                <v-col cols="3" class="pb-0">
                     <v-text-field
                         v-model="form.position"
                         label="Position/Level"
@@ -81,7 +101,7 @@
                         hide-details
                     ></v-text-field>
                 </v-col>
-                <v-col cols="12">
+                <v-col cols="12" class="pb-0">
                     <v-divider></v-divider>
                     <v-checkbox
                         v-model="isBusinessOwner"
@@ -90,7 +110,7 @@
                     ></v-checkbox>
                 </v-col>
                 <template v-if="isBusinessOwner">
-                    <v-col cols="6">
+                    <v-col cols="6" class="pb-0">
                         <v-text-field
                             v-model="form.business_name"
                             label="Business Name"
@@ -100,7 +120,7 @@
                             hide-details
                         ></v-text-field>
                     </v-col>
-                    <v-col cols="6">
+                    <v-col cols="6" class="pb-0">
                         <v-text-field
                             v-model="form.business_location"
                             label="Business Location"
@@ -110,7 +130,7 @@
                             hide-details
                         ></v-text-field>
                     </v-col>
-                    <v-col cols="6">
+                    <v-col cols="6" class="pb-0">
                         <v-text-field
                             v-model="form.business_industry"
                             label="Industry"
@@ -120,7 +140,7 @@
                             hide-details
                         ></v-text-field>
                     </v-col>
-                    <v-col cols="6">
+                    <v-col cols="6" class="pb-0">
                         <v-text-field
                             v-model="form.business_date_establish"
                             label="Date of Establishment"
@@ -130,7 +150,7 @@
                             hide-details
                         ></v-text-field>
                     </v-col>
-                    <v-col cols="12">
+                    <v-col cols="12" class="pb-0">
                         <v-radio-group
                             v-model="form.business_type"
                             class="mt-0" 
@@ -157,63 +177,89 @@
     </v-row>
 </template>
 <script>
-    export default {
-      name: "EmploymentStatusCreate",
-      props: {
-            title: {
-                type: String,
-                default: ''
-            }
-        },
-      data: vm => ({
-            local: [
-                {
-                    label: 'Private'
-                },
-                {
-                    label: 'Government'
-                },
-                {
-                    label: 'OWF Sea Based'
-                },
-                {
-                    label: 'OWF Land Based'
-                },
-                {
-                    label: 'Self-Employed'
-                },
-            ],
-            businessTypes: [
-                {
-                    label: 'Single Proprietorship'
-                },
-                {
-                    label: 'Partnership'
-                },
-                {
-                    label: 'Corporation'
-                },
-            ],
-            isBusinessOwner: false,
-            form: {}
-        }),
-
-        watch: {
-            form: {
-                handler(val){
-                    this.$emit('employmentStatus', val)
-                },
-                deep: true
-            }
+import ReservationMixin from "~/mixins/ReservationMixin.js"
+export default {
+    name: "EmploymentStatusCreate",
+    mixins: [ReservationMixin],
+    props: {
+        title: {
+            type: String,
+            default: ''
         },
 
-        methods: {
-            formatDate (date) {
-                if (!date) return null
-
-                const [year, month, day] = date.split('-')
-                return `${month}/${day}/${year}`
+        errors: {
+            type: Object,
+            default: () => {}
+        }
+    },
+    data: vm => ({
+        dateFormatted: '',
+        date: false,
+        local: [
+            {
+                label: 'Private'
             },
+            {
+                label: 'Government'
+            },
+            {
+                label: 'OWF Sea Based'
+            },
+            {
+                label: 'OWF Land Based'
+            },
+            {
+                label: 'Self-Employed'
+            },
+        ],
+        businessTypes: [
+            {
+                label: 'Single Proprietorship'
+            },
+            {
+                label: 'Partnership'
+            },
+            {
+                label: 'Corporation'
+            },
+        ],
+        isBusinessOwner: false,
+        componentName: 'employmentStatus',
+        error: {},
+        form: {
+            employment: null,
+            company_name: null,
+            location_of_work: null,
+            type_of_work: null,
+            date_employed: null,
+            profession: null,
+            position: null,
+            isBusinessOwner: null,
+            business_name: null,
+            business_location: null,
+            business_industry: null,
+            business_date_establish: null,
+            business_type: null,
+        }
+    }),
+
+    watch: {
+        form: {
+            handler(val){
+                this.clear()
+                this.$emit('employmentStatus', val)
+            },
+            deep: true
+        }
+    },
+
+    methods: {
+        formatDate (date) {
+            if (!date) return null
+
+            const [year, month, day] = date.split('-')
+            return `${month}/${day}/${year}`
         },
-    }
+    },
+}
 </script>

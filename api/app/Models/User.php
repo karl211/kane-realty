@@ -4,13 +4,15 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Notifications\Notifiable;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, Sluggable;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +24,17 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'slug',
     ];
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -52,6 +64,11 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'sales_manager_agents', 'manager_id', 'agent_id');
     }
+    
+    public function spouses()
+    {
+        return $this->hasMany(Spouse::class, 'buyer_id');
+    }
 
     public function coBorrowers()
     {
@@ -71,6 +88,18 @@ class User extends Authenticatable
     public function documents()
     {
         return $this->hasMany(Document::class, 'buyer_id');
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->when($search, function ($query) {
+            $query->whereHas('profile', function ($query) {
+                return $query->where('first_name', request('search'))
+                    ->orWhere('first_name', request('search'))
+                    ->orWhere('last_name', request('search'))
+                    ->orWhere(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".request('search')."%");
+            });
+        });
     }
     
 }

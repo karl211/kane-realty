@@ -30,16 +30,6 @@ return new class extends Migration
             $table->text('address');
             $table->text('facebook_url')->nullable();
             $table->text('instagram_url')->nullable();
-
-            $table->string('spouse_first_name')->nullable();
-            $table->string('spouse_last_name')->nullable();
-            $table->string('spouse_middle_name')->nullable();
-            $table->string('spouse_suffix')->nullable();
-            $table->string('spouse_gender')->nullable();
-            $table->string('spouse_tin')->nullable();
-            $table->date('spouse_date_of_birth')->nullable();
-            $table->string('spouse_contact_number')->nullable();
-
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
 

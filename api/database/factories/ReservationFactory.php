@@ -26,18 +26,21 @@ class ReservationFactory extends Factory
         $manager = User::where('role_id', 3)->inRandomOrder()->first();
         $agent = User::where('role_id', 4)->inRandomOrder()->first();
 
-        return [
-            'buyer_id' => $buyer->id,
-            'co_borrower_id' => $buyer->coBorrowers()->first()->id,
-            'attorney_id' => $attorny->id,
-            'property_id' => random_int(1, 500),
-            'network_id' => $network->id,
-            'sales_manager_id' => $manager->id,
-            'sales_agent_id' => $agent->id,
-            'contract_price' => random_int(100000, 500000),
-            'monthly_amortization' => random_int(20000, 40000),
-            'term' => fake()->randomElement([5, 10, 15, 20, 25, 30]),
-            'transaction_at' => now(),
-        ];
+        if ($buyer && $manager && $attorny) {
+            return [
+                'buyer_id' => $buyer->id,
+                'co_borrower_id' => $buyer->coBorrowers()->first()->id,
+                'attorney_id' => $attorny->id,
+                'property_id' => random_int(1, 500),
+                'network_id' => $network->id,
+                'sales_manager_id' => $manager->id,
+                'sales_agent_id' => $agent->id,
+                'contract_price' => random_int(100000, 500000),
+                'monthly_amortization' => random_int(20000, 40000),
+                'term' => fake()->randomElement([5, 10, 15, 20, 25, 30]),
+                'transaction_at' => now(),
+            ];
+        }
+        
     }
 }

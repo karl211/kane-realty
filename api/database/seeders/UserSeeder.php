@@ -6,11 +6,12 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Network;
 use Illuminate\Support\Str;
-use App\Models\NetworkSalesManager;
 use Illuminate\Database\Seeder;
 use App\Models\SalesManagerAgent;
 use Illuminate\Support\Facades\DB;
+use App\Models\NetworkSalesManager;
 use Illuminate\Support\Facades\Hash;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserSeeder extends Seeder
@@ -63,12 +64,15 @@ class UserSeeder extends Seeder
 
         Network::insert($networks);
         
+        $slug = SlugService::createSlug(User::class, 'slug', 'Super Admin');
+
         $users =  [
             [
                 'role_id' => 1,
                 'name' => 'Super Admin',
                 'email' => 'kane@admin.com',
                 'email_verified_at' => now(),
+                'slug' => $slug,
                 'password' => Hash::make('secret123'), // password
                 'remember_token' => Str::random(10),
             ],
@@ -78,13 +82,16 @@ class UserSeeder extends Seeder
         $faker = \Faker\Factory::create();
 
         for ($i=1; $i < 100; $i++) { 
+            $name = $faker->name();
             $role = Role::inRandomOrder()->first();
+            $slug = SlugService::createSlug(User::class, 'slug', $name);
 
             $user = User::create([
                 "role_id" => $role->id,
-                "name" => $faker->name(),
+                "name" => $name,
                 "email" => Str::random(10). '@gmail.com',
                 'email_verified_at' => now(),
+                'slug' => $slug,
                 'password' => Hash::make('secret123'), // password
                 'remember_token' => Str::random(10),
             ]);

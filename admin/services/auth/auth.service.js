@@ -9,6 +9,10 @@ const authService = class AuthService extends BaseService
     user(params = {}){
         return super.get(`${this.baseURL}/user`, params);
     }
+
+    searchBuyer(params = {}){
+        return super.get(`${this.baseURL}/users/search`, params);
+    }
 };
 
 export default authService

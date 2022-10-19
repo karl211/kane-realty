@@ -40,6 +40,6 @@ class Profile extends Model
 
     public function getFullNameAttribute()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->last_name . ', ' . $this->first_name . ' ' . ucfirst(substr($this->middle_name, 0, 1)) . '.';
     }
 }

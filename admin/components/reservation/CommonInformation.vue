@@ -6,40 +6,43 @@
 
         <v-col cols="8">
             <v-row>
-                <v-col cols="6">
+                <v-col cols="6" class="pb-0">
                     <v-text-field
                         v-model="form.last_name"
                         label="Last name"
                         required
                         dense
                         outlined
-                        hide-details
+                        hide-details="auto"
+                        :error-messages="error.last_name"
                     ></v-text-field>
                 </v-col>
-                <v-col cols="6"></v-col>
-                <v-col cols="6">
+                <v-col cols="6" class="pb-0"></v-col>
+                <v-col cols="6" class="pb-0">
                     <v-text-field
                         v-model="form.first_name"
                         label="First name"
                         required
                         dense
                         outlined
-                        hide-details
+                        hide-details="auto"
+                        :error-messages="error.first_name"
                     ></v-text-field>
                 </v-col>
-                <v-col cols="6"></v-col>
-                <v-col cols="6">
+                <v-col cols="6" class="pb-0"></v-col>
+                <v-col cols="6" class="pb-0">
                     <v-text-field
                         v-model="form.middle_name"
                         label="Middle name"
                         required
                         dense
                         outlined
-                        hide-details
+                        hide-details="auto"
+                        :error-messages="error.middle_name"
                     ></v-text-field>
                 </v-col>
-                <v-col cols="6"></v-col>
-                <v-col cols="6">
+                <v-col cols="6" class="pb-0"></v-col>
+                <v-col cols="6" class="pb-0">
                     <v-text-field
                         v-model="form.suffix"
                         label="Suffix"
@@ -49,7 +52,7 @@
                         hide-details
                     ></v-text-field>
                 </v-col>
-                <v-col cols="6"></v-col>
+                <v-col cols="6" class="pb-0"></v-col>
                 <v-col cols="3">
                     <v-menu
                         ref="menu"
@@ -68,8 +71,8 @@
                             v-on="on"
                             dense
                             outlined
-                            hide-details
-                            
+                            hide-details="auto"
+                            :error-messages="error.date_of_birth"
                             ></v-text-field>
                         </template>
                         <v-date-picker
@@ -90,7 +93,8 @@
                         required
                         dense
                         outlined
-                        hide-details
+                        hide-details="auto"
+                        :error-messages="error.gender"
                     ></v-select>
                 </v-col>
                 <v-col cols="3">
@@ -100,7 +104,7 @@
                         required
                         dense
                         outlined
-                        hide-details
+                        hide-details="auto"
                     ></v-text-field>
                 </v-col>
                 <v-col cols="3">
@@ -110,7 +114,8 @@
                         required
                         dense
                         outlined
-                        hide-details
+                        hide-details="auto"
+                        :error-messages="error.contact_number"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -118,8 +123,10 @@
     </v-row>
 </template>
 <script>
+import ReservationMixin from "~/mixins/ReservationMixin.js"
 export default {
     name: "CommonInformationCreate",
+    mixins: [ReservationMixin],
     props: {
         title: {
             type: String,
@@ -128,21 +135,43 @@ export default {
         emitKey: {
             type: String,
             default: ''
+        },
+        isResetSpouse: {
+            type: Boolean,
+            default: false
+        },
+        errors: {
+            type: Object,
+            default: () => {}
         }
     },
     data: vm => ({
         activePicker: null,
         date: null,
         menu: false,
+        resetSpouse: false,
+        componentName: '',
+        error: {},
         form: {
-            date_of_birth: null
+            last_name: null,
+            first_name: null,
+            middle_name: null,
+            date_of_birth: null,
+            gender: null,
+            tin: null,
+            contact_number: null,
         }
     }),
 
     watch: {
+        isResetSpouse (data) {
+            this.componentName = 'spouseInformation'
+            this.clear()
+        },
+
         form: {
             handler(val){
-                console.log(val)
+                this.clear()
                 this.$emit(this.emitKey, val)
             },
             deep: true
@@ -151,6 +180,11 @@ export default {
         menu (val) {
             val && setTimeout(() => (this.activePicker = 'YEAR'))
         },
+    },
+
+    created () {
+        this.resetSpouse = this.isResetSpouse
+        this.componentName = this.emitKey
     },
 
     methods: {

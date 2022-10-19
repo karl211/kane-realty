@@ -39,13 +39,13 @@ return new class extends Migration
 
             $table->foreign('co_borrower_id')
                 ->references('id')
-                ->on('profiles')
+                ->on('buyer_co_borrowers')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
             $table->foreign('attorney_id')
                 ->references('id')
-                ->on('profiles')
+                ->on('attorneys')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             
@@ -57,7 +57,7 @@ return new class extends Migration
             
             $table->foreign('network_id')
                 ->references('id')
-                ->on('users')
+                ->on('networks')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             
