@@ -2,6 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\UserResource;
+use App\Http\Resources\AttorneyResource;
+use App\Http\Resources\PropertyResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ReservationResource extends JsonResource
@@ -12,17 +15,22 @@ class ReservationResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
-    public function toArray($request)
+    public function toArray($request) 
     {
         return [
             'buyer_id' => $this->buyer->id,
             'name' => $this->buyer->profile->full_name,
-            'property' => $this->property->location->location,
+            'slug' => $this->buyer->slug,
             'contract_price' => $this->contract_price,
             'balance' => $this->contract_price,
             'term' => $this->term,
             'date_of_transaction' => $this->transaction_at,
             'status' => 'Ongoing',
+            'sales_manager' => new UserResource($this->sales_manager),
+            'sales_agent' => new UserResource($this->sales_agent),
+            'attorney' => new AttorneyResource($this->attorney),
+            'property' => new PropertyResource($this->property),
+            'payments' => PaymentResource::collection($this->payments),
         ];
     }
 }

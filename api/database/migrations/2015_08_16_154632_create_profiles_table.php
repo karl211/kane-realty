@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('contact_number');
             $table->string('zip_code');
             $table->text('address');
+            $table->string('photo')->nullable();
             $table->text('facebook_url')->nullable();
             $table->text('instagram_url')->nullable();
             $table->timestamp('deleted_at')->nullable();

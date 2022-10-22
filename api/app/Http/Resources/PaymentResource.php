@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PaymentResource extends JsonResource
@@ -19,6 +20,7 @@ class PaymentResource extends JsonResource
             'amount_paid' => $this->amount,
             'type_of_payment' => $this->type_of_payment,
             'mode_of_payment' => $this->mode_of_payment,
+            'paid_at' => Carbon::parse($this->paid_at)->format('M d, Y'),
             'name' => $this->reservation->buyer->name,
             'property' => $this->reservation->property->full_property,
             'contract_price' => $this->reservation->contract_price,

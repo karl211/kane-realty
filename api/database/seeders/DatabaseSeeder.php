@@ -22,11 +22,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            DocumentSeeder::class,
             UserSeeder::class,
             ProfileSeeder::class,
             LocationPropertySeeder::class,
             ReservationSeeder::class,
-            DocumentSeeder::class,
         ]);
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

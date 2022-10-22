@@ -19,6 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('document_id');
             $table->timestamps();
 
+            $table->unique(["buyer_id", "document_id"]);
+
             $table->foreign('buyer_id')
                 ->references('id')
                 ->on('users')

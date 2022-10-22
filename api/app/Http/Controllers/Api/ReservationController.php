@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BuyerResource;
 use App\Http\Requests\ReservationRequest;
 use App\Http\Resources\ReservationResource;
 use Symfony\Component\HttpFoundation\Response;
@@ -66,9 +68,11 @@ class ReservationController extends Controller
      * @param  \App\Models\Reservation  $reservation
      * @return \Illuminate\Http\Response
      */
-    public function show(Reservation $reservation)
+    public function show(User $buyer)
     {
-        //
+        $buyer_details = $buyer->load('profile', 'spouses', 'coBorrowers', 'reservations.attorney', 'reservations.property', 'reservations.payments', 'documents');
+        
+        return new BuyerResource($buyer_details);
     }
 
     /**

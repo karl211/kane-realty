@@ -26,6 +26,7 @@ class PropertyResource extends JsonResource
             'contract_price' => $this->contract_price,
             'default_monthly_amortization' => $this->default_monthly_amortization,
             'term' => $this->term,
+            'location' => $this->location,
         ];
     }
 }
