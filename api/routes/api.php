@@ -40,8 +40,11 @@ Route::middleware('auth:sanctum')
 
         Route::get('/users/search', [UserController::class, 'searchBuyer']);
 
+        Route::get('/documents', [UserController::class, 'getDocuments']);
+        
         Route::get('/reservations', [ReservationController::class, 'index']);
 
+        Route::get('/reservations/{buyer:slug}', [ReservationController::class, 'show']);
 
         Route::post('/reservations', [ReservationController::class, 'store']);
 

@@ -48,10 +48,10 @@
         >
           <template #item="{ item }">
             <tr>
-              <td @click="show(item.buyer_id)">
+              <td @click="show(item.slug)">
                 <span class="blue--text pointer">{{ item.name }}</span>
               </td>
-              <td>{{ item.property }}</td>
+              <td>{{ item.property.full_property }}</td>
               <td>{{ item.contract_price }}</td>
               <td>{{ item.balance }}</td>
               <td>{{ item.date_of_transaction }}</td>
@@ -63,7 +63,7 @@
                           color="primary"
                           small
                           icon
-                          @click="show(item.buyer_id)"
+                          @click="show(item.slug)"
                       >
                           <v-icon>mdi-eye-arrow-right</v-icon>
                       </v-btn>
@@ -103,71 +103,71 @@
     </div>
   </template>
   
-  <script>
-  import _ from "lodash";
-  import { Reservations } from '../../services/reservations'
-  export default {
+<script>
+import _ from "lodash";
+import { Reservations } from '../../services/reservations'
+export default {
     name: "ReservationIndex",
     data () {
-      return {
-        loading: false,
-        loaded: false,
-        prof_title_id: "",
-        headers: [
-          { text: "Name" },
-          { text: "Property" },
-          { text: "Contract Price" },
-          { text: "Balance" },
-          { text: "Date Of Transaction" },
-          { text: "Actions", align: "center" },
-        ],
-       
-        paginateData: null,
-        reservations: [],
-        search: {
-          page: 1,
-          search: ''
+        return {
+            loading: false,
+            loaded: false,
+            prof_title_id: "",
+            headers: [
+                { text: "Name" },
+                { text: "Property" },
+                { text: "Contract Price" },
+                { text: "Balance" },
+                { text: "Date Of Transaction" },
+                { text: "Actions", align: "center" },
+            ],
+            
+            paginateData: null,
+            reservations: [],
+            search: {
+                page: 1,
+                search: ''
+            }
         }
-      }
     },
+    
     watch: {
-      loaded(value) {
-        this.loaded = value
-      }
+        loaded(value) {
+            this.loaded = value
+        }
     },
+
     created() {
-      this.getReservations()
-      this.searchPayment = _.debounce(this.searchPayment, 400);
+        this.getReservations()
+        this.searchPayment = _.debounce(this.searchPayment, 400);
     },
-    mounted() {
-      
-    },
+
     methods: {
-       getReservations() {
-        this.loading = true
-        
-        Reservations.allReservations(this.search).then((response) => {
-          this.paginateData = response.data
-          this.reservations = response.data.data
-          this.loaded = true
-          this.loading = false
-        });
-      },
-      paginate(pageNumber) {
-        this.search.page = pageNumber
-        this.getReservations(this.search);
-      },
-      searchPayment(value) {
-        this.reservations = []
-        this.search.page = 1
-        this.search.search = value
-  
-        this.getReservations(this.search)
-      },
-      show(id) {
-        this.$router.push({path: `/reservations/${id}`});
-      }
+        getReservations() {
+            this.loading = true
+            
+            Reservations.allReservations(this.search).then((response) => {
+                this.paginateData = response.data
+                this.reservations = response.data.data
+                this.loaded = true
+                this.loading = false
+            });
+        },
+        paginate(pageNumber) {
+            this.search.page = pageNumber
+            this.getReservations(this.search);
+        },
+        searchPayment(value) {
+            this.reservations = []
+            this.search.page = 1
+            this.search.search = value
+
+            this.getReservations(this.search)
+        },
+        show(id) {
+            this.$router.push({path: `/reservations/${id}`});
+        }
     }
-  }
-  </script>
+}
+</script>
   

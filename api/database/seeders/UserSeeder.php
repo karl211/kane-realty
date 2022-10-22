@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Network;
+use App\Models\Document;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use App\Models\SalesManagerAgent;
@@ -95,6 +96,13 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('secret123'), // password
                 'remember_token' => Str::random(10),
             ]);
+
+            if ($role->id == 5) {
+                for ($i2=1; $i2 < 2; $i2++) {
+                    $doc = Document::inRandomOrder()->first();
+                    $user->documents()->attach($doc->id);
+                }
+            }
 
             if ($role->id == 3) {
                 NetworkSalesManager::insert([

@@ -58,7 +58,22 @@ class Reservation extends Model
 
     public function buyer()
     {
-        return $this->belongsTo(User::class, 'buyer_id')->select('id', 'name', 'email');
+        return $this->belongsTo(User::class, 'buyer_id');
+    }
+
+    public function sales_manager()
+    {
+        return $this->belongsTo(User::class, 'sales_manager_id');
+    }
+
+    public function sales_agent()
+    {
+        return $this->belongsTo(User::class, 'sales_agent_id');
+    }
+
+    public function attorney()
+    {
+        return $this->belongsTo(Attorney::class, 'attorney_id');
     }
 
     public function property()

@@ -36,6 +36,7 @@ class Profile extends Model
         'spouse_gender',
         'spouse_tin',
         'spouse_contact_number',
+        'photo',
     ];
 
     public function getFullNameAttribute()

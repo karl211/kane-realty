@@ -44,6 +44,7 @@ class ProfileFactory extends Factory
             'contact_number' => fake()->ean8(),
             'zip_code' => fake()->ean8(),
             'address' => fake()->address(),
+            'photo' => 'https://loremflickr.com/640/480/business?'. random_int(1, 5000),
         ];
     }
 }

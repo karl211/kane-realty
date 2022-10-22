@@ -223,6 +223,8 @@ class ReservationRequest extends FormRequest
         foreach ($documents as $document) {
             if ($this->hasFile($document->title)) {
                 $file_path = Storage::disk('local')->put($document->title. '/' . $buyer->id, $this->file($document->title));
+
+                $buyer->documents()->attach($document->id);
             }
         }
     }

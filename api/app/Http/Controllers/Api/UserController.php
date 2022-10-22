@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use App\Models\Network;
+use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -37,13 +38,21 @@ class UserController extends Controller
         return response()->json(['data' => $networks]);
     }
 
+    public function getDocuments()
+    {
+        return Document::all();
+    }
+    
+
     public function searchBuyer()
     {
-        $buyers = User::join('profiles', 'profiles.user_id', '=', 'users.id')
-        ->has('reservations')
-        ->where('first_name', request('search'))
-        ->orWhere('last_name', request('search'))
-        ->orWhere(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".request('search')."%")
+        $buyers = User::has('reservations')
+        ->join('profiles', 'profiles.user_id', '=', 'users.id')
+        ->where(function ($query) {
+            return $query->where('first_name', 'LIKE', "%".request('search')."%")
+            ->orWhere('last_name', 'LIKE', "%".request('search')."%")
+            ->orWhere(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".request('search')."%");
+        })
         ->orderBy('last_name', 'asc')
         ->paginate(10);
         
