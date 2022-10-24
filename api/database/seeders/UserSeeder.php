@@ -97,6 +97,22 @@ class UserSeeder extends Seeder
                 'remember_token' => Str::random(10),
             ]);
 
+            $user->profile()->create([
+                'first_name' => fake()->firstName(),
+                'last_name' => fake()->lastName(),
+                'middle_name' => fake()->lastName(),
+                'suffix' => fake()->suffix(),
+                'gender' => fake()->randomElement(['male', 'female']),
+                'tin' => fake()->ean8(),
+                'date_of_birth' => fake()->dateTime($max = 'now', $timezone = null),
+                'civil_status' => fake()->randomElement(['single', 'married']),
+                'religion' => fake()->randomElement(['Roman Catholic', 'Alliance']),
+                'contact_number' => fake()->ean8(),
+                'zip_code' => fake()->ean8(),
+                'address' => fake()->address(),
+                'photo' => 'https://loremflickr.com/640/480/business?'. random_int(1, 5000),
+            ]);
+
             if ($role->id == 5) {
                 for ($i2=1; $i2 < 2; $i2++) {
                     $doc = Document::inRandomOrder()->first();

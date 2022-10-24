@@ -46,10 +46,13 @@ class UserController extends Controller
 
     public function searchBuyer()
     {
-        $buyers = User::has('reservations')
+        $buyers = User::select(['users.*', 'first_name', 'last_name', 'middle_name'])
+        ->has('reservations')
         ->join('profiles', 'profiles.user_id', '=', 'users.id')
         ->where(function ($query) {
-            return $query->where('first_name', 'LIKE', "%".request('search')."%")
+            return $query->where('email', 'LIKE', "%".request('search')."%")
+            ->orWhere('first_name', 'LIKE', "%".request('search')."%")
+            ->orWhere('middle_name', 'LIKE', "%".request('search')."%")
             ->orWhere('last_name', 'LIKE', "%".request('search')."%")
             ->orWhere(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".request('search')."%");
         })

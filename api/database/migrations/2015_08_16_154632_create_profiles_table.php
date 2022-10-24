@@ -34,6 +34,8 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
 
+            $table->unique(["user_id"]);
+
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')

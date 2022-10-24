@@ -2,73 +2,7 @@
     <v-container>
         <v-row>
             <v-col cols="3">
-                <v-card
-                    v-if="buyer"
-                    class="mx-auto max-card-h"
-                >
-                    <br>
-                    <v-img
-                        class="rounded-circle mx-auto"
-                        width="150"
-                        height="150"
-                        :src="buyer.profile.photo"
-                    ></v-img>
-                    
-                    <v-card-text class="text-center">
-                        <h3>{{ buyer.profile.full_name }}</h3>
-                        <p>Buyer</p>
-                    </v-card-text>
-
-                    <v-divider class="mx-4"></v-divider>
-
-                    <v-card-text class="text-left">
-                        <div>
-                            <h3>Name:</h3>
-                            <p>{{ buyer.profile.first_name }} {{ buyer.profile.middle_name }} {{ buyer.profile.last_name }}</p>
-                        </div>
-
-                        <div>
-                            <h3>Contact no:</h3>
-                            <p>{{ buyer.profile.contact_number }}</p>
-                        </div>
-
-                        <div>
-                            <h3>E-mail:</h3>
-                            <p>{{ buyer.email }}</p>
-                        </div>
-
-                        <div>
-                            <h3>Gender:</h3>
-                            <p>{{ buyer.profile.gender }}</p>
-                        </div>
-
-                        <div>
-                            <h3>TIN:</h3>
-                            <p>{{ buyer.profile.tin }}</p>
-                        </div>
-
-                        <div>
-                            <h3>Civil status:</h3>
-                            <p>{{ buyer.profile.civil_status }}</p>
-                        </div>
-
-                        <div>
-                            <h3>Date of Birth:</h3>
-                            <p>{{ buyer.profile.date_of_birth }}</p>
-                        </div>
-
-                        <div>
-                            <h3>Address:</h3>
-                            <p>{{ buyer.profile.address }}</p>
-                        </div>
-                    </v-card-text>
-                </v-card>
-                <div v-else class="center-loading">
-                    <v-progress-circular
-                        indeterminate
-                        color="primary"
-                    ></v-progress-circular>
-                </div>
+                <BuyerInfo :buyer="buyer"/>
             </v-col>
             <v-col cols="7">
                 <v-card
@@ -212,7 +146,7 @@
                                                                 <td width="266">{{ payment.paid_at }}</td>
                                                                 <td width="245">{{ payment.type_of_payment }}</td>
                                                                 <td width="150">{{ payment.mode_of_payment }}</td>
-                                                                <td>{{ payment.amount_paid }}</td>
+                                                                <td>{{ '₱' + Number(payment.amount_paid).toLocaleString() }}</td>
                                                             </tr>
                                                         </tbody>
                                                     </template>
@@ -237,7 +171,7 @@
                                                 class="ml-auto mt-3"
                                                 elevation="0"
                                                 color="info"
-                                                @click="addPayment"
+                                                @click="addPayment(item)"
                                             >
                                                 <v-icon>mdi-cash-clock</v-icon> &nbsp; Add Payment
                                             </v-btn>
@@ -384,15 +318,9 @@ export default {
             return '₱' + Number(total).toLocaleString()
         },
 
-        addPayment () {
-            this.$router.push({path: `/payments/create`});
+        addPayment (item) {
+            this.$router.push({path: `/payments/create?buyer=${this.buyer.slug}&reservation=${item.id}`});
         },
-
-        // getTotalPayments (total) {
-        //     return total 
-        // }
-
-
 
         updateForm (form, key) {
             this.form[key] = form

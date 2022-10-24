@@ -34,6 +34,8 @@ Route::middleware('auth:sanctum')
     ->group(function () {
         Route::get('/payments', [PaymentController::class, 'index']);
 
+        Route::post('/payments', [PaymentController::class, 'store']);
+
         Route::get('/locations', [LocationController::class, 'index']);
 
         Route::get('/networks', [UserController::class, 'getNetworks']);

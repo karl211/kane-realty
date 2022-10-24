@@ -12,16 +12,24 @@ class Payment extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'reservation_id',
+        'buyer_id',
         'ar_number',
         'amount',
         'type_of_payment',
         'mode_of_payment',
         'paid_at',
+        'image',
     ];
 
     public function reservation()
     {
         return $this->belongsTo(Reservation::class);
+    }
+
+    public function buyer()
+    {
+        return $this->belongsTo(User::class, 'buyer_id');
     }
 
     public function scopeSearch($query, $search)

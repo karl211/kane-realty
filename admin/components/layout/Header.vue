@@ -8,7 +8,7 @@
             chips
             color="blue-grey lighten-2"
             label="Search..."
-            item-text="last_name"
+            :item-text="getItemText"
             item-value="id"
             solo
             flat
@@ -49,9 +49,19 @@
 
         <v-spacer></v-spacer>
         
-            <div class="mr-3">
+        <div class="mr-3">
+            <div class="d-flex">
+                <v-select
+                    :items="['Arkea Butuan', 'Arkea San Franz']"
+                    value="Arkea Butuan"
+                    required
+                    dense
+                    hide-details="auto"
+                    class="concept-w"
+                ></v-select>
                 <v-icon color="primary" @click="$router.push('/reservations/create')">mdi-home-plus</v-icon>
             </div>
+        </div>
 
         <v-menu
             offset-y
@@ -110,7 +120,6 @@ export default {
             autoUpdate: true,
             buyer: '',
             isUpdating: false,
-            name: '',
             buyers: [],
         }
     },
@@ -129,6 +138,10 @@ export default {
     },
 
     methods: {
+        getItemText(item) {
+            return `${item.last_name} ${item.first_name} ${item.middle_name} ${item.email}`;
+        },
+
         remove (item) {
             this.buyer = ''
             this.buyers = []
@@ -140,7 +153,6 @@ export default {
                     if (res.data.data.data.length) {
                         this.buyers = res.data.data.data
                     }
-                    console.log(this.buyers)
                 });
             } else {
                 this.buyers = []
@@ -157,5 +169,8 @@ export default {
 <style>
 .pointer {
     cursor: pointer;
+}
+.concept-w {
+    width: 160px;
 }
 </style>
