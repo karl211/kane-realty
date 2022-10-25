@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('location_id');
             $table->integer('block');
             $table->integer('lot');
-            $table->integer('phase');
+            $table->integer('phase')->nullable();
             $table->string('lot_size')->nullable();
             $table->string('floor_area')->nullable();
             $table->string('model')->nullable();

@@ -15,12 +15,22 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('branch_id');
             $table->string('location');
             $table->text('description');
-            $table->string('photo');
+            $table->string('type');
+            $table->string('photo')->nullable();
+            $table->text('map')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
+
+            $table->foreign('branch_id')
+                ->references('id')
+                ->on('branches')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
+        
     }
 
     /**

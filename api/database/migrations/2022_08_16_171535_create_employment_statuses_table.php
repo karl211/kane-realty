@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('company_name')->nullable();
             $table->string('location_of_work')->nullable();
             $table->string('type_of_work')->nullable();
-            $table->date('date_employed')->nullable();
+            $table->string('date_employed')->nullable();
             $table->string('profession')->nullable();
             $table->string('position')->nullable();
             $table->string('business_name')->nullable();

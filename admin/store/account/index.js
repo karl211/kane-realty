@@ -5,6 +5,7 @@ import accountActions from './account.actions';
 
 const state = () => accoutState
 
+console.log(state)
 const getters = accountGetters
 
 const mutations = accountMutations

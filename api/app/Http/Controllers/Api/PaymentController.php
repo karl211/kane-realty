@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PaymentRequest;
 use App\Http\Resources\PaymentResource;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,12 +19,15 @@ class PaymentController extends Controller
      */
     public function index(Request $request)
     {
-      $payments = Payment::select(['ar_number', 'amount', 'type_of_payment', 'mode_of_payment', 'reservation_id'])
-            ->with('reservation.buyer', 'reservation.property')
-            ->search(request('search'))
-            ->paginate(10);
+        $payments = Payment::with('reservation.buyer', 'reservation.property')
+                ->whereHas('reservation.buyer', function($q) use($request){
+                    $q->where('branch_id', $request->branch_id);
+                })
+                ->search(request('search'))
+                ->orderBy('paid_at', 'desc')
+                ->paginate(10);
 
-      return PaymentResource::collection($payments);
+        return PaymentResource::collection($payments);
     }
 
     /**
@@ -41,9 +46,24 @@ class PaymentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PaymentRequest $request)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            $payment = $request->save();
+
+            DB::commit();
+
+            return response()->json([
+                'data'  => $payment->load('buyer'),
+                'message' => 'Successfully reserved'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
     }
 
     /**

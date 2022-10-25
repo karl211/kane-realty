@@ -14,7 +14,15 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        //
+        $payments = Payment::with('reservation.buyer', 'reservation.property')
+                ->whereHas('reservation.buyer', function($q) use($request){
+                    $q->where('branch_id', $request->branch_id);
+                })
+                ->search(request('search'))
+                ->orderBy('paid_at', 'desc')
+                ->paginate(10);
+
+        return PaymentResource::collection($payments);
     }
 
     /**

@@ -70,6 +70,7 @@ class UserSeeder extends Seeder
         $users =  [
             [
                 'role_id' => 1,
+                'branch_id' => 1,
                 'name' => 'Super Admin',
                 'email' => 'kane@admin.com',
                 'email_verified_at' => now(),
@@ -89,12 +90,29 @@ class UserSeeder extends Seeder
 
             $user = User::create([
                 "role_id" => $role->id,
+                'branch_id' => 1,
                 "name" => $name,
                 "email" => Str::random(10). '@gmail.com',
                 'email_verified_at' => now(),
                 'slug' => $slug,
                 'password' => Hash::make('secret123'), // password
                 'remember_token' => Str::random(10),
+            ]);
+
+            $user->profile()->create([
+                'first_name' => fake()->firstName(),
+                'last_name' => fake()->lastName(),
+                'middle_name' => fake()->lastName(),
+                'suffix' => fake()->suffix(),
+                'gender' => fake()->randomElement(['male', 'female']),
+                'tin' => fake()->ean8(),
+                'date_of_birth' => fake()->dateTime($max = 'now', $timezone = null),
+                'civil_status' => fake()->randomElement(['single', 'married']),
+                'religion' => fake()->randomElement(['Roman Catholic', 'Alliance']),
+                'contact_number' => fake()->ean8(),
+                'zip_code' => fake()->ean8(),
+                'address' => fake()->address(),
+                'photo' => 'https://loremflickr.com/640/480/business?'. random_int(1, 5000),
             ]);
 
             if ($role->id == 5) {

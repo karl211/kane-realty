@@ -48,44 +48,45 @@
         >
           <template #item="{ item }">
             <tr>
-              <td @click="show(item.slug)">
-                <span class="blue--text pointer">{{ item.name }}</span>
-              </td>
-              <td>{{ item.property.full_property }}</td>
-              <td>{{ item.contract_price }}</td>
-              <td>{{ item.balance }}</td>
-              <td>{{ item.date_of_transaction }}</td>
-              <td class="d-flex justify-center mt-3">
-                  <div class="d-flex justify-content">
-                      <v-btn
-                          elevation="0"
-                          depressed
-                          color="primary"
-                          small
-                          icon
-                          @click="show(item.slug)"
-                      >
-                          <v-icon>mdi-eye-arrow-right</v-icon>
-                      </v-btn>
-                      <v-btn
-                          elevation="0"
-                          depressed
-                          color="warning"
-                          small
-                          icon
-                      >
-                          <v-icon>mdi-file-edit-outline</v-icon>
-                      </v-btn>
-                      <v-btn
-                          elevation="0"
-                          color="danger"
-                          small
-                          icon
-                      >
-                          <v-icon>mdi-delete</v-icon>
-                      </v-btn>
-                  </div>
-              </td>
+                <td>{{ item.date_of_transaction }}</td>
+                <td @click="show(item.slug)">
+                    <span class="blue--text pointer">{{ item.name }}</span>
+                </td>
+                <td>{{ item.property.full_property }}</td>
+                <td>{{ item.contract_price }}</td>
+                <td>{{ item.balance }}</td>
+                
+                <td class="d-flex justify-center mt-3">
+                    <div class="d-flex justify-content">
+                        <v-btn
+                            elevation="0"
+                            depressed
+                            color="primary"
+                            small
+                            icon
+                            @click="show(item.slug)"
+                        >
+                            <v-icon>mdi-eye-arrow-right</v-icon>
+                        </v-btn>
+                        <v-btn
+                            elevation="0"
+                            depressed
+                            color="warning"
+                            small
+                            icon
+                        >
+                            <v-icon>mdi-file-edit-outline</v-icon>
+                        </v-btn>
+                        <v-btn
+                            elevation="0"
+                            color="danger"
+                            small
+                            icon
+                        >
+                            <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                    </div>
+                </td>
             </tr>
           </template>
         </v-data-table>
@@ -105,7 +106,9 @@
   
 <script>
 import _ from "lodash";
+import { mapGetters } from 'vuex'
 import { Reservations } from '../../services/reservations'
+
 export default {
     name: "ReservationIndex",
     data () {
@@ -114,11 +117,11 @@ export default {
             loaded: false,
             prof_title_id: "",
             headers: [
+                { text: "Date Of Transaction" },
                 { text: "Name" },
                 { text: "Property" },
                 { text: "Contract Price" },
                 { text: "Balance" },
-                { text: "Date Of Transaction" },
                 { text: "Actions", align: "center" },
             ],
             
@@ -126,7 +129,7 @@ export default {
             reservations: [],
             search: {
                 page: 1,
-                search: ''
+                search: '',
             }
         }
     },
@@ -135,6 +138,12 @@ export default {
         loaded(value) {
             this.loaded = value
         }
+    },
+
+    computed: {
+        ...mapGetters({
+            getBranch: 'account/getBranch',
+        })
     },
 
     created() {
@@ -146,6 +155,8 @@ export default {
         getReservations() {
             this.loading = true
             
+            
+
             Reservations.allReservations(this.search).then((response) => {
                 this.paginateData = response.data
                 this.reservations = response.data.data
@@ -161,6 +172,8 @@ export default {
             this.reservations = []
             this.search.page = 1
             this.search.search = value
+
+            
 
             this.getReservations(this.search)
         },

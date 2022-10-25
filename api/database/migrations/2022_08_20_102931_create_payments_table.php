@@ -16,17 +16,25 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('reservation_id');
-            $table->timestamp('paid_at');
-            $table->string('ar_number');
+            $table->unsignedBigInteger('buyer_id');
+            $table->date('paid_at');
+            $table->string('ar_number')->nullable();
             $table->integer('amount');
-            $table->string('type_of_payment');
-            $table->string('mode_of_payment');
+            $table->string('type_of_payment')->nullable();
+            $table->string('mode_of_payment')->nullable();
+            $table->string('image')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
 
             $table->foreign('reservation_id')
                 ->references('id')
                 ->on('reservations')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            
+            $table->foreign('buyer_id')
+                ->references('id')
+                ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

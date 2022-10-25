@@ -21,7 +21,7 @@ class PaymentResource extends JsonResource
             'type_of_payment' => $this->type_of_payment,
             'mode_of_payment' => $this->mode_of_payment,
             'paid_at' => Carbon::parse($this->paid_at)->format('M d, Y'),
-            'name' => $this->reservation->buyer->name,
+            'name' => $this->reservation->buyer->profile->full_name,
             'property' => $this->reservation->property->full_property,
             'contract_price' => $this->reservation->contract_price,
             'balance' => $this->reservation->contract_price,

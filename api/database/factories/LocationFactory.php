@@ -17,6 +17,7 @@ class LocationFactory extends Factory
     public function definition()
     {
         return [
+            'branch_id' => 1,
             'location' => fake()->name(),
             'description' => fake()->text(),
             'photo' => fake()->imageUrl(400, 300, 'cats'),
