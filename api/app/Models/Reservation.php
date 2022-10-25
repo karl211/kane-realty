@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Builder;
 
 class Reservation extends Model
 {
@@ -26,6 +27,15 @@ class Reservation extends Model
         'term',
         'transaction_at',
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope('default_branch', function (Builder $builder) {
+            $builder->whereHas('property.location', function($q) {
+                $q->where('branch_id', request()->branch_id);
+            });
+        });
+    }
 
     public function getBalanceAttribute()
     {

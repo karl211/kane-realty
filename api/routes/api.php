@@ -8,7 +8,8 @@ use App\Http\Controllers\Api\{
     PaymentController,
     LocationController,
     UserController,
-    ReservationController
+    ReservationController,
+    PropertyController
 };
 
 /*
@@ -32,6 +33,8 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::middleware('auth:sanctum')
     ->group(function () {
+        Route::get('/branches', [AuthController::class, 'getBranches']);
+
         Route::get('/payments', [PaymentController::class, 'index']);
 
         Route::post('/payments', [PaymentController::class, 'store']);
@@ -49,6 +52,8 @@ Route::middleware('auth:sanctum')
         Route::get('/reservations/{buyer:slug}', [ReservationController::class, 'show']);
 
         Route::post('/reservations', [ReservationController::class, 'store']);
+
+        Route::get('/properties', [PropertyController::class, 'index']);
 
         // Route::get('/sales-managers', [UserController::class, 'getSalesManagers']);
     }

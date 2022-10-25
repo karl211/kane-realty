@@ -70,6 +70,7 @@ class UserSeeder extends Seeder
         $users =  [
             [
                 'role_id' => 1,
+                'branch_id' => 1,
                 'name' => 'Super Admin',
                 'email' => 'kane@admin.com',
                 'email_verified_at' => now(),
@@ -89,6 +90,7 @@ class UserSeeder extends Seeder
 
             $user = User::create([
                 "role_id" => $role->id,
+                'branch_id' => 1,
                 "name" => $name,
                 "email" => Str::random(10). '@gmail.com',
                 'email_verified_at' => now(),

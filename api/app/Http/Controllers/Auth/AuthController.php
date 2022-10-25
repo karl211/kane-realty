@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\AuthenticationException;
@@ -34,7 +35,16 @@ class AuthController extends Controller
     public function getUser()
     {
         return response()->json([
-            'data' => auth()->user()
+            'data' => auth()->user()->where('branch_id', 1)->first()
+        ], 200);
+    }
+
+    public function getBranches()
+    {
+        $branches = Branch::all();
+        
+        return response()->json([
+            'data' => $branches
         ], 200);
     }
 }

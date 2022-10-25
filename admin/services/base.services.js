@@ -98,9 +98,13 @@ const baseService = class BaseService
 
     get( uri, data = {}, additionalHeaders = {} )
     {
+        
+
         if ( Object.keys( data ).length > 0 )
         {
-            uri = `${ uri }?${ this.getQueryString( data ) }`
+            uri = `${ uri }?${ this.getQueryString( data ) }&branch_id=${localStorage.getItem('branch')}`
+        } else if (localStorage.getItem('branch')) {
+                uri += `?branch_id=${localStorage.getItem('branch')}`
         }
 
         return this.$http.get( uri, {

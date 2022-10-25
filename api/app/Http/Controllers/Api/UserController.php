@@ -46,7 +46,7 @@ class UserController extends Controller
 
     public function searchBuyer()
     {
-        $buyers = User::select(['users.*', 'first_name', 'last_name', 'middle_name'])
+        $buyers = User::select(['users.*', 'first_name', 'last_name', 'middle_name', 'photo'])
         ->has('reservations')
         ->join('profiles', 'profiles.user_id', '=', 'users.id')
         ->where(function ($query) {

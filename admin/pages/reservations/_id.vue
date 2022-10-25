@@ -191,7 +191,6 @@
             </v-col>
             <v-col cols="2">
                 <v-card
-                    v-if="buyerDocuments.length"
                     class="mx-auto"
                 >
                     <v-card-title class="pb-0">
@@ -210,12 +209,7 @@
                         
                     </v-card-text>
                 </v-card>
-                <div v-else class="center-loading">
-                    <v-progress-circular
-                        indeterminate
-                        color="primary"
-                    ></v-progress-circular>
-                </div>
+              
             </v-col>
         </v-row>
         

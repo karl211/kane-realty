@@ -1,161 +1,180 @@
-<template>
-  <div>
+    <template>
+    <div>
     <!-- <v-data-table
         :headers="headers"
-        :items="desserts"
+        :items="properties"
         :items-per-page="5"
         class="elevation-1"
-      ></v-data-table> -->
+        ></v-data-table> -->
     <section>
-      <h1 class="title">Properties</h1>
-      <v-row>
-        <v-col></v-col>
-        <v-col sm="5">
-          <section class="d-flex">
-            <v-text-field
-              v-model="search"
-              label="Name, Email, Address, User Type"
-              dense
-              outlined
-              class="mx-1"
-            ></v-text-field>
-            <v-select
-              v-model="prof_title_id"
-              :items="mapProfessionalTitles"
-              item-text="title"
-              item-value="id"
-              label="Account Title"
-              placeholder="Select Account Title"
-              dense
-              outlined
-              class="mx-1"
-            />
-          </section>
-        </v-col>
-      </v-row>
-
-      <v-data-table
-        hide-default-footer
-        :loading="loading"
-        :items="desserts"
-        :headers="headers"
-        :items-per-page="5"
-        :server-items-length="desserts.length"
-      >
-        <template v-slot:item="{ item }">
-          <tr>
-            <td>
-                {{ item.name }}
-            </td>
-            <td>{{ item.property }}</td>
-            <td>
-              <div class="d-flex">
-                <!-- <v-btn
-                  elevation="0"
-                  outlined
-                  class="mx-1"
-                  color="primary"
-                  @click="onImpersonate(item)"
-                  small
-                  >Login</v-btn
-                >
-                <v-btn
-                  elevation="0"
-                  outlined
-                  color="primary"
-                  small
-                  @click.stop="getDetails(item)"
-                  >More</v-btn
+        <h1 class="title">Locations</h1>
+        <br>
+        <div class="container-wrap content-w">
+            <v-card
+                class="item-wide mr-10 mb-10"
+                max-width="500"
+                v-for="(location, i) in locations" :key="i"
+            >
+                <!-- <v-img
+                    class="white--text align-end"
+                    height="250px"
+                    :src="location.photo"
                 > -->
-              </div>
-            </td>
-          </tr>
-        </template>
-      </v-data-table>
-      <v-row justify="space-between">
-        <v-col></v-col>
-        <v-col class="text-right">
-          <TablePagination
-            store="manageaccount"
-            collection="accounts"
-          />
-        </v-col>
-      </v-row>
+                <div id="map-container-google-1" class="z-depth-1-half map-container" style="width: 500px;">
+                    <iframe :src="location.map" frameborder="0"
+                    style="border:0; height: 350px; width: 500px;" allowfullscreen></iframe>
+                </div>
+
+                <v-card-title>{{ location.location }}</v-card-title>
+                <!-- </v-img> -->
+
+                <v-card-text class="text--primary card-text-wrap">
+                    <div>{{ location.description }}</div>
+                    <div>Total property: <span class="text--font-weight-medium orange--text text-sm-h6">{{ location.properties.length }}</span></div>
+                </v-card-text>
+            </v-card>
+        </div>
+        <!-- <v-row >
+            <v-col sm="4">
+                
+            </v-col>
+            <v-col sm="4">
+                <v-card
+                    class="mx-auto"
+                    max-width="400"
+                    
+                >
+                    <v-img
+                    class="white--text align-end"
+                    height="200px"
+                    src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                    >
+                    <v-card-title>Top 10 Australian beaches</v-card-title>
+                    </v-img>
+
+                    <v-card-subtitle class="pb-0">
+                    Number 10
+                    </v-card-subtitle>
+
+                    <v-card-text class="text--primary">
+                    <div>Whitehaven Beach</div>
+
+                    <div>Whitsunday Island, Whitsunday Islands</div>
+                    </v-card-text>
+
+                    <v-card-actions>
+                    <v-btn
+                        color="orange"
+                        text
+                    >
+                        Share
+                    </v-btn>
+
+                    <v-btn
+                        color="orange"
+                        text
+                    >
+                        Explore
+                    </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-col>
+            <v-col sm="4">
+                <v-card
+                    class="mx-auto"
+                    max-width="400"
+                    
+                >
+                    <v-img
+                    class="white--text align-end"
+                    height="200px"
+                    src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                    >
+                    <v-card-title>Top 10 Australian beaches</v-card-title>
+                    </v-img>
+
+                    <v-card-subtitle class="pb-0">
+                    Number 10
+                    </v-card-subtitle>
+
+                    <v-card-text class="text--primary">
+                    <div>Whitehaven Beach</div>
+
+                    <div>Whitsunday Island, Whitsunday Islands</div>
+                    </v-card-text>
+
+                    <v-card-actions>
+                    <v-btn
+                        color="orange"
+                        text
+                    >
+                        Share
+                    </v-btn>
+
+                    <v-btn
+                        color="orange"
+                        text
+                    >
+                        Explore
+                    </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-col>
+        </v-row> -->
     </section>
-  </div>
+    </div>
 </template>
 
 <script>
-import { Auth } from '../../services/auth'
-  export default {
+import { Property } from '../../services/properties'
+export default {
     name: "PropertiesIndex",
     data () {
-      return {
-        loading: false,
-        loaded: false,
-        search: "",
-        prof_title_id: "",
-        headers: [
-          {
-            text: 'Location',
-            align: 'start',
-          },
-          { text: 'Property', value: 'property' },
-          
-        ],
-        mapProfessionalTitles: [
-          'Location'
-        ],
-        desserts: [
-          {
-            name: 'Tiniwisan',
-            property: 'Block 30, Lot 1',
-          },
-          {
-            name: 'Tiniwisan2',
-            property: 'Block 30, Lot 12',
-          },
-          {
-            name: 'Tiniwisan',
-            property: 'Block 30, Lot 1',
-          },
-          {
-            name: 'Tiniwisan2',
-            property: 'Block 30, Lot 12',
-          },{
-            name: 'Tiniwisan',
-            property: 'Block 30, Lot 1',
-          },
-          {
-            name: 'Tiniwisan2',
-            property: 'Block 30, Lot 12',
-          },{
-            name: 'Tiniwisan',
-            property: 'Block 30, Lot 1',
-          },
-          {
-            name: 'Tiniwisan2',
-            property: 'Block 30, Lot 12',
-          },{
-            name: 'Tiniwisan',
-            property: 'Block 30, Lot 1',
-          },
-          {
-            name: 'Tiniwisan2',
-            property: 'Block 30, Lot 12',
-          },
-        ],
-      }
+        return {
+            loading: false,
+            loaded: false,
+            search: "",
+            prof_title_id: "",
+            headers: [
+                {
+                text: 'Location',
+                align: 'start',
+                },
+                { text: 'Property', value: 'property' },
+                
+            ],
+            mapProfessionalTitles: [
+                'Location'
+            ],
+
+            locations: []
+        }
     },
+
+    created () {
+        this.getProperties()
+    },
+
     methods: {
-      getPayments() {
-        Auth.payments().then((res) => {
-            console.log(res)
-        });
-      }
+        getProperties() {
+            Property.all().then((response) => {
+                if (response.data) {
+                    this.locations = response.data.data
+                }
+            });
+        }
     },
-    mounted() {
-      // this.getPayments()
-    }
-  }
+}
 </script>
+<style>
+    .card-text-wrap {
+        min-height: 100px;
+    }
+    .content-w {
+        margin-left: 10%;
+    }
+    .container-wrap {
+        display: flex;
+        flex-wrap: wrap;
+    }
+</style>

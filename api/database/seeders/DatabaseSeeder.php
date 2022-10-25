@@ -2,15 +2,14 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Database\Seeders\UserSeeder;
-use Database\Seeders\ProfileSeeder;
+use Database\Seeders\BranchSeeder;
 use Database\Seeders\DocumentSeeder;
-use Database\Seeders\LocationSeeder;
-use Database\Seeders\PropertySeeder;
-use Database\Seeders\ReservationSeeder;
-use Database\Seeders\LocationPropertySeeder;
+use Database\Seeders\Old\UserSeeder;
+use Database\Seeders\Old\ReservationSeeder;
+use Database\Seeders\Old\LocationSeeder;
+use Database\Seeders\Old\PropertySeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,15 +21,12 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            BranchSeeder::class,
+            LocationSeeder::class,
+            PropertySeeder::class,
             DocumentSeeder::class,
             UserSeeder::class,
-            ProfileSeeder::class,
-            LocationPropertySeeder::class,
             ReservationSeeder::class,
         ]);
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
     }
 }

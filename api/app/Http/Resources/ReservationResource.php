@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\AttorneyResource;
 use App\Http\Resources\PropertyResource;
@@ -25,7 +26,7 @@ class ReservationResource extends JsonResource
             'contract_price' => $this->contract_price,
             'balance' => $this->contract_price,
             'term' => $this->term,
-            'date_of_transaction' => $this->transaction_at,
+            'date_of_transaction' => Carbon::parse($this->transaction_at)->format('M d, Y'),
             'status' => 'Ongoing',
             'sales_manager' => new UserResource($this->sales_manager),
             'sales_agent' => new UserResource($this->sales_agent),

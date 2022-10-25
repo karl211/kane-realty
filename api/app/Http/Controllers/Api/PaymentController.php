@@ -19,12 +19,15 @@ class PaymentController extends Controller
      */
     public function index(Request $request)
     {
-      $payments = Payment::select(['ar_number', 'amount', 'type_of_payment', 'mode_of_payment', 'reservation_id'])
-            ->with('reservation.buyer', 'reservation.property')
-            ->search(request('search'))
-            ->paginate(10);
+        $payments = Payment::with('reservation.buyer', 'reservation.property')
+                ->whereHas('reservation.buyer', function($q) use($request){
+                    $q->where('branch_id', $request->branch_id);
+                })
+                ->search(request('search'))
+                ->orderBy('paid_at', 'desc')
+                ->paginate(10);
 
-      return PaymentResource::collection($payments);
+        return PaymentResource::collection($payments);
     }
 
     /**

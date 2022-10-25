@@ -18,10 +18,10 @@ return new class extends Migration
             $table->unsignedBigInteger('reservation_id');
             $table->unsignedBigInteger('buyer_id');
             $table->date('paid_at');
-            $table->string('ar_number');
+            $table->string('ar_number')->nullable();
             $table->integer('amount');
-            $table->string('type_of_payment');
-            $table->string('mode_of_payment');
+            $table->string('type_of_payment')->nullable();
+            $table->string('mode_of_payment')->nullable();
             $table->string('image')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();

@@ -21,6 +21,7 @@ class BuyerResource extends JsonResource
     {
         return [
             'buyer_id' => $this->id,
+            'branch_id' => $this->branch_id,
             'slug' => $this->slug,
             'email' => $this->email,
             'profile' => new ProfileResource($this->profile),

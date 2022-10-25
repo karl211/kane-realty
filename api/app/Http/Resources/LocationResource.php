@@ -20,6 +20,7 @@ class LocationResource extends JsonResource
             'description' => $this->description,
             'location' => $this->location,
             'photo' => $this->photo,
+            'map' => $this->map,
             'properties' => PropertyResource::collection($this->properties)
         ];
     }

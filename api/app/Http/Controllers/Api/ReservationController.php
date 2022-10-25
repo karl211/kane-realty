@@ -19,9 +19,12 @@ class ReservationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $reservations = Reservation::with('property', 'buyer')->has('buyer.profile')->paginate(10);
+        $reservations = Reservation::with('property', 'buyer')
+            ->has('buyer.profile')
+            ->orderBy('transaction_at', 'desc')
+            ->paginate(10);
 
         return ReservationResource::collection($reservations);
     }
