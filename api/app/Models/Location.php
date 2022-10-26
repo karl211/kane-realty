@@ -22,7 +22,6 @@ class Location extends Model
 
     public function properties()
     {
-        return $this->hasMany(Property::class)
-            ->orderBy('block', 'ASC');
+        return $this->hasMany(Property::class);
     }
 }

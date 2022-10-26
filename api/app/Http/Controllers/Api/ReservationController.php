@@ -73,7 +73,11 @@ class ReservationController extends Controller
      */
     public function show(User $buyer)
     {
-        $buyer_details = $buyer->load('profile', 'spouses', 'coBorrowers', 'reservations.attorney', 'reservations.property', 'reservations.payments', 'documents');
+        $buyer_details = User::where('id', $buyer->id)->with('profile', 'spouses', 'coBorrowers', 'reservations.attorney', 'reservations.property', 'reservations.payments', 'documents')
+            ->with(['reservations.payments' => function($query) {
+                $query->orderBy('paid_at', 'asc');
+            }])
+            ->first();
         
         return new BuyerResource($buyer_details);
     }

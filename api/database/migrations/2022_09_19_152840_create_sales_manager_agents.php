@@ -19,6 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('agent_id');
             $table->timestamps();
 
+            $table->unique(["manager_id", "agent_id"]);
+
             $table->foreign('manager_id')
                 ->references('id')
                 ->on('users')

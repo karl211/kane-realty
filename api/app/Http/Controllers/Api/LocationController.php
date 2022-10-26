@@ -17,6 +17,9 @@ class LocationController extends Controller
     public function index()
     {
         $locations = Location::with('properties')
+            ->when(request()->location_id, function ($query) {
+                $query->where('id', request()->location_id);
+            })
             ->orderBy('location')
             ->get();
             
