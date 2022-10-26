@@ -71,7 +71,6 @@ class ReservationSeeder extends Seeder
         ");
 
         foreach ($reservations as $reservation) {
-            // dd($reservation);
             $profile = Profile::withoutGlobalScope('default_branch')
                 ->where('first_name', ucwords($reservation->FirstName))
                 ->where('last_name', ucwords($reservation->LastName))

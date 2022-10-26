@@ -131,7 +131,8 @@ class UserSeeder extends Seeder
                 $date_of_birth = null;
             }
 
-            $user_data->profile()->updateOrCreate([
+            $user_data->profile()->withoutGlobalScope('default_branch')
+            ->updateOrCreate([
                 'first_name' => ucwords($user->FirstName),
                 'last_name' => ucwords($user->LastName),
                 'middle_name' => ucwords($user->MiddleName)
@@ -149,7 +150,8 @@ class UserSeeder extends Seeder
             ]);
 
             if ($user->SpouseFirstName && $user->SpouseLastName) {
-                $user_data->spouses()->updateOrCreate([
+                $user_data->spouses()->withoutGlobalScope('default_branch')
+                ->updateOrCreate([
                     'first_name' => ucwords($user->SpouseFirstName),
                     'last_name' => ucwords($user->SpouseLastName)
                 ], [
@@ -162,7 +164,8 @@ class UserSeeder extends Seeder
             }
             
             if ($user->CoFirstName && $user->CoLastName) {
-                $user_data->coBorrowers()->updateOrCreate([
+                $user_data->coBorrowers()->withoutGlobalScope('default_branch')
+                ->updateOrCreate([
                     'first_name' => ucwords($user->CoFirstName),
                     'last_name' => ucwords($user->CoLastName)
                 ], [
@@ -176,7 +179,8 @@ class UserSeeder extends Seeder
             }
 
             if ($user->CoFirstName && $user->CoLastName) {
-                $user_data->coBorrowers()->updateOrCreate([
+                $user_data->coBorrowers()->withoutGlobalScope('default_branch')
+                ->updateOrCreate([
                     'first_name' => ucwords($user->CoFirstName),
                     'last_name' => ucwords($user->CoLastName)
                 ], [
@@ -190,7 +194,8 @@ class UserSeeder extends Seeder
             }
 
             if ($user->AtFirstName && $user->AtLastName) {
-                Attorney::updateOrCreate([
+                Attorney::withoutGlobalScope('default_branch')
+                ->updateOrCreate([
                     'first_name' => ucwords($user->AtFirstName),
                     'last_name' => ucwords($user->AtLastName)
                 ],[
@@ -204,7 +209,8 @@ class UserSeeder extends Seeder
             }
             
             if ($user->Position) {
-                $user_data->employmentStatus()->updateOrCreate([
+                $user_data->employmentStatus()->withoutGlobalScope('default_branch')
+                ->updateOrCreate([
                     'employment' => $user->Employment,
                     'company_name' => $user->CompanyName,
                     'location_of_work' => $user->CompanyLocation,

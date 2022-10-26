@@ -10,6 +10,8 @@ use Database\Seeders\Old\UserSeeder;
 use Database\Seeders\Old\ReservationSeeder;
 use Database\Seeders\Old\LocationSeeder;
 use Database\Seeders\Old\PropertySeeder;
+use Database\Seeders\Old\BuyerDocumentSeeder;
+use Database\Seeders\Old\SalesManagerSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -27,6 +29,8 @@ class DatabaseSeeder extends Seeder
             DocumentSeeder::class,
             UserSeeder::class,
             ReservationSeeder::class,
+            BuyerDocumentSeeder::class,
+            SalesManagerSeeder::class,
         ]);
     }
 }

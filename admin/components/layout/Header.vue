@@ -60,7 +60,11 @@
                     class="concept-w"
                     @change="selectBranch"
                 ></v-select>
-                <v-icon color="primary" @click="$router.push('/reservations/create')">mdi-home-plus</v-icon>
+                <span class="ml-3">
+                    <v-divider vertical />
+                </span>
+                <v-icon class="ml-3" color="primary" @click="$router.push('/payments/create')">mdi-cash-fast</v-icon>
+                <v-icon class="ml-3" color="primary" @click="$router.push('/reservations/create')">mdi-home-plus</v-icon>
             </div>
         </div>
 
@@ -130,7 +134,7 @@ export default {
 
     created() {
         this.buyers = []
-        this.searchBuyer = _.debounce(this.searchBuyer, 360)
+        this.searchBuyer = _.debounce(this.searchBuyer, 300)
         this.getBranch()
     },
 
