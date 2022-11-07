@@ -57,8 +57,17 @@
                     required
                     dense
                     hide-details="auto"
-                    class="concept-w"
+                    class="concept-w mr-2"
                     @change="selectBranch"
+                ></v-select>
+                <v-select
+                    v-model="location"
+                    :items="locations"
+                    required
+                    dense
+                    hide-details="auto"
+                    class="concept-w"
+                    @change="selectLocation"
                 ></v-select>
                 <span class="ml-3">
                     <v-divider vertical />
@@ -120,7 +129,9 @@ export default {
             isUpdating: false,
             buyers: [],
             branches: [],
-            branch: 1
+            locations: [],
+            branch: 1,
+            location: 1
         }
     },
 
@@ -130,18 +141,36 @@ export default {
                 setTimeout(() => (this.isUpdating = false), 3000)
             }
         },
+
+        // branch (val) {
+        //     console.log(val)
+        // }
     },
 
     created() {
+        this.getBranch()
         this.buyers = []
         this.searchBuyer = _.debounce(this.searchBuyer, 300)
-        this.getBranch()
+        
     },
 
     methods: {
         // ...mapMutations(['setBranch']),
 
         getBranch () {
+            // console.log(localStorage.getItem('branch'))
+            // console.log(localStorage.getItem('location'))
+            // if (localStorage.getItem('branch') && !localStorage.getItem('location')) {
+                
+            //     if (localStorage.getItem('branch') === 1) {
+            //         localStorage.setItem('location', 1)
+            //         this.location = 1
+            //     } else {
+            //         localStorage.setItem('location', 2)
+            //         this.location = 2
+            //     }
+            // } 
+
             Auth.branch().then((res) => {
                 if (res.data.data.length) {
                     this.branches = res.data.data.map(function(data) {
@@ -153,17 +182,32 @@ export default {
 
                     if (this.branches.length) {
                         if (localStorage.getItem('branch')) {
-                            this.$store.commit('account/setBranch', parseInt(localStorage.getItem('branch')))
-
                             this.branch = parseInt(localStorage.getItem('branch'))
                         } else {
                             localStorage.setItem('branch', parseInt(this.branches[0].value))
-                            this.$store.commit('account/setBranch', parseInt(this.branches[0].value))
                         }
                     }
-                }
+                    
 
-                // console.log(this.$store.getters['account/getBranch'])
+                    if (res.data.data.length) {
+                        const self = this
+                        this.locations =  res.data.data.filter(function (el) {
+                            return el.id  === self.branch
+                        })[0].locations.map(function(data) {
+                            return {
+                                text: data.location,
+                                value: data.id
+                            }
+                        })
+                    }
+                    
+                    if (localStorage.getItem('location')) {
+                        this.location = parseInt(localStorage.getItem('location'))
+                    } else {
+                        localStorage.setItem('location', parseInt(this.locations[0].value))
+                        this.location = this.locations[0].value
+                    }
+                }
             });
         },
 
@@ -199,10 +243,15 @@ export default {
 
         selectBranch (value) {
             localStorage.setItem('branch', parseInt(value))
-            this.$store.commit('account/setBranch', parseInt(value))
+            localStorage.removeItem('location')
+            location.reload()
+        },
+
+        selectLocation (value) {
+            localStorage.setItem('location', parseInt(value))
 
             location.reload()
-        }
+        },
     },
 }
 </script>

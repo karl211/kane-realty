@@ -244,6 +244,11 @@ export default {
     }),
 
     watch: {
+        'form.date_employed'(val) {
+            console.log(val)
+            this.dateFormatted = this.formatDate(val)
+        },
+
         form: {
             handler(val){
                 this.clear()
@@ -254,12 +259,7 @@ export default {
     },
 
     methods: {
-        formatDate (date) {
-            if (!date) return null
-
-            const [year, month, day] = date.split('-')
-            return `${month}/${day}/${year}`
-        },
+ 
     },
 }
 </script>

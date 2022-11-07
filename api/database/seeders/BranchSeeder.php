@@ -24,7 +24,7 @@ class BranchSeeder extends Seeder
             ],
             [
                 'concept' => 'Arkea',
-                'branch' => 'San Franz',
+                'branch' => 'San Francisco',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

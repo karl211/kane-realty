@@ -10,6 +10,7 @@
                     <v-text-field
                         v-model="form.last_name"
                         label="Last name"
+                        class="required"
                         required
                         dense
                         outlined
@@ -22,6 +23,7 @@
                     <v-text-field
                         v-model="form.first_name"
                         label="First name"
+                        class="required"
                         required
                         dense
                         outlined
@@ -34,6 +36,7 @@
                     <v-text-field
                         v-model="form.middle_name"
                         label="Middle name"
+                        class="required"
                         required
                         dense
                         outlined
@@ -57,6 +60,7 @@
                     <v-text-field
                         v-model="form.email"
                         label="Email"
+                        class="required"
                         required
                         dense
                         outlined
@@ -78,6 +82,7 @@
                             <v-text-field
                             v-model="form.date_of_birth"
                             label="Date of Birth"
+                            class="required"
                             persistent-hint
                             v-bind="attrs"
                             v-on="on"
@@ -102,6 +107,7 @@
                         v-model="form.gender"
                         :items="['Male', 'Female']"
                         label="Gender"
+                        class="required"
                         required
                         dense
                         outlined
@@ -114,6 +120,7 @@
                         v-model="form.civil_status"
                         :items="civil_statuses"
                         label="Civil Status"
+                        class="required"
                         required
                         dense
                         outlined
@@ -126,6 +133,7 @@
                     <v-text-field
                         v-model="form.religion"
                         label="Religion"
+                        class="required"
                         required
                         dense
                         outlined
@@ -147,6 +155,7 @@
                     <v-text-field
                         v-model="form.address"
                         label="Address"
+                        class="required"
                         required
                         dense
                         outlined
@@ -158,6 +167,7 @@
                     <v-text-field
                         v-model="form.zip_code"
                         label="Zip code"
+                        class="required"
                         required
                         dense
                         outlined
@@ -169,6 +179,7 @@
                     <v-text-field
                         v-model="form.contact_number"
                         label="Contact no."
+                        class="required"
                         required
                         dense
                         outlined

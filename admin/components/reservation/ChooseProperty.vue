@@ -21,6 +21,7 @@
                                 <v-text-field
                                 v-model="dateFormatted"
                                 label="Date of Transaction"
+                                class="required"
                                 persistent-hint
                                 v-bind="attrs"
                                 v-on="on"
@@ -42,6 +43,7 @@
                         <v-select
                             :items="mapLocations"
                             label="Location"
+                            class="required"
                             required
                             dense
                             outlined
@@ -54,6 +56,7 @@
                         <v-select
                             :items="blocks"
                             label="Block"
+                            class="required"
                             required
                             dense
                             outlined
@@ -66,6 +69,7 @@
                         <v-select
                             :items="lots"
                             label="Lot"
+                            class="required"
                             required
                             dense
                             outlined
@@ -91,6 +95,7 @@
                             v-model="form.contract_price"
                             prepend-inner-icon="mdi-currency-php"
                             label="Contract Price"
+                            class="required"
                             required
                             dense
                             outlined
@@ -104,7 +109,9 @@
                         <v-text-field
                             v-model="form.monthly_amortization"
                             label="Monthly Amortization"
+                            class="required"
                             required
+                            readonly
                             dense
                             outlined
                             hide-details="auto"
@@ -115,7 +122,9 @@
                         <v-text-field
                             v-model="form.term"
                             label="Term"
+                            class="required"
                             required
+                            readonly
                             dense
                             outlined
                             hide-details="auto"

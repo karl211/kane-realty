@@ -1,0 +1,14 @@
+.pointer {
+    cursor: pointer;
+}
+
+.mdi-currency-php {
+    font-size: 20px !important;
+}
+
+.required label::after {
+    content: "*";
+    padding-left: 2px;
+    padding-right: 2px;
+    color: #d70000;
+}

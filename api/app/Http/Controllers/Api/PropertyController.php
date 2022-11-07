@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Property;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\PropertyRequest;
 
 class PropertyController extends Controller
 {
@@ -41,9 +44,24 @@ class PropertyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PropertyRequest $request)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            $property = $request->save();
+
+            DB::commit();
+
+            return response()->json([
+                'data'  => $property,
+                'message' => 'Successfully reserved'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
     }
 
     /**

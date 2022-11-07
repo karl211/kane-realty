@@ -29,14 +29,16 @@ class ReservationController extends Controller
         return ReservationResource::collection($reservations);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function locations()
     {
-        //
+        $locations = Location::with('properties')
+            ->when(request()->location_id, function ($query) {
+                $query->where('id', request()->location_id);
+            })
+            ->orderBy('location')
+            ->get();
+            
+        return LocationResource::collection($locations);
     }
 
     /**

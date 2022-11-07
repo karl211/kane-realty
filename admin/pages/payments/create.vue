@@ -341,12 +341,6 @@ export default {
             return `${year}-${month}-${day}`
         },
 
-        formatAmount (amount) {
-            if (!amount) return null
-
-            return amount.replaceAll(',', '')
-        },
-
         cancel () {
             this.$router.push({path: `/payments`});
         },

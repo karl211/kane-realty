@@ -32,7 +32,7 @@ class Reservation extends Model
     {
         static::addGlobalScope('default_branch', function (Builder $builder) {
             $builder->whereHas('property.location', function($q) {
-                $q->where('branch_id', request()->branch_id);
+                $q->where('branch_id', request()->branch_id)->where('id', request()->location_id);
             });
         });
     }

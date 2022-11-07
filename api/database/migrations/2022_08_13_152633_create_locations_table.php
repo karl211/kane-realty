@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('location');
             $table->text('description');
             $table->string('type');
-            $table->string('photo')->nullable();
             $table->text('map')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
