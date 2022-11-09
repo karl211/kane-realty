@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')
         Route::post('/payments', [PaymentController::class, 'store']);
 
         Route::get('/locations', [LocationController::class, 'index']);
+
         Route::post('/locations', [LocationController::class, 'store']);
 
         Route::get('/networks', [UserController::class, 'getNetworks']);
@@ -49,6 +50,8 @@ Route::middleware('auth:sanctum')
         Route::get('/documents', [UserController::class, 'getDocuments']);
         
         Route::get('/reservations', [ReservationController::class, 'index']);
+
+        Route::get('/reservations/locations', [ReservationController::class, 'locations']);
 
         Route::get('/reservations/{buyer:slug}', [ReservationController::class, 'show']);
 

@@ -243,7 +243,13 @@ export default {
 
         selectBranch (value) {
             localStorage.setItem('branch', parseInt(value))
-            localStorage.removeItem('location')
+            
+            if (value === 1) {
+                localStorage.setItem('location', 1)
+            } else {
+                localStorage.setItem('location', 2)
+            }
+            
             location.reload()
         },
 

@@ -32,7 +32,7 @@ class ReservationSeeder extends Seeder
             transactions.ContractPrice, 
             transactions.MonthlyAmortization, 
             transactions.Terms, 
-            transactions.`Status`, 
+            transactions.`Status` AS reservation_status, 
             properties.`Name`, 
             properties.`Status` AS property_status, 
             propertytypes.`Name` AS location_name, 
@@ -126,6 +126,10 @@ class ReservationSeeder extends Seeder
                 ->where('lot', $lot)
                 ->first();
 
+            $property->update([
+                'status' => $reservation->property_status
+            ]);
+
             // dd($reservation);
 
             // if (!$property) {
@@ -173,6 +177,7 @@ class ReservationSeeder extends Seeder
                 'monthly_amortization' => $reservation->MonthlyAmortization,
                 'term' => $reservation->Terms,
                 'transaction_at' => $reservation->CreatedAt,
+                'status' => $reservation->reservation_status,
             ]);
 
             $new_reservation->payments()->withoutGlobalScope('default_branch')

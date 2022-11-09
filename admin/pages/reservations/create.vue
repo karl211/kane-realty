@@ -136,7 +136,7 @@ export default {
                         confirmButtonText: 'Okay',
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // this.$router.push({path: `/reservations`});
+                            this.$router.push({path: `/reservations`});
                         } 
                     })
                 }

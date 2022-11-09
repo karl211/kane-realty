@@ -102,12 +102,12 @@
                             hide-details="auto"
                             :error-messages="error.contract_price"
                             readonly
-                            type="number"
                         ></v-text-field>
                     </v-col>
                     <v-col cols="4" class="pb-0">
                         <v-text-field
                             v-model="form.monthly_amortization"
+                            prepend-inner-icon="mdi-currency-php"
                             label="Monthly Amortization"
                             class="required"
                             required
@@ -306,8 +306,8 @@ export default {
                 })
 
                 if (propery) {
-                    this.form.contract_price = propery.contract_price
-                    this.form.monthly_amortization = propery.default_monthly_amortization
+                    this.form.contract_price = Number(propery.contract_price).toLocaleString()
+                    this.form.monthly_amortization = Number(propery.default_monthly_amortization).toLocaleString()
                     this.form.term = propery.term
                 }
             }

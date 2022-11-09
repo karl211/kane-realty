@@ -26,6 +26,7 @@ class Reservation extends Model
         'monthly_amortization',
         'term',
         'transaction_at',
+        'status',
     ];
 
     protected static function booted()

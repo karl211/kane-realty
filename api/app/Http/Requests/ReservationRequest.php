@@ -216,8 +216,13 @@ class ReservationRequest extends FormRequest
             $property_attr['contract_price'] = $property->contract_price;
             $property_attr['default_monthly_amortization'] = $property->default_monthly_amortization;
             $property_attr['term'] = $property->term;
+            $property_attr['status'] = 'On Going';
 
             $buyer->reservations()->create($property_attr);
+
+            $property->update([
+                'status' => 'Reserved'
+            ]);
 
             foreach ($documents as $document) {
                 if ($this->hasFile($document->title)) {
