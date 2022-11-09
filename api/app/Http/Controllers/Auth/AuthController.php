@@ -41,7 +41,7 @@ class AuthController extends Controller
 
     public function getBranches()
     {
-        $branches = Branch::all();
+        $branches = Branch::with('locations')->get();
         
         return response()->json([
             'data' => $branches

@@ -26,13 +26,14 @@ class Reservation extends Model
         'monthly_amortization',
         'term',
         'transaction_at',
+        'status',
     ];
 
     protected static function booted()
     {
         static::addGlobalScope('default_branch', function (Builder $builder) {
             $builder->whereHas('property.location', function($q) {
-                $q->where('branch_id', request()->branch_id);
+                $q->where('branch_id', request()->branch_id)->where('id', request()->location_id);
             });
         });
     }

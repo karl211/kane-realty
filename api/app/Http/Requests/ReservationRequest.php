@@ -12,6 +12,7 @@ use App\Models\Property;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Http\FormRequest;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class ReservationRequest extends FormRequest
 {
@@ -37,9 +38,9 @@ class ReservationRequest extends FormRequest
 
     public function validator($factory)
     {
-    return $factory->make(
-        $this->sanitize(), $this->container->call([$this, 'rules']), $this->messages()
-    );
+        return $factory->make(
+            $this->sanitize(), $this->container->call([$this, 'rules']), $this->messages()
+        );
     }
 
     public function sanitize()
@@ -51,7 +52,8 @@ class ReservationRequest extends FormRequest
             'coBorrowerInformation' => json_decode($this->input('coBorrowerInformation'), true),
             'attorneyInformation' => json_decode($this->input('attorneyInformation'), true),
             'employmentStatus' => json_decode($this->input('employmentStatus'), true),
-            'documents' => json_decode($this->input('documents'), true)
+            'documents' => json_decode($this->input('documents'), true),
+            'branch_id' => json_decode($this->input('branch_id'), true)
         ]);
         return $this->all();
     }
@@ -74,9 +76,6 @@ class ReservationRequest extends FormRequest
             'chooseProperty.selectedLocation.location_id' => 'required',
             'chooseProperty.selectedLocation.block' => 'required',
             'chooseProperty.selectedLocation.lot' => 'required',
-            'chooseProperty.contract_price' => 'required',
-            'chooseProperty.monthly_amortization' => 'required',
-            'chooseProperty.term' => 'required',
 
             'personalInformation.last_name' => 'required',
             'personalInformation.first_name' => 'required',
@@ -188,8 +187,6 @@ class ReservationRequest extends FormRequest
     public function save()
     {
         $this->choose_property = Collect($this->chooseProperty)->toArray();
-        // $this->personal_information = Collect($this->personalInformation)->toArray();
-        // $this->employment_status = Collect($this->employmentStatus)->toArray();
         $this->spouse_information = Collect($this->spouseInformation)->toArray();
         $this->co_borrower_information = Collect($this->coBorrowerInformation)->toArray();
         $this->attorney_information = Collect($this->attorneyInformation)->toArray();
@@ -197,35 +194,50 @@ class ReservationRequest extends FormRequest
         
         $documents = Document::all();
 
-        $property = Property::where('location_id', $this->location['location_id'])
+        $property = Property::withoutGlobalScope('default_branch')
+                        ->where('location_id', $this->location['location_id'])
                         ->where('block', $this->location['block'])
                         ->where('lot', $this->location['lot'])
-                        ->orWhere('phase', $this->location['phase'])
                         ->first();
 
-        $buyer = $this->createBuyer();   
-
-        $spouse = $this->createSpouse($buyer);   
-
-        $co_borrower = $this->createCoBorrower($buyer);
-
-        $attorney = $this->createAttorney();
-
         if ($property) {
+            $buyer = $this->createBuyer();   
+
+            $spouse = $this->createSpouse($buyer);   
+
+            $co_borrower = $this->createCoBorrower($buyer);
+
+            $attorney = $this->createAttorney();
+
             $property_attr = $this->choose_property;
             $property_attr['property_id'] = $property->id;
             $property_attr['co_borrower_id'] = $co_borrower->id;
             $property_attr['attorney_id'] = $attorney->id;
+            $property_attr['contract_price'] = $property->contract_price;
+            $property_attr['default_monthly_amortization'] = $property->default_monthly_amortization;
+            $property_attr['term'] = $property->term;
+            $property_attr['status'] = 'On Going';
 
             $buyer->reservations()->create($property_attr);
-        }
-        
-        foreach ($documents as $document) {
-            if ($this->hasFile($document->title)) {
-                $file_path = Storage::disk('local')->put($document->title. '/' . $buyer->id, $this->file($document->title));
 
-                $buyer->documents()->attach($document->id);
+            $property->update([
+                'status' => 'Reserved'
+            ]);
+
+            foreach ($documents as $document) {
+                if ($this->hasFile($document->title)) {
+                    $file = $this->file($document->title);
+                    $filename = time() . '-' . $file->getClientOriginalName();
+                    $file->storeAs('buyers/' . $buyer->id . '/' . $document->title, $filename, 's3');
+        
+                    $buyer->documents()->attach($document->id, [
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
             }
+        } else {
+            abort(402, 'Property is not available');
         }
     }
 
@@ -233,11 +245,14 @@ class ReservationRequest extends FormRequest
     {
         $role = Role::where('name', 'buyer')->first();
         $name = $this->personal_information['first_name'] . ' ' . $this->personal_information['last_name'];
+        $slug = SlugService::createSlug(User::class, 'slug', $name);
 
         $buyer = User::create([
+            "branch_id" => $this->branch_id,
             "role_id" => $role->id,
             "name" => $name,
             "email" => $this->personal_information['email'],
+            "slug" => $slug,
             'password' => Hash::make(Str::random(10))
         ]);
         

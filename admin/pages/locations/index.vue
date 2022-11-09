@@ -7,7 +7,7 @@
                 class="ml-2"
                 elevation="0"
                 color="info"
-                @click="$router.push('/properties/location/create')"
+                @click="$router.push('/locations/create')"
             >
                 <v-icon>mdi-map</v-icon> Add Location
             </v-btn>
@@ -18,11 +18,11 @@
                 class="item-wide mr-10 mb-10"
                 max-width="500"
                 v-for="(location, i) in locations" :key="i"
-                @click="$router.push(`/properties/show?id=${location.id}`)"
+                @click="$router.push(`/locations/properties?id=${location.id}`)"
             >
-                <div id="map-container-google-1" class="z-depth-1-half map-container" style="width: 500px;">
+                <div id="map-container-google-1" class="z-depth-1-half map-container" style="width: 400px;">
                     <iframe :src="location.map" frameborder="0"
-                    style="border:0; height: 350px; width: 500px;" allowfullscreen></iframe>
+                    style="border:0; height: 250px; width: 400px;" allowfullscreen></iframe>
                 </div>
 
                 <v-card-title>{{ location.location }}</v-card-title>
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { Property } from '../../services/properties'
+import { Location } from '../../services/locations'
 export default {
     name: "PropertiesIndex",
     data () {
@@ -67,17 +67,19 @@ export default {
                 'Location'
             ],
 
+            
             locations: []
         }
     },
 
     created () {
+        
         this.getProperties()
     },
 
     methods: {
         getProperties() {
-            Property.all().then((response) => {
+            Location.all().then((response) => {
                 if (response.data) {
                     this.locations = response.data.data
                 }

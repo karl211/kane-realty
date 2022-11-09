@@ -82,6 +82,7 @@ export default {
         isShowSpouseInformation: false,
         errors: {},
         form: {
+            branch_id: null,
             chooseProperty: {},
             personalInformation: {},
             spouseInformation: {},
@@ -109,6 +110,7 @@ export default {
         submit () {
             const formData = new FormData()
 
+            this.form.branch_id = localStorage.getItem('branch')
             Object.entries(this.form).forEach(([key, obj]) => {
                 if (obj) {
                     if (key === 'documents') {
@@ -146,7 +148,10 @@ export default {
                         'Something went wrong',
                         'warning'
                     )
-                    this.errors = error.response.data.errors
+                    const self = this
+                    setTimeout(() => {
+                        self.errors = error.response.data.errors
+                    }, 1000);
                 }
             })
             

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\Location;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BuyerResource;
+use App\Http\Resources\LocationResource;
 use App\Http\Requests\ReservationRequest;
 use App\Http\Resources\ReservationResource;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,14 +31,22 @@ class ReservationController extends Controller
         return ReservationResource::collection($reservations);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function locations()
     {
-        //
+        $locations = Location::with('properties')
+            ->with(['properties' => function($query) {
+                $query->where('status', 'On Going');
+            }])
+            ->when(request()->location_id, function ($query) {
+                $query->where('id', request()->location_id);
+            })
+            ->whereHas('properties', function($q) {
+                $q->where('status', 'On Going');
+            })
+            ->orderBy('location')
+            ->get();
+            
+        return LocationResource::collection($locations);
     }
 
     /**

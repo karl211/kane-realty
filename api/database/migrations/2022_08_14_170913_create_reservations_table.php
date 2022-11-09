@@ -26,6 +26,7 @@ return new class extends Migration
             $table->integer('monthly_amortization');
             $table->string('term');
             $table->date('transaction_at');
+            $table->string('status');
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
 

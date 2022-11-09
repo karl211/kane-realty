@@ -60,17 +60,12 @@ class PropertySeeder extends Seeder
 
                 foreach ($explode_str as $val) {
                     if ($val && !$block) {
-                        
                         $block = trim($val);
                     } else if ($val && !$lot) {
-                        // dd($val);
                         $lot = trim($val);
                     }
                 }
 
-                // if ($block == 'b5') {
-                //     dd($property);
-                // }
                 if ($property->property == 'Block7 l0t5') {
                     $block = 7;
                     $lot = 5;
@@ -95,20 +90,6 @@ class PropertySeeder extends Seeder
                     $lot = 7;
                 }
 
-                // if (!$lot) {
-                //     dd($property);
-                // }
-                
-                // $location = Location::updateOrCreate(
-                // [
-                //     'branch_id' => $branch,
-                    
-                // ], [
-                //     'location' => $property->location_name,
-                //     'description' => $property->description,
-                //     'type' => $property->type,
-                // ]);
-
                 $location->properties()->updateOrCreate([
                     'block' => $block,
                     'lot' => $lot,
@@ -116,7 +97,6 @@ class PropertySeeder extends Seeder
                     'contract_price' => $property->ContractPrice,
                     'default_monthly_amortization' => $property->MonthlyAmortization,
                     'term' => $property->Terms,
-                    'photo' => 'https://loremflickr.com/640/480/business?'. random_int(1, 5000),
                     'status' => $property->Status,
                 ]);
             }

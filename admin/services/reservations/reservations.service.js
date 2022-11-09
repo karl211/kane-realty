@@ -7,7 +7,7 @@ const reservationsService = class ReservationsService extends BaseService
     }
 
     locations(params = {}) {
-        return super.get(`${this.baseURL}/locations`, params);
+        return super.get(`${this.baseURL}/reservations/locations`, params);
     }
 
     networks(params = {}) {

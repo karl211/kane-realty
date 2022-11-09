@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PropertyResource extends JsonResource
@@ -14,6 +15,15 @@ class PropertyResource extends JsonResource
      */
     public function toArray($request)
     {
+        $file = null;
+        $file_path = 'properties/' . $this->id . '/' . $this->photo;
+
+        if ($this->photo) {
+            $file = Storage::disk('s3')->temporaryUrl($file_path, now()->addMinutes(2));
+        } else {
+            $file = url('/images/default-property.gif');
+        }
+
         return [
             'id' => $this->id,
             'block' => $this->block,
@@ -24,7 +34,7 @@ class PropertyResource extends JsonResource
             'lot_size' => $this->lot_size,
             'description' => $this->description,
             'full_property' => $this->full_property,
-            'photo' => $this->photo,
+            'photo' => $file,
             'contract_price' => $this->contract_price,
             'default_monthly_amortization' => $this->default_monthly_amortization,
             'term' => $this->term,

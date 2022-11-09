@@ -25,7 +25,7 @@
                     <v-img
                         v-if="form.post_dated_cheque"
                         contain
-                        max-height="400"
+                        max-height="250"
                         max-width="500"
                         :src="url('post_dated_cheque')"
                     />
@@ -48,7 +48,7 @@
                     <v-img
                         v-if="form.birth_or_marriage_certificate"
                         contain
-                        max-height="400"
+                        max-height="250"
                         max-width="500"
                         :src="url('birth_or_marriage_certificate')"
                     />
@@ -71,7 +71,7 @@
                     <v-img
                         v-if="form.picture_by_2"
                         contain
-                        max-height="400"
+                        max-height="250"
                         max-width="500"
                         :src="url('picture_by_2')"
                     />
@@ -94,7 +94,7 @@
                     <v-img
                         v-if="form.tax_certificate"
                         contain
-                        max-height="400"
+                        max-height="250"
                         max-width="500"
                         :src="url('tax_certificate')"
                     />
@@ -117,7 +117,7 @@
                     <v-img
                         v-if="form.proof_of_billing"
                         contain
-                        max-height="400"
+                        max-height="250"
                         max-width="500"
                         :src="url('proof_of_billing')"
                     />
@@ -134,6 +134,7 @@
                             accept="image/*"
                             prepend-icon=""
                             label="2 Valid ID's (Company and Government)"
+                            class="required"
                             hide-details="auto"
                             :error-messages="error.valid_id"
                         ></v-file-input>
@@ -143,7 +144,7 @@
                     <v-img
                         v-if="form.valid_id"
                         contain
-                        max-height="400"
+                        max-height="250"
                         max-width="500"
                         :src="url('valid_id')"
                     />
@@ -166,7 +167,7 @@
                     <v-img
                         v-if="form.tin"
                         contain
-                        max-height="400"
+                        max-height="250"
                         max-width="500"
                         :src="url('tin')"
                     />
@@ -189,7 +190,7 @@
                     <v-img
                         v-if="form.house_sketch"
                         contain
-                        max-height="400"
+                        max-height="250"
                         max-width="500"
                         :src="url('house_sketch')"
                     />
@@ -212,7 +213,7 @@
                     <v-img
                         v-if="form.picture_by_1"
                         contain
-                        max-height="400"
+                        max-height="250"
                         max-width="500"
                         :src="url('picture_by_1')"
                     />
@@ -235,7 +236,7 @@
                     <v-img
                         v-if="form.spa"
                         contain
-                        max-height="400"
+                        max-height="250"
                         max-width="500"
                         :src="url('spa')"
                     />
@@ -283,10 +284,7 @@ export default {
             console.log(file)
         },
 
-        url(key) {
-            if (!this.form[key]) return;
-            return URL.createObjectURL(this.form[key]);
-        }
+        
     },
 }
 </script>

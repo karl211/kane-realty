@@ -7,31 +7,13 @@
                 class="ml-2"
                 elevation="0"
                 color="info"
-                @click="$router.push('/properties/create')"
+                @click="$router.push('/locations/properties/create?id=' + $route.query.id + '&location=' + location)"
             >
                 <v-icon>mdi-home-plus</v-icon> Add Property
             </v-btn>
         </div>
         <br>
         <div class="container-wrap">
-            <!-- <v-card
-                class="item-wide mr-10 mb-10"
-                max-width="500"
-                v-for="(location, i) in locations" :key="i"
-                @click="$router.push('/properties/show')"
-            >
-                <div id="map-container-google-1" class="z-depth-1-half map-container" style="width: 500px;">
-                    <iframe :src="location.map" frameborder="0"
-                    style="border:0; height: 350px; width: 500px;" allowfullscreen></iframe>
-                </div>
-
-                <v-card-title>{{ location.location }}</v-card-title>
-
-                <v-card-text class="text--primary card-text-wrap">
-                    <div>{{ location.description }}</div>
-                    <div>Total property: <span class="text--font-weight-medium orange--text text-sm-h6">{{ location.properties.length }}</span></div>
-                </v-card-text>
-            </v-card> -->
             <v-card
                 class="mx-auto mb-10"
                 max-width="350"
@@ -54,7 +36,7 @@
                     <div>Default Amortization: {{ '₱' + Number(property.default_monthly_amortization).toLocaleString() }}</div>
                     <div>Term: {{ property.term }}</div>
                     
-                    <div class="mt-3">{{ property.description.substring(0, 150) }} <a>.....</a></div>
+                    <!-- <div class="mt-3" v-if="property.description">{{ property.description.substring(0, 150) }} <a>.....</a></div> -->
                 </v-card-text>
 
                 <!-- <v-card-actions>
@@ -73,12 +55,16 @@
                 </v-btn>
                 </v-card-actions> -->
             </v-card>
+            <div class="filling-empty-space-childs"></div>
+            <div class="filling-empty-space-childs"></div>
+            <div class="filling-empty-space-childs"></div>
+            <!-- <div class="filling-empty-space-childs"></div> -->
         </div>
     </section>
 </template>
 
 <script>
-import { Property } from '../../services/properties'
+import { Property } from '../../../services/properties'
 export default {
     name: "PropertiesIndex",
     data () {
@@ -114,5 +100,11 @@ export default {
     .container-wrap {
         display: flex;
         flex-wrap: wrap;
+        justify-content: space-around
+    }
+
+    .filling-empty-space-childs {
+        width: 25%;
+        height:0; 
     }
 </style>

@@ -2,7 +2,7 @@
     <v-container>
         <v-card>
             <v-toolbar-title class="pa-10 pt-10 pb-5">
-                <h2><v-icon large>mdi-cash-clock</v-icon> Add Property</h2>
+                <h2><v-icon large>mdi-cash-clock</v-icon> Add Location</h2>
             </v-toolbar-title>
             <v-divider></v-divider>
             <v-form>
@@ -11,16 +11,17 @@
                         <v-col cols="12">
                             <v-card
                                 class="mx-auto"
-                                min-height="830px"
+                                min-height="400px"
                             >
                                 <v-card-text class="text-left">
                                     <v-row>
                                         <v-col cols="6">
                                             <v-select
                                                 v-model="form.branch_id"
-                                                :items="['Butuan', 'San Franz']"
+                                                :items="branches"
                                                 label="Branch"
                                                 required
+                                                class="required"
                                                 dense
                                                 outlined
                                                 hide-details="auto"
@@ -34,6 +35,7 @@
                                                 v-model="form.location"
                                                 label="Location"
                                                 required
+                                                class="required"
                                                 dense
                                                 outlined
                                                 hide-details="auto"
@@ -46,6 +48,7 @@
                                             <v-textarea
                                                 v-model="form.description"
                                                 label="Description"
+                                                class="required"
                                                 dense
                                                 outlined
                                                 name="input-7-4"
@@ -61,45 +64,12 @@
                                                 :items="['Lot only', 'House & Lot']"
                                                 label="Type"
                                                 required
+                                                class="required"
                                                 dense
                                                 outlined
                                                 hide-details="auto"
                                                 :error-messages="error.type"
                                             ></v-select>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                       <v-col cols="6">
-                                            <v-file-input
-                                                v-model="form.photo"
-                                                accept="image/*"
-                                                prepend-icon=""
-                                                label="Photo"
-                                                hide-details="auto"
-                                                :error-messages="error.photo"
-                                            ></v-file-input>
-
-                                            <br>
-                                            <v-img
-                                                v-if="form.photo"
-                                                contain
-                                                max-height="400"
-                                                max-width="500"
-                                                :src="url('photo')"
-                                            />
-                                       </v-col>
-                                   </v-row>
-                                   <v-row>
-                                        <v-col cols="6">
-                                            <v-text-field
-                                                v-model="form.map"
-                                                label="Map Url"
-                                                required
-                                                dense
-                                                outlined
-                                                hide-details="auto"
-                                                :error-messages="error.map"
-                                            ></v-text-field>
                                         </v-col>
                                     </v-row>
                                 </v-card-text>
@@ -131,12 +101,14 @@
     </v-container>
 </template>
 <script>
-// import Swal from 'sweetalert2'
+import Swal from 'sweetalert2'
 
 // import _ from 'lodash'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { Location } from '../../services/locations'
+// import { Auth } from '../../../services/auth'
 export default {
-    name: "ReservationCreate",
+    name: "LocationCreate",
     data: vm => ({
         currencyMask: createNumberMask({
             prefix: '',
@@ -147,41 +119,67 @@ export default {
         }),
         error: {},
         form: {
-            // buyer_id: null,
-            // paid_at: vm.formatDate((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)),
-            // mode_of_payment: 'Cash',
-            // image: null
+           
         },
-
+        branches: [],
     }),
 
     watch: {
-        'form.paid_at'(val) {
-            this.dateFormatted = this.formatDate(val)
-        },
-
-        'form.mode_of_payment'(val) {
-            this.form.image = null
-        },
-
         form() {
             this.clear()
         }
     },
 
     created () {
-      
+        this.getBranches()
     },
 
     methods: {
+        getBranches() {
+            Location.branches().then((response) => {
+                if (response.data) {
+                    this.branches = response.data.data.map(function(data) {
+                        return {
+                            text: data.branch,
+                            value: data.id
+                        }
+                    })
+                }
+            });
+        },
+
         cancel () {
             
         },
 
         submit () {
-            
-        }
+            Location.create(this.form).then((response) => {
+                if (response.data) {
+                    Swal.fire({
+                        title: 'Done!',
+                        text: 'Successfully saved',
+                        confirmButtonText: 'Okay',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.$router.push({path: `/locations`});
+                        } 
+                    })
+                }
+            }).catch(error => {
+                // Handle error
+                if (error.response) {
+                    Swal.fire(
+                        'Ops.',
+                        'Something went wrong',
+                        'warning'
+                    )
+
+                    this.error = error.response.data.errors
+                }
+            })
+        },
         
+      
     },
 }
 </script>
