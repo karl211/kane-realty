@@ -183,13 +183,12 @@ class ReservationSeeder extends Seeder
             $new_reservation->payments()->withoutGlobalScope('default_branch')
             ->updateOrCreate([
                 'buyer_id' => $buyer->id,
-                'ar_number' => $reservation->ORNumber,
+                'or_number' => $reservation->ORNumber,
                 'type_of_payment' => $reservation->TypeOfPayment,
                 'mode_of_payment' => $reservation->ModeOfPayment
             ], [
                 'amount' => $reservation->Amount,
                 'paid_at' => $reservation->DateOfPayment,
-                'image' => 'https://loremflickr.com/640/480/business?'. random_int(1, 5000),
             ]);
         }
     }

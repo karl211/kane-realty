@@ -16,6 +16,7 @@ class Payment extends Model
         'reservation_id',
         'buyer_id',
         'ar_number',
+        'or_number',
         'amount',
         'type_of_payment',
         'mode_of_payment',

@@ -70,6 +70,7 @@ class LocationSeeder extends Seeder
                 'buyer_id' => $reservation->buyer_id,
                 'paid_at' => now(),
                 'ar_number' => random_int(1000, 5000),
+                'or_number' => random_int(1000, 5000),
                 'amount' => random_int(20000, 40000),
                 'type_of_payment' => fake()->randomElement(['Reservation', 'Amortization']),
                 'mode_of_payment' => fake()->randomElement(['Cash', 'Cheque', 'Gcash', 'Maya', 'Paypal']),

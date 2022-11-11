@@ -24,9 +24,9 @@
                     @click:close="remove(data.item)"
                 >
                     <v-avatar left>
-                        <v-img :src="data.item.photo"></v-img>
+                        <v-img :src="data.item.profile.photo"></v-img>
                     </v-avatar>
-                    {{ data.item.last_name }}, {{ data.item.first_name }} {{ data.item.middle_name }}
+                    {{ data.item.profile.last_name }}, {{ data.item.profile.first_name }} {{ data.item.profile.middle_name }}
                 </v-chip>
             </template>
             <template v-slot:item="data">
@@ -35,10 +35,10 @@
                 </template>
                 <template v-else>
                     <v-list-item-avatar>
-                        <img :src="data.item.photo">
+                        <img :src="data.item.profile.photo">
                     </v-list-item-avatar>
                     <v-list-item-content @click="selectBuyer(data)">
-                        <v-list-item-title class="font-weight-medium">{{ data.item.last_name }}, {{ data.item.first_name }} {{ data.item.middle_name }}</v-list-item-title>
+                        <v-list-item-title class="font-weight-medium">{{ data.item.profile.last_name }}, {{ data.item.profile.first_name }} {{ data.item.profile.middle_name }}</v-list-item-title>
                         <v-list-item-subtitle>
                             <small class="text-md-caption blue--text">{{ data.item.email }}</small>
                         </v-list-item-subtitle>
@@ -212,7 +212,7 @@ export default {
         },
 
         getItemText(item) {
-            return `${item.last_name} ${item.first_name} ${item.middle_name} ${item.email}`;
+            return `${item.profile.last_name} ${item.profile.first_name} ${item.profile.middle_name} ${item.email}`;
         },
 
         remove (item) {
@@ -228,8 +228,8 @@ export default {
         searchBuyer (keyword) {
             if (keyword) {
                 Auth.searchBuyer({search: keyword}).then((res) => {
-                    if (res.data.data.data.length) {
-                        this.buyers = res.data.data.data
+                    if (res.data.data.length) {
+                        this.buyers = res.data.data
                     }
                 });
             } else {

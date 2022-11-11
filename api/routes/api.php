@@ -55,6 +55,14 @@ Route::middleware('auth:sanctum')
 
         Route::get('/reservations/{buyer:slug}', [ReservationController::class, 'show']);
 
+        Route::get('/reservations/{buyer:slug}/document/download', [ReservationController::class, 'download']);
+        
+        Route::post('/reservations/{buyer:slug}/property', [ReservationController::class, 'addProperty']);
+
+        Route::post('/reservations/{buyer:slug}/document', [ReservationController::class, 'updateDocument']);
+
+        
+
         Route::post('/reservations', [ReservationController::class, 'store']);
 
         Route::get('/properties', [PropertyController::class, 'index']);

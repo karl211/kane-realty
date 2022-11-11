@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('buyer_id');
             $table->unsignedBigInteger('document_id');
+            $table->string('file')->nullable();
             $table->timestamps();
 
             $table->unique(["buyer_id", "document_id"]);

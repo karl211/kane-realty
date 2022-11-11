@@ -14,6 +14,15 @@ class ProfileResource extends JsonResource
      */
     public function toArray($request)
     {
+        $photo = null;
+        $photo_path = 'buyers/' . $this->id . '/' . $this->photo;
+
+        if ($this->photo) {
+            $photo = Storage::disk('s3')->temporaryUrl($photo_path, now()->addMinutes(2));
+        } else {
+            $photo = url('/images/default-user.png');
+        }
+
         return [
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
@@ -28,7 +37,7 @@ class ProfileResource extends JsonResource
             'contact_number' => $this->contact_number,
             'zip_code' => $this->zip_code,
             'address' => $this->address,
-            'photo' => $this->photo,
+            'photo' => $photo,
             'facebook_url' => $this->facebook_url,
             'instagram_url' => $this->instagram_url,
         ];

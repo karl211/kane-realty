@@ -8,6 +8,7 @@ use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -59,7 +60,6 @@ class UserController extends Controller
         ->orderBy('last_name', 'asc')
         ->paginate(10);
         
-        return response()->json(['data' => $buyers]);
-        // return ReservationResource::collection($reservations);
+        return UserResource::collection($buyers);
     }
 }

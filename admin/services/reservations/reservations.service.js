@@ -26,9 +26,23 @@ const reservationsService = class ReservationsService extends BaseService
         return super.get(`${this.baseURL}/reservations/${buyer}`);
     }
 
+    addProperty(buyer, params = {}) {
+        return super.post(`${this.baseURL}/reservations/${buyer}/property`, params);
+    }
+
+    updateDocument(buyer, params = {}) {
+        return super.post(`${this.baseURL}/reservations/${buyer}/document`, params);
+    }
+
     getDocuments() {
         return super.get(`${this.baseURL}/documents`);
     }
+
+    download(url, params = {}) {
+        return super.get(url, params);
+    }
+
+    
 };
 
 export default reservationsService

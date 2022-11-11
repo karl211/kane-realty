@@ -15,7 +15,7 @@
                                 <h3 class="ml-1">Properties</h3>
                                 <v-dialog
                                     v-model="dialog"
-                                    width="1200px"
+                                    width="800px"
                                 >
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-btn
@@ -29,9 +29,12 @@
                                         </v-btn>
                                     </template>
                                     <v-card>
+                                        <v-card-title class="pb-0 ml-6">
+                                            <h3>Add Property</h3>
+                                        </v-card-title>
                                         <v-form>
-                                            <v-container class="pa-10">
-                                                <ReservationChooseProperty :errors="errors" @chooseProperty="updateForm($event, 'chooseProperty')"/>
+                                            <v-container class="px-10">
+                                                <ReservationChooseProperty size="sm" :errors="errors" @chooseProperty="updateForm($event, 'chooseProperty')"/>
                                                 <br>
                                                 <v-divider></v-divider>
                                                 <br>
@@ -83,6 +86,7 @@
                                                         <p class="ma-0">Block {{ item.property.block }}</p>
                                                         <p class="ma-0">Lot {{ item.property.lot }}</p>
                                                         <p v-if="item.property.phase">Phase {{ item.property.phase }}</p>
+                                                        <p v-if="item.property.lot_size">Lot size {{ item.property.lot_size }}</p>
                                                     </div>
                                                 </v-card-text>
 
@@ -189,14 +193,26 @@
                     ></v-progress-circular>
                 </div>
             </v-col>
-            <v-col cols="2">
+            <v-col cols="2" v-if="buyerDocuments.length">
                 <v-card
                     class="mx-auto"
                 >
                     <v-card-title class="pb-0">
+                        <div class="d-flex">
                         <h3>Documents</h3>
+                        <v-btn
+                            class="ml-2"
+                            elevation="0"
+                            color="orange"
+                            dark
+                            small
+                            @click="manage"
+                        >
+                            Manage
+                        </v-btn>
+                    </div>
                     </v-card-title>
-                    <v-card-text class="text-left">
+                    <v-card-text  class="text-left">
                         <div class="d-flex" v-for="(document,i) in buyerDocuments" :key="i">
                             <v-checkbox
                                 :label="document.label"
@@ -206,10 +222,42 @@
                                 color="success"
                             ></v-checkbox>
                         </div>
-                        
                     </v-card-text>
                 </v-card>
-              
+                <v-dialog
+                    v-model="manageDocuments"
+                    width="800px"
+                >
+                    <v-card>
+                        <v-card-title class="pb-0 ml-6">
+                            <h3>Update Document</h3>
+                        </v-card-title>
+                        <v-form>
+                            <v-container class="px-10">
+                                <ReservationDocument title="Documents" :is-modal="true" :errors="errors" :documents="buyerDocuments" @documents="updateForm($event, 'documents')"/>
+                                <br>
+                                <div class="d-flex justify-end">
+                                    <v-btn
+                                        class="ml-2"
+                                        elevation="0"
+                                        color="warning"
+                                        @click="manageDocuments = false"
+                                    >
+                                        Cancel
+                                    </v-btn>
+                                    <v-btn
+                                        class="ml-2"
+                                        elevation="0"
+                                        color="primary"
+                                        @click="updateDocument"
+                                    >
+                                        Submit
+                                    </v-btn>
+                                </div>
+                            </v-container>
+                        </v-form>
+                    </v-card>
+                </v-dialog>
             </v-col>
         </v-row>
         
@@ -222,6 +270,7 @@ export default {
     data () {
         return {
             dialog: false,
+            manageDocuments: false,
             panel: [0],
             totalPayment: 0,
             buyer: null,
@@ -261,24 +310,33 @@ export default {
             Reservations.getBuyer(this.$route.params.id).then((response) => {
                 if (response.data.data) {
                     this.buyer = response.data.data
+                    
+                    this.buyerDocuments = this.mapDocuments(response.data.data.documents)
 
-                    this.buyerDocuments = this.mapDocuments(this.buyer.documents)
-
-                    this.mapReservations(this.buyer.reservations)
+                    setTimeout(() => {
+                        this.mapReservations(this.buyer.reservations)
+                    }, 600);
                 }
             });
         },
 
         mapDocuments (documents) {
-            return this.documents.map(function(data) {
+            return  this.documents.map(function(data) {
                 const obj = {
-                    label: data.desc,
                     value: false,
+                    label: data.desc,
+                    key: data.title,
+                    file_name: null,
+                    file_url: null,
                 }
                 if (documents) {
                     documents.forEach(document => {
                         if (document.title === data.title) {
                             obj.value = true
+                            obj.file_name = new File([document.file_url], document.file_name, {
+                                type: "image/jpeg",
+                            })
+                            obj.file_url = document.file_url
                         }
                     });
                 }
@@ -320,35 +378,21 @@ export default {
             this.form[key] = form
         },
 
+        manage () {
+            this.manageDocuments = true
+            // console.log(document)
+        },
+
         submit () {
-            const formData = new FormData()
-
-            Object.entries(this.form).forEach(([key, obj]) => {
-                if (obj) {
-                    if (key === 'documents') {
-                        Object.entries(obj).forEach(([fileKey, fileVal]) => {
-                            formData.append(fileKey, fileVal);
-                        })
-                    } else {
-                        formData.append(key, JSON.stringify(obj));
-                    }
-                }
-            })
-
-            Reservations.create(formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then((response) => {
+            Reservations.addProperty(this.buyer.slug, this.form).then((response) => {
                 if (response.data) {
-
                     Swal.fire({
                         title: 'Done!',
-                        text: 'Successfully reserved',
+                        text: 'Successfully added',
                         confirmButtonText: 'Okay',
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            this.$router.push({path: `/reservations`});
+                            location.reload()
                         } 
                     })
                 }
@@ -364,6 +408,44 @@ export default {
                 }
             })
             
+        },
+
+        updateDocument () {
+            const formData = new FormData()
+            
+            Object.entries(this.form).forEach(([key, obj]) => {
+                if (obj) {
+                    if (key === 'documents') {
+                        Object.entries(obj).forEach(([fileKey, fileVal]) => {
+                            formData.append(fileKey, fileVal);
+                        })
+                    } 
+                }
+            })
+
+            Reservations.updateDocument(this.buyer.slug, formData).then((response) => {
+                if (response.data) {
+                    Swal.fire({
+                        title: 'Done!',
+                        text: 'Successfully updated',
+                        confirmButtonText: 'Okay',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload()
+                        }
+                    })
+                }
+            }).catch(error => {
+                // Handle error
+                if (error.response) {
+                    Swal.fire(
+                        'Ops.',
+                        'Something went wrong',
+                        'warning'
+                    )
+                    this.errors = error.response.data.errors
+                }
+            })
         }
     }
 }

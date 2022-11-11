@@ -87,7 +87,7 @@ class User extends Authenticatable
 
     public function documents()
     {
-        return $this->belongsToMany(Document::class, 'buyer_documents', 'buyer_id', 'document_id');
+        return $this->belongsToMany(Document::class, 'buyer_documents', 'buyer_id', 'document_id')->withPivot('file', 'buyer_id');
     }
 
     public function scopeSearch($query, $search)
