@@ -15,16 +15,28 @@
                             hide-details
                         ></v-checkbox>
                         <v-file-input
+                            v-if="document.file_name"
                             v-model="document.file_name"
                             accept="image/*"
                             prepend-icon=""
                             :label="document.label"
+                            hide-details="auto"
+                            :error-messages="error['valid_id']"
                             @change="selectFile($event, document)"
                         ></v-file-input>
-                        
+                        <v-file-input
+                            v-else
+                            v-model="form[document.key]"
+                            accept="image/*"
+                            prepend-icon=""
+                            :label="document.label"
+                            hide-details="auto"
+                            :error-messages="error[document.key]"
+                            @change="selectFile($event, document)"
+                        ></v-file-input>
                         <v-btn 
                             v-if="document.file_url"
-                            :href="document.file_url"
+                            :href="url(document.file_url)"
                             class="mt-4"
                             plain
                             target="_blank"
@@ -33,13 +45,6 @@
                                 mdi-download-box
                             </v-icon>
                         </v-btn>
-                        
-                        <!-- <a v-if="document.file_url" download="custom-filename.jpg" :href="document.file_url" title="ImageName">
-                            <v-icon class="pointer download-wrap">
-                                mdi-download-box
-                            </v-icon>
-                        </a> -->
-                        
                     </div>
                     <br>
                     <v-img
@@ -55,7 +60,10 @@
     </v-row>
 </template>
 <script>
+import Swal from 'sweetalert2'
+import { Reservations } from '../../services/reservations'
 import ReservationMixin from "~/mixins/ReservationMixin.js"
+
 export default {
     name: "ReservationCreate",
     mixins: [ReservationMixin],
@@ -122,27 +130,29 @@ export default {
     },
 
     mounted () {
-        this.files = this.documents 
         if (this.isModal) {
             this.colSize = "12"
         }
 
-        if (this.files.length) {
-            this.files.forEach(document => {
-                for (const i in this.form) {
-                    console.log(document)
-                    if (document.key === i && document.value) {
-                        this.form[i] = document.value
-                    }
-                }
-            })
-        }
+        if (this.documents.length) {
+            this.files = this.documents 
 
+            if (this.files.length) {
+                this.files.forEach(document => {
+                    for (const i in this.form) {
+                        if (document.key === i && document.value) {
+                            this.form[i] = document.value
+                        }
+                    }
+                })
+            }
+        } else {
+            this.fetchDocument()
+        }
     },
 
     methods: {
         selectFile (file, document) {
-            console.log(file)
             if (!file) {
                 document.value = false
             }
@@ -151,11 +161,7 @@ export default {
             this.$emit('documents', this.form)
         },
 
-        download (document) {
-            console.log(document)
-        },
-
-        url(url) {
+        url (url) {
             if (!url) return;
 
             if (typeof url === 'object') {
@@ -163,8 +169,35 @@ export default {
             } else {
                 return url
             }
+        },
+
+        mapDocuments (documents) {
+            return  documents.map(function(data) {
+                return {
+                    value: false,
+                    label: data.desc,
+                    key: data.title,
+                    file_name: null,
+                    file_url: null,
+                }
+            })
+        },
+
+        fetchDocument () {
+            Reservations.getDocuments().then((response) => {
+                if (response.data) {
+                    this.files = this.mapDocuments(response.data)
+                }
+            }).catch(error => {
+                if (error.response) {
+                    Swal.fire(
+                        'Ops.',
+                        'Something went wrong',
+                        'warning'
+                    )
+                }
+            })
         }
-        
     },
 }
 </script>

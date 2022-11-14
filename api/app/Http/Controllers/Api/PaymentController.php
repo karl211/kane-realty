@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentRequest;
 use App\Http\Resources\PaymentResource;
-use Symfony\Component\HttpFoundation\Response;
 
 class PaymentController extends Controller
 {

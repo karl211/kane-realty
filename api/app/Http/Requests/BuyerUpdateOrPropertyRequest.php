@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Models\Property;
 use Illuminate\Foundation\Http\FormRequest;
 
-class BuyerAddPropertyRequest extends FormRequest
+class BuyerUpdateOrPropertyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -56,17 +56,35 @@ class BuyerAddPropertyRequest extends FormRequest
 
         if ($property) {
             $recent_reservation = $buyer->reservations()->latest()->first();
+            
+            if ($this->selected_property) {
+                $reservation = $buyer->reservations()->where('property_id', $this->selected_property)->first();
+                
+                $reservation->property->update([
+                    'status' => 'On Going'
+                ]);
 
-            $reservation = $buyer->reservations()->create([
-                'property_id' => $property->id,
-                'co_borrower_id' => $recent_reservation->co_borrower_id,
-                'attorney_id' => $recent_reservation->attorney_id,
-                'contract_price' => $property->contract_price,
-                'monthly_amortization' => $property->default_monthly_amortization,
-                'term' => $property->term,
-                'transaction_at' => $choose_property['transaction_at'],
-                'status' => 'On Going'
-            ]);
+                $reservation->update([
+                    'property_id' => $property->id,
+                    'co_borrower_id' => $recent_reservation->co_borrower_id,
+                    'attorney_id' => $recent_reservation->attorney_id,
+                    'contract_price' => $property->contract_price,
+                    'monthly_amortization' => $property->default_monthly_amortization,
+                    'term' => $property->term,
+                    'transaction_at' => $choose_property['transaction_at'],
+                ]);
+            } else {
+                $reservation = $buyer->reservations()->create([
+                    'property_id' => $property->id,
+                    'co_borrower_id' => $recent_reservation->co_borrower_id,
+                    'attorney_id' => $recent_reservation->attorney_id,
+                    'contract_price' => $property->contract_price,
+                    'monthly_amortization' => $property->default_monthly_amortization,
+                    'term' => $property->term,
+                    'transaction_at' => $choose_property['transaction_at'],
+                    'status' => 'On Going'
+                ]);
+            }
 
             $property->update([
                 'status' => 'Reserved'

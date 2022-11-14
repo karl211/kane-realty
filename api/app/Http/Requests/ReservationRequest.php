@@ -231,10 +231,14 @@ class ReservationRequest extends FormRequest
             foreach ($documents as $document) {
                 if ($this->hasFile($document->title)) {
                     $file = $this->file($document->title);
-                    $filename = time() . '-' . $file->getClientOriginalName();
+                    $filename = $file->getClientOriginalName();
                     $file->storeAs('buyers/' . $buyer->id . '/' . $document->title, $filename, 's3');
-        
-                    $buyer->documents()->attach($document->id, [
+
+                    $buyer->documents()->newPivotQuery()->updateOrInsert([
+                        'buyer_id' => $buyer->id,
+                        'document_id' => $document->id
+                    ], [
+                        'file' => $filename,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);

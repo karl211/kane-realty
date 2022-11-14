@@ -70,18 +70,10 @@
                         </v-btn>
                         <v-btn
                             elevation="0"
-                            depressed
-                            color="warning"
-                            small
-                            icon
-                        >
-                            <v-icon>mdi-file-edit-outline</v-icon>
-                        </v-btn>
-                        <v-btn
-                            elevation="0"
                             color="danger"
                             small
                             icon
+                            @click="deleteReservation(item)"
                         >
                             <v-icon>mdi-delete</v-icon>
                         </v-btn>
@@ -106,6 +98,7 @@
   
 <script>
 import _ from "lodash";
+import Swal from 'sweetalert2'
 import { mapGetters } from 'vuex'
 import { Reservations } from '../../services/reservations'
 
@@ -172,14 +165,52 @@ export default {
             this.reservations = []
             this.search.page = 1
             this.search.search = value
-
-            
-
             this.getReservations(this.search)
         },
         show(id) {
             this.$router.push({path: `/reservations/${id}`});
+        },
+        deleteReservation(item) {
+            Swal.fire({
+                title: 'Do you want to delete this reservation?',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Reservations.remove({id: item.id}).then((response) => {
+                        if (response.data) {
+                            Swal.fire({
+                                title: 'Done!',
+                                text: 'Successfully deleted',
+                                confirmButtonText: 'Okay',
+                                icon: 'success',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload()
+                                } 
+                            })
+                        }
+                    }).catch(error => {
+                        // Handle error
+                        if (error.response) {
+                            Swal.fire(
+                                'Ops.',
+                                'Something went wrong',
+                                'warning'
+                            )
+                            // const self = this
+                            // setTimeout(() => {
+                                
+                            // }, 1000);
+                            this.errors = error.response.data.errors
+                        }
+                    })
+                }
+            })
         }
+        // edit(id) {
+        //     this.$router.push({path: `/reservations/${id}/update`});
+        // }
     }
 }
 </script>

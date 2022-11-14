@@ -12,3 +12,7 @@
     padding-right: 2px;
     color: #d70000;
 }
+
+.swal2-container {
+    font-family: 'Roboto' !important;
+}

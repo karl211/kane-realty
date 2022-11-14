@@ -185,6 +185,11 @@ export default {
             type: String,
             default: 'lg'
         },
+
+        property: {
+            type: Object,
+            default: () => {}
+        },
         
         errors: {
             type: Object,
@@ -244,7 +249,11 @@ export default {
         },
     },
 
-    mounted() {
+    created () {
+        console.log(this.property)
+    },
+
+    mounted () {
         if (this.size === 'sm') {
             this.colSize = "12"
         }

@@ -303,6 +303,7 @@ export default {
                         title: 'Done!',
                         text: 'Successfully added',
                         confirmButtonText: 'Okay',
+                        icon: 'success',
                     }).then((result) => {
                         if (result.isConfirmed) {
                             this.$router.push({path: `/locations/properties?id=${this.form.location_id}`});

@@ -24,10 +24,11 @@ return new class extends Migration
             $table->string('model')->nullable();
             $table->string('photo')->nullable();
             $table->text('description')->nullable();
-            $table->integer('contract_price');
-            $table->integer('default_monthly_amortization');
-            $table->string('term');
+            $table->integer('contract_price')->nullable();
+            $table->integer('default_monthly_amortization')->nullable();
+            $table->string('term')->nullable();
             $table->text('status'); // available, reserved, ocuppied
+            $table->boolean('is_active'); 
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
             

@@ -9,9 +9,10 @@ use App\Models\Reservation;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PaymentRequest extends FormRequest
+class UpdatePaymentRequest extends FormRequest
 {
     protected $buyer;
+    protected $payment;
     protected $reservation;
 
     /**
@@ -33,6 +34,10 @@ class PaymentRequest extends FormRequest
 
         if (!$this->buyer) {
             abort(403, 'Not authorized');
+        }
+
+        if ($this->payment_id) {
+            $this->payment = Payment::findOrFail($this->payment_id);
         }
 
         return true;
@@ -98,6 +103,10 @@ class PaymentRequest extends FormRequest
         $data = $this->all();
 
         if ($this->hasFile('image')) {
+            if ($this->payment->image) {
+                Storage::disk('s3')->delete('payments/' . $this->buyer->id . '/' . $this->mode_of_payment . '/' . $this->payment->image);
+            }
+            
             $file = $this->file('image');
             $filename = $file->getClientOriginalName();
             $file->storeAs('payments/' . $this->buyer->id . '/' . $this->mode_of_payment, $filename, 's3');
@@ -117,8 +126,6 @@ class PaymentRequest extends FormRequest
             ]);
         }
 
-        $payment = Payment::create($data);
-
-        return $payment;
+        return $this->payment->update($data);
     }
 }

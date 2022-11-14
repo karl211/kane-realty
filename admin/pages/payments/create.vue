@@ -125,6 +125,19 @@
                                     <v-row>
                                         <v-col cols="6">
                                             <v-text-field
+                                                v-model="form.or_number"
+                                                label="OR Number"
+                                                required
+                                                dense
+                                                outlined
+                                                hide-details="auto"
+                                                :error-messages="error.or_number"
+                                            ></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row>
+                                        <v-col cols="6">
+                                            <v-text-field
                                                 v-model="form.amount"
                                                 label="Amount"
                                                 required
@@ -154,15 +167,6 @@
                                                     :value="val.label"
                                                 ></v-radio>
                                             </v-radio-group>
-                                            <!-- <br>
-                                            <v-text-field
-                                                v-model="form.type_of_payment"
-                                                label="Other Type of Payment"
-                                                required
-                                                dense
-                                                outlined
-                                                hide-details
-                                            ></v-text-field> -->
                                         </v-col>
                                     </v-row>
                                     <v-row>
@@ -186,6 +190,9 @@
                                                             accept="image/*"
                                                             prepend-icon=""
                                                             label="Select file"
+                                                            hide-details="auto"
+                                                            :error-messages="error.image"
+                                                            @change="onChange"
                                                         ></v-file-input>
                                                         <v-img
                                                             v-if="form.image"
@@ -197,17 +204,6 @@
                                                     </div>
                                                 </div>
                                             </v-radio-group>
-                                            
-                                            <!-- <br>
-                                            
-                                            <v-text-field
-                                                v-model="form.mode_of_payment"
-                                                label="Mode of Payment"
-                                                required
-                                                dense
-                                                outlined
-                                                hide-details
-                                            ></v-text-field> -->
                                         </v-col>
                                     </v-row>
                                 </v-card-text>
@@ -349,7 +345,7 @@ export default {
             const formData = new FormData()
 
             this.form.amount = this.formatAmount(this.form.amount)
-
+            
             Object.entries(this.form).forEach(([key, obj]) => {
                 if (obj) {
                     if (key === 'image') {
@@ -370,6 +366,7 @@ export default {
                         title: 'Done!',
                         text: 'Successfully paid',
                         confirmButtonText: 'Okay',
+                        icon: 'success',
                     }).then((result) => {
                         if (result.isConfirmed) {
                             this.$router.push({path: `/reservations/${response.data.data.buyer.slug}`});
@@ -379,11 +376,20 @@ export default {
             }).catch(error => {
                 // Handle error
                 if (error.response) {
-                    Swal.fire(
-                        'Ops.',
-                        'Something went wrong',
-                        'warning'
-                    )
+                    console.log()
+                    if (error.response.data.message) {
+                        Swal.fire(
+                            'Ops.',
+                            error.response.data.message,
+                            'warning'
+                        )
+                    } else {
+                        Swal.fire(
+                            'Ops.',
+                            'Something went wrong',
+                            'warning'
+                        )
+                    }
 
                     this.error = error.response.data.errors
                 }
@@ -458,23 +464,27 @@ export default {
             }
         },
 
-        clear () {
-            for (const key in this.error) {
-                if (
-                    typeof this.error[key] === 'object' &&
-                    !Array.isArray(this.error[key]) &&
-                    this.error[key] !== null
-                ) {
-                    const nestedObj = this.error[key];
+        onChange () {
+            this.clear()
+        }
 
-                    for (const key in nestedObj) {
-                        nestedObj[key] = null
-                    }
-                } else {
-                    this.error[key] = null
-                }
-            }
-        },
+        // clear () {
+        //     for (const key in this.error) {
+        //         if (
+        //             typeof this.error[key] === 'object' &&
+        //             !Array.isArray(this.error[key]) &&
+        //             this.error[key] !== null
+        //         ) {
+        //             const nestedObj = this.error[key];
+
+        //             for (const key in nestedObj) {
+        //                 nestedObj[key] = null
+        //             }
+        //         } else {
+        //             this.error[key] = null
+        //         }
+        //     }
+        // },
     },
 }
 </script>
@@ -485,9 +495,7 @@ export default {
     .w-50 {
         width: 50%;
     }
-    .swal2-container {
-        font-family: 'Roboto' !important;
-    }
+    
     .min-h-830 {
         min-height: 830px;
     }

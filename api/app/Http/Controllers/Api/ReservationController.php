@@ -12,10 +12,11 @@ use App\Http\Resources\BuyerResource;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\LocationResource;
 use App\Http\Requests\ReservationRequest;
+use App\Http\Requests\UpdatePaymentRequest;
 use App\Http\Resources\ReservationResource;
 use App\Http\Requests\UpdateDocumentRequest;
-use App\Http\Requests\BuyerAddPropertyRequest;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\BuyerUpdateOrPropertyRequest;
 
 class ReservationController extends Controller
 {
@@ -78,7 +79,7 @@ class ReservationController extends Controller
         }
     }
 
-    public function addProperty(User $buyer, BuyerAddPropertyRequest $request)
+    public function updateOrCreateProperty(User $buyer, BuyerUpdateOrPropertyRequest $request)
     {
         try {
             DB::beginTransaction();
@@ -119,6 +120,27 @@ class ReservationController extends Controller
         }
     }
 
+    public function updatePayment(User $buyer, UpdatePaymentRequest $request)
+    {
+        // return $request->all();
+        try {
+            DB::beginTransaction();
+
+            $document = $request->save($buyer);
+
+            DB::commit();
+
+            return response()->json([
+                'data'  => $document,
+                'message' => 'Successfully updated'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
+    }
+    
     /**
      * Display the specified resource.
      *
@@ -188,8 +210,25 @@ class ReservationController extends Controller
      * @param  \App\Models\Reservation  $reservation
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Reservation $reservation)
+    public function destroy(Request $request)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            $reservation = Reservation::findOrFail($request->id);
+
+            $reservation->delete();
+            
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Successfully deleted'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
+        dd($request->all());
     }
 }
