@@ -31,8 +31,6 @@ class ReservationRequest extends FormRequest
      */
     public function authorize()
     {
-        
-
         return true;
     }
 
@@ -211,12 +209,18 @@ class ReservationRequest extends FormRequest
 
             $property_attr = $this->choose_property;
             $property_attr['property_id'] = $property->id;
-            $property_attr['co_borrower_id'] = $co_borrower->id;
-            $property_attr['attorney_id'] = $attorney->id;
             $property_attr['contract_price'] = $property->contract_price;
             $property_attr['default_monthly_amortization'] = $property->default_monthly_amortization;
             $property_attr['term'] = $property->term;
             $property_attr['status'] = 'On Going';
+
+            if ($co_borrower) {
+                $property_attr['co_borrower_id'] = $co_borrower->id;
+            }
+
+            if ($attorney) {
+                $property_attr['attorney_id'] = $attorney->id;
+            }
 
             $buyer->reservations()->create($property_attr);
 
@@ -227,10 +231,14 @@ class ReservationRequest extends FormRequest
             foreach ($documents as $document) {
                 if ($this->hasFile($document->title)) {
                     $file = $this->file($document->title);
-                    $filename = time() . '-' . $file->getClientOriginalName();
+                    $filename = $file->getClientOriginalName();
                     $file->storeAs('buyers/' . $buyer->id . '/' . $document->title, $filename, 's3');
-        
-                    $buyer->documents()->attach($document->id, [
+
+                    $buyer->documents()->newPivotQuery()->updateOrInsert([
+                        'buyer_id' => $buyer->id,
+                        'document_id' => $document->id
+                    ], [
+                        'file' => $filename,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
@@ -284,7 +292,7 @@ class ReservationRequest extends FormRequest
 
     protected function createCoBorrower($buyer)
     {
-        if (isset($this->co_borrower_information)) {
+        if (isset($this->co_borrower_information) && $this->co_borrower_information['first_name'] && $this->co_borrower_information['last_name']) {
             return $buyer->coBorrowers()->create($this->co_borrower_information);
         }
 
@@ -293,7 +301,7 @@ class ReservationRequest extends FormRequest
 
     protected function createAttorney()
     {
-        if (isset($this->attorney_information)) {
+        if (isset($this->attorney_information) && $this->attorney_information['first_name'] && $this->attorney_information['last_name']) {
             return Attorney::create($this->attorney_information);
         }
 

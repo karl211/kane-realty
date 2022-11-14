@@ -27,7 +27,7 @@ class ReservationResource extends JsonResource
             'balance' => $this->contract_price,
             'term' => $this->term,
             'date_of_transaction' => Carbon::parse($this->transaction_at)->format('M d, Y'),
-            'status' => 'Ongoing',
+            'status' => $this->status,
             'sales_manager' => new UserResource($this->sales_manager),
             'sales_agent' => new UserResource($this->sales_agent),
             'attorney' => new AttorneyResource($this->attorney),

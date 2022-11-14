@@ -159,6 +159,7 @@ export default {
                         title: 'Done!',
                         text: 'Successfully saved',
                         confirmButtonText: 'Okay',
+                        icon: 'success',
                     }).then((result) => {
                         if (result.isConfirmed) {
                             this.$router.push({path: `/locations`});

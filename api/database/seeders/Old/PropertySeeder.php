@@ -23,32 +23,13 @@ class PropertySeeder extends Seeder
 
         $properties = DB::connection('mysql2')->select("
         SELECT
-            propertytypes.`Name` as location_name, 
-            propertytypes.`Location` as description, 
-            propertytypes.`Description` as type, 
-            properties.`Name` as property, 
-            properties.Description as lot_size, 
-            properties.`Status`,
-            transactions.ContractPrice, 
-            transactions.MonthlyAmortization, 
-            transactions.Terms, 
-            transactions.`Status`
+            new_properties.*
         FROM
-            propertytypes
-            INNER JOIN
-            properties
-            ON 
-                propertytypes.Id = properties.PropertyTypeId
-            INNER JOIN
-            transactions
-            ON 
-                properties.Id = transactions.PropertyId
-            WHERE properties.`Name` != 'Test Property'
+            new_properties
         ");
         
-        
         foreach ($properties as $property) {
-            $location = Location::withoutGlobalScope('default_branch')->where('location', $property->location_name)->first();
+            $location = Location::withoutGlobalScope('default_branch')->where('location', $property->location)->first();
 
             if ($location) {
                 $str = str_replace("block", "", strtolower($property->property));
@@ -90,14 +71,15 @@ class PropertySeeder extends Seeder
                     $lot = 7;
                 }
 
-                $location->properties()->updateOrCreate([
+                $location->properties()->withoutGlobalScope('default_branch')->updateOrCreate([
                     'block' => $block,
                     'lot' => $lot,
-                    'lot_size' => $property->lot_size,
-                    'contract_price' => $property->ContractPrice,
-                    'default_monthly_amortization' => $property->MonthlyAmortization,
-                    'term' => $property->Terms,
-                    'status' => $property->Status,
+                    'lot_size' => $property->no_of_sqm,
+                    'contract_price' => $property->contract_price,
+                    'default_monthly_amortization' => $property->monthly_amortization,
+                    'term' => $property->term,
+                    'status' => ucfirst(strtolower($property->status)),
+                    'is_active' => true,
                 ]);
             }
             

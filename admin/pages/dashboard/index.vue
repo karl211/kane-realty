@@ -7,7 +7,7 @@
             <v-col md="3">
                 <v-card class="pa-2">
                     <v-card-title>
-                        Jobs Upgraded
+                        For Cancellation
                     </v-card-title>
                     <v-card-subtitle>
                         2000
@@ -17,7 +17,7 @@
             <v-col md="3">
                 <v-card class="pa-2 card-stats">
                     <v-card-title>
-                        Jobs Upgraded
+                        For Assume
                     </v-card-title>
                     <v-card-subtitle>
                         2000
@@ -27,7 +27,7 @@
             <v-col md="3">
                 <v-card class="pa-2">
                     <v-card-title>
-                        Jobs Applicants
+                        Total Sales
                     </v-card-title>
                     <v-card-subtitle>2
                     </v-card-subtitle>
@@ -36,7 +36,7 @@
             <v-col md="3">
                 <v-card class="pa-2">
                     <v-card-title>
-                        Talent Found
+                        Total Reservation
                     </v-card-title>
                     <v-card-subtitle>
                         2000

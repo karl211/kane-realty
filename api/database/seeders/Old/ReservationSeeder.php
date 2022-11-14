@@ -86,6 +86,7 @@ class ReservationSeeder extends Seeder
 
             $block = null;
             $lot = null;
+            $status = $reservation->reservation_status;
 
             foreach ($explode_str as $val) {
                 if ($val && !$block) {
@@ -125,72 +126,66 @@ class ReservationSeeder extends Seeder
                 ->where('block', $block)
                 ->where('lot', $lot)
                 ->first();
-
-            $property->update([
-                'status' => $reservation->property_status
-            ]);
-
-            // dd($reservation);
-
-            // if (!$property) {
-            //     dd($reservation);
-            // }
-            
-            
-            $co_borrower_id = null;
-            $buyer = null;
-            
-            if ($profile) {
-                $buyer = $profile->buyer;
-
-                $branch = 2;
-                $butuan = array("San Vicente", "Tiniwisan");
-
-                if (in_array($location->location, $butuan)) {
-                    $branch = 1;
+            if ($property) {
+                $property->update([
+                    'status' => $reservation->property_status
+                ]);
+                
+                $co_borrower_id = null;
+                $buyer = null;
+                
+                if ($profile) {
+                    $buyer = $profile->buyer;
+    
+                    $branch = 2;
+                    $butuan = array("San Vicente", "Tiniwisan");
+    
+                    if (in_array($location->location, $butuan)) {
+                        $branch = 1;
+                    }
+    
+                    $buyer->update([
+                        'branch_id' => $branch
+                    ]);
                 }
-
-                $buyer->update([
-                    'branch_id' => $branch
+    
+                if ($buyer->coBorrowers()->first()) {
+                    $co_borrower_id = $buyer->coBorrowers()->first()->id;
+                }
+    
+                if ($reservation->reservation_status == 'Completed') {
+                    $status = 'Fully Paid';
+    
+                    $property->update([
+                        'status' => 'Fully Paid'
+                    ]);
+                }
+    
+                $new_reservation = Reservation::withoutGlobalScope('default_branch')
+                ->updateOrCreate([
+                    'buyer_id' => $buyer->id,
+                    'co_borrower_id' => $co_borrower_id,
+                    'property_id' => $property->id
+                ], [
+                    'contract_price' => $reservation->ContractPrice,
+                    'monthly_amortization' => $reservation->MonthlyAmortization,
+                    'term' => $reservation->Terms,
+                    'transaction_at' => $reservation->CreatedAt,
+                    'status' => $status,
+                ]);
+    
+                $new_reservation->payments()->withoutGlobalScope('default_branch')
+                ->updateOrCreate([
+                    'buyer_id' => $buyer->id,
+                    'or_number' => $reservation->ORNumber,
+                    'type_of_payment' => $reservation->TypeOfPayment,
+                    'mode_of_payment' => $reservation->ModeOfPayment
+                ], [
+                    'amount' => $reservation->Amount,
+                    'paid_at' => $reservation->DateOfPayment,
                 ]);
             }
-            // dd($buyer);
-            // if ($buyer) {
-                
-            // }
-
-            // if (!$profile) {
-            //     dd($reservation);
-            // }
-
-            if ($buyer->coBorrowers()->first()) {
-                $co_borrower_id = $buyer->coBorrowers()->first()->id;
-            }
-
-            $new_reservation = Reservation::withoutGlobalScope('default_branch')
-            ->updateOrCreate([
-                'buyer_id' => $buyer->id,
-                'co_borrower_id' => $co_borrower_id,
-                'property_id' => $property->id
-            ], [
-                'contract_price' => $reservation->ContractPrice,
-                'monthly_amortization' => $reservation->MonthlyAmortization,
-                'term' => $reservation->Terms,
-                'transaction_at' => $reservation->CreatedAt,
-                'status' => $reservation->reservation_status,
-            ]);
-
-            $new_reservation->payments()->withoutGlobalScope('default_branch')
-            ->updateOrCreate([
-                'buyer_id' => $buyer->id,
-                'ar_number' => $reservation->ORNumber,
-                'type_of_payment' => $reservation->TypeOfPayment,
-                'mode_of_payment' => $reservation->ModeOfPayment
-            ], [
-                'amount' => $reservation->Amount,
-                'paid_at' => $reservation->DateOfPayment,
-                'image' => 'https://loremflickr.com/640/480/business?'. random_int(1, 5000),
-            ]);
+            
         }
     }
 }

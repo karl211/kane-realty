@@ -1,244 +1,58 @@
 <template>
     <v-row>
-        <v-col cols="4">
+        <v-col v-if="!isModal" cols="4">
             <h3>{{ title }}</h3>
         </v-col>
 
-        <v-col cols="8">
+        <v-col :cols="colSize">
             <v-row>
-                <v-col cols="6">
+                <v-col cols="6" v-for="(document, key) in files" :key="key">
                     <div class="d-flex">
                         <v-checkbox
-                            v-model="form.post_dated_cheque"
+                            v-model="document.value"
                             readonly
+                            color="success"
                             hide-details
                         ></v-checkbox>
                         <v-file-input
-                            v-model="form.post_dated_cheque"
+                            v-if="document.file_name"
+                            v-model="document.file_name"
                             accept="image/*"
                             prepend-icon=""
-                            label="Post Dated Cheque"
-                            @change="selectFile"
-                        ></v-file-input>
-                    </div>
-                    <br>
-                    <v-img
-                        v-if="form.post_dated_cheque"
-                        contain
-                        max-height="250"
-                        max-width="500"
-                        :src="url('post_dated_cheque')"
-                    />
-                </v-col>
-                <v-col cols="6">
-                    <div class="d-flex">
-                        <v-checkbox
-                            v-model="form.birth_or_marriage_certificate"
-                            readonly
-                            hide-details
-                        ></v-checkbox>
-                        <v-file-input
-                            v-model="form.birth_or_marriage_certificate"
-                            accept="image/*"
-                            prepend-icon=""
-                            label="Photocopy of Marriage Certificate/Birth Certificate"
-                        ></v-file-input>
-                    </div>
-                    <br>
-                    <v-img
-                        v-if="form.birth_or_marriage_certificate"
-                        contain
-                        max-height="250"
-                        max-width="500"
-                        :src="url('birth_or_marriage_certificate')"
-                    />
-                </v-col>
-                <v-col cols="6">
-                    <div class="d-flex">
-                        <v-checkbox
-                            v-model="form.picture_by_2"
-                            readonly
-                            hide-details
-                        ></v-checkbox>
-                        <v-file-input
-                            v-model="form.picture_by_2"
-                            accept="image/*"
-                            prepend-icon=""
-                            label="2 pcs 2x2 picture"
-                        ></v-file-input>
-                    </div>
-                    <br>
-                    <v-img
-                        v-if="form.picture_by_2"
-                        contain
-                        max-height="250"
-                        max-width="500"
-                        :src="url('picture_by_2')"
-                    />
-                </v-col>
-                <v-col cols="6">
-                    <div class="d-flex">
-                        <v-checkbox
-                            v-model="form.tax_certificate"
-                            readonly
-                            hide-details
-                        ></v-checkbox>
-                        <v-file-input
-                            v-model="form.tax_certificate"
-                            accept="image/*"
-                            prepend-icon=""
-                            label="Community Tax Certificate"
-                        ></v-file-input>
-                    </div>
-                    <br>
-                    <v-img
-                        v-if="form.tax_certificate"
-                        contain
-                        max-height="250"
-                        max-width="500"
-                        :src="url('tax_certificate')"
-                    />
-                </v-col>
-                <v-col cols="6">
-                    <div class="d-flex">
-                        <v-checkbox
-                            v-model="form.proof_of_billing"
-                            readonly
-                            hide-details
-                        ></v-checkbox>
-                        <v-file-input
-                            v-model="form.proof_of_billing"
-                            accept="image/*"
-                            prepend-icon=""
-                            label="Proof of Billing"
-                        ></v-file-input>
-                    </div>
-                    <br>
-                    <v-img
-                        v-if="form.proof_of_billing"
-                        contain
-                        max-height="250"
-                        max-width="500"
-                        :src="url('proof_of_billing')"
-                    />
-                </v-col>
-                <v-col cols="6">
-                    <div class="d-flex">
-                        <v-checkbox
-                            v-model="form.valid_id"
-                            readonly
-                            hide-details
-                        ></v-checkbox>
-                        <v-file-input
-                            v-model="form.valid_id"
-                            accept="image/*"
-                            prepend-icon=""
-                            label="2 Valid ID's (Company and Government)"
-                            class="required"
+                            :label="document.label"
                             hide-details="auto"
-                            :error-messages="error.valid_id"
+                            :error-messages="error['valid_id']"
+                            @change="selectFile($event, document)"
                         ></v-file-input>
-                        
-                    </div>
-                    <br>
-                    <v-img
-                        v-if="form.valid_id"
-                        contain
-                        max-height="250"
-                        max-width="500"
-                        :src="url('valid_id')"
-                    />
-                </v-col>
-                <v-col cols="6">
-                    <div class="d-flex">
-                        <v-checkbox
-                            v-model="form.tin"
-                            readonly
-                            hide-details
-                        ></v-checkbox>
                         <v-file-input
-                            v-model="form.tin"
+                            v-else
+                            v-model="form[document.key]"
                             accept="image/*"
                             prepend-icon=""
-                            label="Tax Identification Number"
+                            :label="document.label"
+                            hide-details="auto"
+                            :error-messages="error[document.key]"
+                            @change="selectFile($event, document)"
                         ></v-file-input>
+                        <v-btn 
+                            v-if="document.file_url"
+                            :href="url(document.file_url)"
+                            class="mt-4"
+                            plain
+                            target="_blank"
+                            download>
+                            <v-icon class="pointer download-wrap">
+                                mdi-download-box
+                            </v-icon>
+                        </v-btn>
                     </div>
                     <br>
                     <v-img
-                        v-if="form.tin"
+                        v-if="document.file_url"
                         contain
-                        max-height="250"
-                        max-width="500"
-                        :src="url('tin')"
-                    />
-                </v-col>
-                <v-col cols="6">
-                    <div class="d-flex">
-                        <v-checkbox
-                            v-model="form.house_sketch"
-                            readonly
-                            hide-details
-                        ></v-checkbox>
-                        <v-file-input
-                            v-model="form.house_sketch"
-                            accept="image/*"
-                            prepend-icon=""
-                            label="House Sketch"
-                        ></v-file-input>
-                    </div>
-                    <br>
-                    <v-img
-                        v-if="form.house_sketch"
-                        contain
-                        max-height="250"
-                        max-width="500"
-                        :src="url('house_sketch')"
-                    />
-                </v-col>
-                <v-col cols="6">
-                    <div class="d-flex">
-                        <v-checkbox
-                            v-model="form.picture_by_1"
-                            readonly
-                            hide-details
-                        ></v-checkbox>
-                        <v-file-input
-                            v-model="form.picture_by_1"
-                            accept="image/*"
-                            prepend-icon=""
-                            label="3 pcs 1x1 picture"
-                        ></v-file-input>
-                    </div>
-                    <br>
-                    <v-img
-                        v-if="form.picture_by_1"
-                        contain
-                        max-height="250"
-                        max-width="500"
-                        :src="url('picture_by_1')"
-                    />
-                </v-col>
-                <v-col cols="6">
-                    <div class="d-flex">
-                        <v-checkbox
-                            v-model="form.spa"
-                            readonly
-                            hide-details
-                        ></v-checkbox>
-                        <v-file-input
-                            v-model="form.spa"
-                            accept="image/*"
-                            prepend-icon=""
-                            label="SPA (with Consular Seal if notarized abroad)"
-                        ></v-file-input>
-                    </div>
-                    <br>
-                    <v-img
-                        v-if="form.spa"
-                        contain
-                        max-height="250"
-                        max-width="500"
-                        :src="url('spa')"
+                        max-height="200"
+                        max-width="400"
+                        :src="url(document.file_url)"
                     />
                 </v-col>
             </v-row>
@@ -246,7 +60,10 @@
     </v-row>
 </template>
 <script>
+import Swal from 'sweetalert2'
+import { Reservations } from '../../services/reservations'
 import ReservationMixin from "~/mixins/ReservationMixin.js"
+
 export default {
     name: "ReservationCreate",
     mixins: [ReservationMixin],
@@ -256,6 +73,16 @@ export default {
             default: ''
         },
 
+        isModal: {
+            type: Boolean,
+            default: false
+        },
+
+        documents: {
+            type: Array,
+            default: () => []
+        },
+
         errors: {
             type: Object,
             default: () => {}
@@ -263,10 +90,33 @@ export default {
     },
     data: vm => ({
         componentName: 'documents',
+        colSize: "8",
         error: {},
         form: {
-            valid_id: null
-        }
+            post_dated_cheque: null,
+            birth_or_marriage_certificate: null,
+            picture_by_2: null,
+            tax_certificate: null,
+            proof_of_billing: null,
+            valid_id: null,
+            tin: null,
+            house_sketch: null,
+            picture_by_1: null,
+            spa: null,
+        },
+        // checkbox: {
+        //     post_dated_cheque: false,
+        //     birth_or_marriage_certificate: false,
+        //     picture_by_2: false,
+        //     tax_certificate: false,
+        //     proof_of_billing: false,
+        //     valid_id: false,
+        //     tin: false,
+        //     house_sketch: false,
+        //     picture_by_1: false,
+        //     spa: false,
+        // },
+        files: []
     }),
 
     watch: {
@@ -279,12 +129,80 @@ export default {
         }
     },
 
+    mounted () {
+        if (this.isModal) {
+            this.colSize = "12"
+        }
+
+        if (this.documents.length) {
+            this.files = this.documents 
+
+            if (this.files.length) {
+                this.files.forEach(document => {
+                    for (const i in this.form) {
+                        if (document.key === i && document.value) {
+                            this.form[i] = document.value
+                        }
+                    }
+                })
+            }
+        } else {
+            this.fetchDocument()
+        }
+    },
+
     methods: {
-        selectFile (file) {
-            console.log(file)
+        selectFile (file, document) {
+            if (!file) {
+                document.value = false
+            }
+            this.form[document.key] = file
+            document.file_url = file
+            this.$emit('documents', this.form)
         },
 
-        
+        url (url) {
+            if (!url) return;
+
+            if (typeof url === 'object') {
+                return URL.createObjectURL(url);
+            } else {
+                return url
+            }
+        },
+
+        mapDocuments (documents) {
+            return  documents.map(function(data) {
+                return {
+                    value: false,
+                    label: data.desc,
+                    key: data.title,
+                    file_name: null,
+                    file_url: null,
+                }
+            })
+        },
+
+        fetchDocument () {
+            Reservations.getDocuments().then((response) => {
+                if (response.data) {
+                    this.files = this.mapDocuments(response.data)
+                }
+            }).catch(error => {
+                if (error.response) {
+                    Swal.fire(
+                        'Ops.',
+                        'Something went wrong',
+                        'warning'
+                    )
+                }
+            })
+        }
     },
 }
 </script>
+<style>
+    .download-wrap {
+        font-size: 35px;
+    }
+</style>

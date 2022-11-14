@@ -2,7 +2,7 @@
     <v-container>
         <v-card>
             <v-toolbar-title class="pa-10 pt-10 pb-5">
-                <h2><v-icon large>mdi-home-plus</v-icon> Add Reservation</h2>
+                <h2><v-icon large>mdi-home-plus</v-icon> Update Reservation</h2>
             </v-toolbar-title>
             <v-divider></v-divider>
             <v-form>
@@ -73,10 +73,10 @@
     </v-container>
 </template>
 <script>
-import Swal from 'sweetalert2'
-import { Reservations } from '../../services/reservations'
+// import Swal from 'sweetalert2'
+import { Reservations } from '../../../services/reservations'
 export default {
-    name: "ReservationCreate",
+    name: "ReservationUpdate",
     data: vm => ({
         resetSpouse: false,
         isShowSpouseInformation: false,
@@ -93,6 +93,10 @@ export default {
         }
     }),
 
+    created () {
+        this.getBuyer()
+    },
+
     methods: {
         handleCivilStatus (data) {
             if (data !== 'Single') {
@@ -105,6 +109,21 @@ export default {
 
         updateForm (form, key) {
             this.form[key] = form
+        },
+
+        getBuyer () {
+            Reservations.getBuyer(this.$route.params.id).then((response) => {
+                if (response.data.data) {
+                    console.log(response.data.data)
+                    // this.buyer = response.data.data
+                    
+                    // this.buyerDocuments = this.mapDocuments(response.data.data.documents)
+
+                    // setTimeout(() => {
+                    //     this.mapReservations(this.buyer.reservations)
+                    // }, 600);
+                }
+            });
         },
 
         submit () {
@@ -126,39 +145,38 @@ export default {
                 }
             })
 
-            Reservations.create(formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then((response) => {
-                if (response.data) {
+            // Reservations.create(formData, {
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data'
+            //     }
+            // }).then((response) => {
+            //     if (response.data) {
 
-                    Swal.fire({
-                        title: 'Done!',
-                        text: 'Successfully reserved',
-                        confirmButtonText: 'Okay',
-                        icon: 'success',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // this.$router.push({path: `/reservations`});
-                        } 
-                    })
-                }
-            }).catch(error => {
-                // Handle error
-                if (error.response) {
-                    Swal.fire(
-                        'Ops.',
-                        'Something went wrong',
-                        'warning'
-                    )
-                    // const self = this
-                    // setTimeout(() => {
+            //         Swal.fire({
+            //             title: 'Done!',
+            //             text: 'Successfully reserved',
+            //             confirmButtonText: 'Okay',
+            //         }).then((result) => {
+            //             if (result.isConfirmed) {
+            //                 // this.$router.push({path: `/reservations`});
+            //             } 
+            //         })
+            //     }
+            // }).catch(error => {
+            //     // Handle error
+            //     if (error.response) {
+            //         Swal.fire(
+            //             'Ops.',
+            //             'Something went wrong',
+            //             'warning'
+            //         )
+            //         // const self = this
+            //         // setTimeout(() => {
                         
-                    // }, 1000);
-                    this.errors = error.response.data.errors
-                }
-            })
+            //         // }, 1000);
+            //         this.errors = error.response.data.errors
+            //     }
+            // })
             
         }
     },

@@ -19,20 +19,17 @@ const mixin = {
         
         errors (errors) {
             if (errors) {
-                console.log(errors)
                 for (const key in this.error) {
                     for (const key2 in errors) {
                         const subKey = key2.replace(`${this.componentName}.`,'')
                         const splitKey = subKey.split(".")
                         
                         if (splitKey.length > 1) {
-                            if (key === splitKey[0]) {
-                                this.error[key][splitKey[1]] = errors[key2]
+                            if (key === splitKey[0] && this.componentName === 'chooseProperty') {
+                                this.$set(this.error, splitKey[1], errors[key2])
+                            } else if (key === subKey) {
+                                this.error[key] = errors[key2]
                             }
-                        }
-
-                        if (key === subKey) {
-                            this.error[key] = errors[key2]
                         }
                     }
                 }

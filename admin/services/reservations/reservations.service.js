@@ -22,8 +22,24 @@ const reservationsService = class ReservationsService extends BaseService
         return super.post(`${this.baseURL}/reservations`, params, header);
     }
 
+    remove(params = {}) {
+        return super.post(`${this.baseURL}/reservations/delete`, params);
+    }
+
     getBuyer(buyer) {
         return super.get(`${this.baseURL}/reservations/${buyer}`);
+    }
+
+    updateOrCreateProperty(buyer, params = {}) {
+        return super.post(`${this.baseURL}/reservations/${buyer}/property`, params);
+    }
+
+    updateDocument(buyer, params = {}) {
+        return super.post(`${this.baseURL}/reservations/${buyer}/document`, params);
+    }
+
+    updatePayment(buyer, params = {}) {
+        return super.post(`${this.baseURL}/reservations/${buyer}/payment`, params);
     }
 
     getDocuments() {

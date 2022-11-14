@@ -25,6 +25,7 @@ class Property extends Model
         'default_monthly_amortization',
         'term',
         'status',
+        'is_active',
         'deleted_at',
     ];
 

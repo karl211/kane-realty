@@ -1,11 +1,11 @@
 <template>
     <v-form ref="form" class="mx-2" lazy-validation>
         <v-row>
-            <v-col cols="4">
+            <v-col v-if="size !== 'sm'" cols="4">
                 <h3>Choose Property</h3>
             </v-col>
 
-            <v-col cols="8">
+            <v-col :cols="colSize">
                 <v-row>
                     <v-col cols="6" class="pb-0">
                         <v-menu
@@ -181,6 +181,16 @@ export default {
     name: "ReservationCreate",
     mixins: [ReservationMixin],
     props: {
+        size: {
+            type: String,
+            default: 'lg'
+        },
+
+        property: {
+            type: Object,
+            default: () => {}
+        },
+        
         errors: {
             type: Object,
             default: () => {}
@@ -199,6 +209,7 @@ export default {
         salesManagers: [],
         salesAgents: [],
         componentName: 'chooseProperty',
+        colSize: "8",
         error: {},
         form: {
             transaction_at: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
@@ -219,6 +230,13 @@ export default {
     }),
 
     watch: {
+        // size (val) {
+        //     console.log(val)
+        //     if (val === 'sm') {
+        //         this.colSize = "12"
+        //     }
+        // },
+
         form: {
             handler(val){
                 this.clear()
@@ -231,7 +249,15 @@ export default {
         },
     },
 
-    mounted() {
+    created () {
+        console.log(this.property)
+    },
+
+    mounted () {
+        if (this.size === 'sm') {
+            this.colSize = "12"
+        }
+
         this.getLocations()
         this.getNetworks()
     },

@@ -146,7 +146,7 @@ class UserSeeder extends Seeder
                 'contact_number' => ucwords($user->ContactNumber),
                 'zip_code' => ucwords($user->ZipCode),
                 'address' => ucwords($user->Address),
-                'photo' => 'https://loremflickr.com/640/480/business?'. random_int(1, 5000),
+                'photo' => null,
             ]);
 
             if ($user->SpouseFirstName && $user->SpouseLastName) {

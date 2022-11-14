@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('buyer_id');
             $table->date('paid_at');
             $table->string('ar_number')->nullable();
+            $table->string('or_number')->nullable();
             $table->integer('amount');
             $table->string('type_of_payment')->nullable();
             $table->string('mode_of_payment')->nullable();

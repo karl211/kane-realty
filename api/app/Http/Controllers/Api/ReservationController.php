@@ -9,10 +9,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BuyerResource;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\LocationResource;
 use App\Http\Requests\ReservationRequest;
+use App\Http\Requests\UpdatePaymentRequest;
 use App\Http\Resources\ReservationResource;
+use App\Http\Requests\UpdateDocumentRequest;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\BuyerUpdateOrPropertyRequest;
 
 class ReservationController extends Controller
 {
@@ -75,6 +79,68 @@ class ReservationController extends Controller
         }
     }
 
+    public function updateOrCreateProperty(User $buyer, BuyerUpdateOrPropertyRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $reservation = $request->save($buyer);
+
+            DB::commit();
+
+            return response()->json([
+                'data'  => $reservation,
+                'message' => 'Successfully added'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
+    }
+
+    public function updateDocument(User $buyer, UpdateDocumentRequest $request)
+    {
+        // return $request->all();
+        try {
+            DB::beginTransaction();
+
+            $document = $request->save($buyer);
+
+            DB::commit();
+
+            return response()->json([
+                'data'  => $document,
+                'message' => 'Successfully updated'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
+    }
+
+    public function updatePayment(User $buyer, UpdatePaymentRequest $request)
+    {
+        // return $request->all();
+        try {
+            DB::beginTransaction();
+
+            $document = $request->save($buyer);
+
+            DB::commit();
+
+            return response()->json([
+                'data'  => $document,
+                'message' => 'Successfully updated'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
+    }
+    
     /**
      * Display the specified resource.
      *
@@ -87,9 +153,32 @@ class ReservationController extends Controller
             ->with(['reservations.payments' => function($query) {
                 $query->orderBy('paid_at', 'asc');
             }])
+            ->with(['reservations.payments' => function($query) {
+                $query->orderBy('paid_at', 'asc');
+            }])
             ->first();
         
         return new BuyerResource($buyer_details);
+    }
+
+    public function download(User $buyer)
+    {
+        $file_path = 'buyers/644/birth_or_marriage_certificate/property-img-default.gif';
+        $file = Storage::disk('s3')->url($file_path);
+
+        // $file= public_path(). "/download/info.pdf";
+
+        $id = 1;
+ 
+        $headers = [
+ 
+            'Content-Type'        => 'application/jpeg',
+ 
+            'Content-Disposition' => 'attachment; filename="'. 'property-img-default.gif' .'"',
+ 
+        ];
+ 
+        return \Response::make(Storage::disk('s3')->get($file_path), 200, $headers);
     }
 
     /**
@@ -121,8 +210,25 @@ class ReservationController extends Controller
      * @param  \App\Models\Reservation  $reservation
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Reservation $reservation)
+    public function destroy(Request $request)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            $reservation = Reservation::findOrFail($request->id);
+
+            $reservation->delete();
+            
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Successfully deleted'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
+        dd($request->all());
     }
 }
