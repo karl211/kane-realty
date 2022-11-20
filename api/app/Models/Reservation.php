@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -104,5 +105,21 @@ class Reservation extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        if ($search) {
+            return $query->whereHas('buyer', function ($query) use ($search) {
+                return $query->where('email', $search);
+            })
+            ->orWhereHas('buyer.profile', function ($query) use ($search) {
+                return $query->where('first_name', $search)
+                    ->orWhere('middle_name', $search)
+                    ->orWhere('last_name', $search)
+                    ->orWhere(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".$search."%");
+            });
+        }
+        return $query;
     }
 }

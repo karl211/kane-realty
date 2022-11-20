@@ -13,7 +13,7 @@ export default {
         paginateData:{
             type: Object,
             default(rawProps) {
-                return {  }
+                return {}
             }
         },
     },
