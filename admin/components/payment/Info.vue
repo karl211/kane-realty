@@ -264,10 +264,14 @@ export default {
 
     created () {
         if (this.payment) {
+            console.log(this.payment)
             this.selectedPayment = this.payment
-            this.selectedPayment.file_name = new File([this.payment.file_url], this.payment.file_name, {
-                type: "image/jpeg",
-            })
+            if (this.payment.file_name) {
+                this.selectedPayment.file_name = new File([this.payment.file_url], this.payment.file_name, {
+                    type: "image/jpeg",
+                })
+            }
+            
             // this.form.image = this.selectedPayment.file_name
         }
     },

@@ -6,7 +6,9 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Api\{
     DashboardController,
     PaymentController,
+    InvoiceController,
     LocationController,
+    CalendarController,
     UserController,
     ReservationController,
     PropertyController
@@ -38,6 +40,10 @@ Route::middleware('auth:sanctum')
         Route::get('/payments', [PaymentController::class, 'index']);
 
         Route::post('/payments', [PaymentController::class, 'store']);
+
+        Route::get('/calendar/past-dues', [CalendarController::class, 'index']);
+
+        Route::get('/invoices', [InvoiceController::class, 'index']);
 
         Route::get('/locations', [LocationController::class, 'index']);
 

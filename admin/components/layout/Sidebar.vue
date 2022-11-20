@@ -54,6 +54,7 @@
         { title: 'Reservations', icon: 'mdi-book-account', to: '/reservations' },
         { title: 'Payments', icon: 'mdi-cash-clock', to: '/payments' },
         { title: 'Locations', icon: 'mdi-home-group', to: '/locations' },
+        { title: 'Invoices', icon: 'mdi-list-box-outline', to: '/invoices' },
         { title: 'Reports', icon: 'mdi-note', to: '/reports' },
         { title: 'Users', icon: 'mdi-account', to: '/users' },
       ],

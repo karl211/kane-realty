@@ -92,9 +92,13 @@ const mixin = {
             return amount.replaceAll(',', '')
         },
 
-        url(key) {
+        url (key) {
             if (!this.form[key]) return;
             return URL.createObjectURL(this.form[key]);
+        },
+
+        formatCurrency (money) {
+            return '₱' + Number(money).toLocaleString()
         }
     }
 }
