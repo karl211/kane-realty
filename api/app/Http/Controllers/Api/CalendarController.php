@@ -31,8 +31,9 @@ class CalendarController extends Controller
             })
             ->sortBy('property.lot')
             ->sortBy('property.block');
-        dd($reservations);
-        return CalendarResource::collection($reservations);
+            
+        return $reservations;
+        // return CalendarResource::collection($reservations);
         // $search = null;
         // if (isset(request('search'))) {
         //     $search = request('search')['search'];
@@ -88,11 +89,6 @@ class CalendarController extends Controller
             foreach ($payments as $payment) {
                 if (Carbon::parse($payment->paid_at)->year == Carbon::parse($due_date)->year && Carbon::parse($payment->paid_at)->month == Carbon::parse($due_date)->month) {
                     $is_paid = true;
-                    // $paids[] = [
-                    //     'paid_at' => $due_date,
-                    //     'amount' => $payment->amount,
-                    //     'status' => 'Paid',
-                    // ];
                 }
             }
 
@@ -101,14 +97,14 @@ class CalendarController extends Controller
                 
                 if ($filter_end->gte($due_date)) {
                     $photo = null;
-                    $photo_path = 'buyers/' . $this->id . '/' . $this->photo;
+                    $photo_path = 'buyers/' . $reservation->buyer->id . '/' . $reservation->buyer->profile->photo;
 
-                    if ($this->photo) {
+                    if ($reservation->buyer->profile->photo) {
                         $photo = Storage::disk('s3')->temporaryUrl($photo_path, now()->addMinutes(2));
                     } else {
                         $photo = url('/images/default-user.png');
                     }
-                    
+
                     $past_dues[] = [
                         'due_date' => $due_date,
                         'monthly_amortization' => $reservation->monthly_amortization,
