@@ -230,7 +230,7 @@ export default {
             nativeEvent.stopPropagation()
         },
         updateRange ({ start, end }) {
-            const events = []
+            // const events = []
 
             // const min = new Date(`${start.date}T00:00:00`)
             // const max = new Date(`${end.date}T23:59:59`)
@@ -253,21 +253,14 @@ export default {
             //     })
             // }
 
-            const min = new Date(`${start.date}T00:00:00`)
-            const max = new Date(`${end.date}T23:59:59`)
-            console.log(min.getTime())
-            console.log(max.getTime())
+            // const min = new Date(`${start.date}T00:00:00`)
+            // const max = new Date(`${end.date}T23:59:59`)
+            // console.log(start.date)
+            // console.log(min.getTime())
+            // console.log(max.getTime())
             // const firstTimestamp = this.rnd(min.getTime(), max.getTime())
             // const first = new Date(firstTimestamp )
-            events.push({
-                name: this.names[0],
-                start: min.getTime(),
-                // end: second,
-                color: this.colors[0],
-                // timed: !allDay,
-            })
-
-            this.events = events
+           
         },
         rnd (a, b) {
             return Math.floor((b - a + 1) * Math.random()) + a
@@ -279,7 +272,40 @@ export default {
 
         getPastDues () {
             Calendar.pastDues().then((response) => {
-                console.log(response.data)
+                if (response.data) {
+                    response.data.forEach(dues => {
+                        if (dues) {
+                            dues.forEach(due => {
+                                this.events.push({
+                                    name: due.name + ' - ' + due.property,
+                                    start: new Date(`${due.due_date}T00:00:00`),
+                                    // end: second,
+                                    color: this.colors[0],
+                                    // timed: !allDay,
+                                })
+
+                                // this.events = events
+                            });
+                        }
+                        
+                        
+                    });
+                    const count = [];
+                    response.data.forEach(dues => {
+                        // console.log(dues)
+                        if (dues) {
+                            dues.forEach(due => {
+                                count[due.due_date] = (count[due.due_date]||0) + 1
+                            });
+                            
+                        }
+                        
+                    });
+
+                    
+                    // response.data.forEach(function(i) { count[i.due_date] = (count[i.due_date]||0) + 1;});
+                    console.log(count.sort());
+                }
                 // this.paginateData = response.data
                 // this.loaded = true
                 // this.loading = false
