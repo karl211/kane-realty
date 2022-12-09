@@ -6,6 +6,10 @@ const propertyService = class PropertyService extends BaseService
         return super.get(`${this.baseURL}/locations`, params);
     }
 
+    locationProperties(params = {}, location){
+        return super.get(`${this.baseURL}/locations/${location}/properties`, params);
+    }
+
     create(params = {}, header) {
         return super.post(`${this.baseURL}/properties`, params, header);
     }

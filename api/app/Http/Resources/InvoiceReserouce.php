@@ -30,6 +30,7 @@ class InvoiceReserouce extends JsonResource
             'past_dues' => $this->past_dues,
             'paids' => $this->paids,
             'property' => 'Block ' . $this->property->block . ' - ' . 'Lot ' . $this->property->lot,
+            'location' => $this->property->location->location,
             'sales_manager' => new UserResource($this->sales_manager),
             'sales_agent' => new UserResource($this->sales_agent),
             'attorney' => new AttorneyResource($this->attorney),

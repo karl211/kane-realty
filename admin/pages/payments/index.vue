@@ -5,7 +5,7 @@
         <br>
         <v-row>
             <v-col>
-            <v-btn
+                <v-btn
                     class="ml-2"
                     elevation="0"
                     color="info"
@@ -15,25 +15,25 @@
                 </v-btn>
             </v-col>
             <v-col sm="5">
-            <section class="d-flex">
-                <v-text-field
-                    label="Name, Email, Address, User Type"
-                    dense
-                    outlined
-                    class="mx-1"
-                    @input="searchPayment"
-                ></v-text-field>
-                <v-select
-                    v-model="prof_title_id"
-                    item-text="title"
-                    item-value="id"
-                    label="Account Title"
-                    placeholder="Select Account Title"
-                    dense
-                    outlined
-                    class="mx-1"
-                />
-            </section>
+                <section class="d-flex">
+                    <v-text-field
+                        label="Name, Email, Address, User Type"
+                        dense
+                        outlined
+                        class="mx-1"
+                        @input="searchPayment"
+                    ></v-text-field>
+                    <v-select
+                        v-model="prof_title_id"
+                        item-text="title"
+                        item-value="id"
+                        label="Account Title"
+                        placeholder="Select Account Title"
+                        dense
+                        outlined
+                        class="mx-1"
+                    />
+                </section>
             </v-col>
         </v-row>
 
@@ -52,7 +52,7 @@
                 <td>{{ item.name }}</td>
                 <td>{{ item.property }}</td>
                 <td>{{ item.contract_price }}</td>
-                <td>{{ item.amount_paid }}</td>
+                <td>{{ item.amount }}</td>
                 <td>{{ item.type_of_payment }}</td>
                 <td>{{ item.mode_of_payment }}</td>
                 <td>
@@ -72,6 +72,7 @@
                             color="danger"
                             small
                             icon
+                            @click="deletePayment(item)"
                         >
                             <v-icon>mdi-delete</v-icon>
                         </v-btn>
@@ -96,68 +97,104 @@
 
 <script>
 import _ from "lodash";
+import Swal from 'sweetalert2'
 import { Auth } from '../../services/auth'
+import { Payment } from '../../services/payments'
 export default {
-  name: "PaymentsIndex",
-  data () {
-    return {
-      loading: false,
-      loaded: false,
-      prof_title_id: "",
-      headers: [
-        { text: "Date Paid" },
-        { text: "OR No." },
-        { text: "Name" },
-        { text: "Property" },
-        { text: "Contract Price" },
-        { text: "Amount paid" },
-        { text: "Type" },
-        { text: "Mode" },
-        { text: "Actions", align: "center" },
-      ],
-     
-      paginateData: null,
-      payments: [],
-      search: {
-        page: 1,
-        search: ''
-      }
-    }
-  },
-  watch: {
-    loaded(value) {
-      this.loaded = value
-    }
-  },
-  created() {
-    this.getPayments()
-    this.searchPayment = _.debounce(this.searchPayment, 400);
-  },
-  mounted() {
-    
-  },
-  methods: {
-     getPayments() {
-      this.loading = true
-      
-       Auth.payments(this.search).then((response) => {
-        this.paginateData = response.data
-        this.payments = response.data.data
-        this.loaded = true
-        this.loading = false
-      });
+    name: "PaymentsIndex",
+    data () {
+        return {
+            loading: false,
+            loaded: false,
+            prof_title_id: "",
+            headers: [
+                { text: "Date Paid" },
+                { text: "OR No." },
+                { text: "Name" },
+                { text: "Property" },
+                { text: "Contract Price" },
+                { text: "Amount paid" },
+                { text: "Type" },
+                { text: "Mode" },
+                { text: "Actions", align: "center" },
+            ],
+            
+            paginateData: null,
+            payments: [],
+            search: {
+                page: 1,
+                search: ''
+            }
+        }
     },
-    paginate(pageNumber) {
-      this.search.page = pageNumber
-      this.getPayments(this.search);
+    watch: {
+        loaded(value) {
+        this.loaded = value
+        }
     },
-    searchPayment(value) {
-      this.payments = []
-      this.search.page = 1
-      this.search.search = value
+    created() {
+        this.getPayments()
+        this.searchPayment = _.debounce(this.searchPayment, 400);
+    },
+    mounted() {
+        
+    },
+    methods: {
+        getPayments() {
+            this.loading = true
+            
+            Auth.payments(this.search).then((response) => {
+                this.paginateData = response.data
+                this.payments = response.data.data
+                this.loaded = true
+                this.loading = false
+            });
+        },
+        paginate(pageNumber) {
+            this.search.page = pageNumber
+            this.getPayments(this.search);
+        },
+        searchPayment(value) {
+            this.payments = []
+            this.search.page = 1
+            this.search.search = value
 
-      this.getPayments(this.search)
-    },
-  }
+            this.getPayments(this.search)
+        },
+        deletePayment(item) {
+            Swal.fire({
+                title: 'Do you want to delete this payment?',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Payment.remove({id: item.payment_id}).then((response) => {
+                        if (response.data) {
+                            Swal.fire({
+                                title: 'Done!',
+                                text: 'Successfully deleted',
+                                confirmButtonText: 'Okay',
+                                icon: 'success',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload()
+                                } 
+                            })
+                        }
+                    }).catch(error => {
+                        // Handle error
+                        if (error.response) {
+                            Swal.fire(
+                                'Ops.',
+                                'Something went wrong',
+                                'warning'
+                            )
+                            this.errors = error.response.data.errors
+                        }
+                    })
+                }
+            })
+        }
+    }
 }
 </script>

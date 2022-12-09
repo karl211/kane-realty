@@ -12,7 +12,6 @@ class InvoiceController extends Controller
 {
     public function index(Request $request)
     {
-        $data = [];
         // $search = null;
         // if (isset(request('search'))) {
         //     $search = request('search')['search'];

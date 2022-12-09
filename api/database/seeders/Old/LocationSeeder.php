@@ -51,28 +51,30 @@ class LocationSeeder extends Seeder
         Role::insert($roles);
 
         $locations = DB::connection('mysql2')->select("
-        SELECT
-            propertytypes.*
+        SELECT DISTINCT
+            new_reservations.location
         FROM
-            propertytypes
+            new_reservations
+            WHERE location is not null
         ");
 
         foreach ($locations as $location) {
             $branch = 2;
             $butuan = array("San Vicente", "Tiniwisan");
-            $map = 'https://maps.google.com/maps?q='. $location->Name .'&z=14&ie=UTF8&iwloc=&output=embed';
+            $map = 'https://maps.google.com/maps?q='. $location->location .'&z=14&ie=UTF8&iwloc=&output=embed';
 
-            if (in_array($location->Name, $butuan)) {
+            if (in_array($location->location, $butuan)) {
                 $branch = 1;
             }
 
             Location::create([
                 'branch_id' => $branch,
-                'location' => $location->Name,
-                'description' => $location->Location,
-                'type' => $location->Description,
+                'location' => $location->location,
+                'description' => isset($location->description) ? $location->description : 'none',
+                'type' => isset($location->type) ? $location->type : 'none',
                 'map' => $map,
             ]);
+
         }
     }
 }

@@ -229,6 +229,5 @@ class ReservationController extends Controller
 
             throw $e;
         }
-        dd($request->all());
     }
 }

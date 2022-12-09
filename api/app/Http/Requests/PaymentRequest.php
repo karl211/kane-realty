@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
+use Mail;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Payment;
 use App\Models\Reservation;
+use App\Mail\PaymentNotification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -118,6 +120,10 @@ class PaymentRequest extends FormRequest
         }
 
         $payment = Payment::create($data);
+
+
+        // Mail::to($this->buyer->email)->send(new PaymentNotification());
+        Mail::to("k.monteadora@gmail.com")->send(new PaymentNotification());
 
         return $payment;
     }
