@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LocationRequest;
 use App\Http\Resources\LocationResource;
+use App\Http\Resources\PropertyResource;
 
 class LocationController extends Controller
 {
@@ -19,11 +20,11 @@ class LocationController extends Controller
     public function index()
     {
         $locations = Location::with('properties')
-            ->when(request()->location_id, function ($query) {
-                $query->where('id', request()->location_id);
-            })
+            // ->when(request()->location_id, function ($query) {
+            //     $query->where('id', request()->location_id);
+            // })
             ->orderBy('location')
-            ->get();
+            ->paginate(20);
             
         return LocationResource::collection($locations);
     }
@@ -64,15 +65,12 @@ class LocationController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function getLocationProperties(Location $location, Request $request)
     {
-        //
+        $properties = $location->properties()->search(request('search'))->paginate(10);
+
+        return PropertyResource::collection($properties);
+        
     }
 
     /**

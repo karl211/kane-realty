@@ -1,7 +1,7 @@
 <template>
     <div>
     <section v-if="loaded">
-        <h1 class="title">Report</h1>
+        <h1 class="title">Expenses</h1>
         <v-row>
         <v-col></v-col>
         <v-col sm="5">
@@ -124,7 +124,7 @@
 
 <script>
 import _ from "lodash";
-import { Auth } from '../../services/auth'
+import { Auth } from '../../../services/auth'
 export default {
     name: "PaymentsIndex",
     data () {

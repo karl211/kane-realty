@@ -78,6 +78,10 @@ return [
                 'log',
             ],
         ],
+
+        'sendgrid' => [
+            'transport' => 'sendgrid',
+        ],
     ],
 
     /*
@@ -114,5 +118,17 @@ return [
             resource_path('views/vendor/mail'),
         ],
     ],
+
+    'stream' => [
+        'ssl' => [
+           'allow_self_signed' => true,
+           'verify_peer' => false,
+           'verify_peer_name' => false,
+        ],
+     ], 
+
+    'test_mail' => env('TEST_MAIL', 'don@ethesia.com'),
+
+    'kane_mail' => env('KANE_EMAIL'),
 
 ];

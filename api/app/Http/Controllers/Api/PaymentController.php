@@ -52,6 +52,8 @@ class PaymentController extends Controller
 
             $payment = $request->save();
 
+            
+
             DB::commit();
 
             return response()->json([
@@ -105,8 +107,24 @@ class PaymentController extends Controller
      * @param  \App\Models\Payment  $payment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Payment $payment)
+    public function destroy(Request $request)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            $payment = Payment::findOrFail($request->id);
+
+            $payment->delete();
+            
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Successfully deleted'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
     }
 }

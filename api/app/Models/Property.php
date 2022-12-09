@@ -64,4 +64,11 @@ class Property extends Model
     {
         return $this->belongsTo(Reservation::class, 'property_id');
     }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->when($search, function ($query) {
+            $query->where('status', request('search'));
+        });
+    }
 }

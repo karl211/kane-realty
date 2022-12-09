@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\Branch;
+use App\Mail\TestEmail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\AuthenticationException;
+use Mail;
 
 class AuthController extends Controller
 {
@@ -32,8 +34,14 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function getUser()
+    public function getUser(Request $request)
     {
+        // $data = ['message' => 'This is a test!'];
+
+        // Mail::to('k.monteadora@gmail.com')->send(new TestEmail($data));
+
+        
+
         return response()->json([
             'data' => auth()->user()->where('branch_id', 1)->first()
         ], 200);
@@ -46,5 +54,12 @@ class AuthController extends Controller
         return response()->json([
             'data' => $branches
         ], 200);
+    }
+
+    public function sendMail(Requset $request)
+    {
+        $input = ['message' => 'This is a test!'];
+
+        Mail::to('k.monteadora@gmail.com')->send(new SendGrid($input));
     }
 }
