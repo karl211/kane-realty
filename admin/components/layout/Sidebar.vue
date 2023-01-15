@@ -73,18 +73,18 @@
 export default {
     name: 'DefaultLayout',
     props: {
-    toggleSidebar: {
-        type: Boolean,
-        default: false
-    }
+        toggleSidebar: {
+            type: Boolean,
+            default: false
+        }
     },
-    data: () => ({ 
+    data: () => ({
     drawer: null,
     items: [
         { title: 'Dashboard', icon: 'mdi-view-dashboard', to: '/dashboard' },
         { title: 'Calendar', icon: 'mdi-calendar', to: '/calendar' },
         { title: 'Reservations', icon: 'mdi-book-account', to: '/reservations' },
-        { title: 'Payments', icon: 'mdi-cash-clock', to: '/payments' },
+        { title: 'Receipts', icon: 'mdi-cash-clock', to: '/receipts' },
         { title: 'Locations', icon: 'mdi-home-group', to: '/locations' },
         { title: 'Invoices', icon: 'mdi-list-box-outline', to: '/invoices' },
         { title: 'Reports', icon: 'mdi-note', to: '/reports' },

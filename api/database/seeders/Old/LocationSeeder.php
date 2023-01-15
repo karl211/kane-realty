@@ -60,16 +60,16 @@ class LocationSeeder extends Seeder
 
         foreach ($locations as $location) {
             $branch = 2;
-            $butuan = array("San Vicente", "Tiniwisan");
+            $butuan = array("san vicente", "tiniwisan");
             $map = 'https://maps.google.com/maps?q='. $location->location .'&z=14&ie=UTF8&iwloc=&output=embed';
 
-            if (in_array($location->location, $butuan)) {
+            if (in_array(strtolower($location->location), $butuan)) {
                 $branch = 1;
             }
 
             Location::create([
                 'branch_id' => $branch,
-                'location' => $location->location,
+                'location' => ucfirst(strtolower($location->location)),
                 'description' => isset($location->description) ? $location->description : 'none',
                 'type' => isset($location->type) ? $location->type : 'none',
                 'map' => $map,

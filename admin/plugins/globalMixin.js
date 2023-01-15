@@ -98,7 +98,10 @@ const mixin = {
         },
 
         formatCurrency (money) {
-            return '₱' + Number(money).toLocaleString()
+            if (Number(money)) {
+                return '₱' + Number(money).toLocaleString()
+            }
+            return money
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -13,138 +14,87 @@ class ReportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sales = collect(DB::select('
-        SELECT DISTINCT
-            DATE_FORMAT(paid_at, "%b") AS `month`, 
-            type_of_payment, 
-            YEAR(paid_at) AS `year`, 
-            SUM(amount) AS amount_total, 
-            locations.location
-        FROM
-            payments
-            INNER JOIN
-            reservations
-            ON 
-                payments.reservation_id = reservations.id
-            INNER JOIN
-            properties
-            ON 
-                reservations.property_id = properties.id
-            INNER JOIN
-            locations
-            ON 
-                properties.location_id = locations.id
-        WHERE
-            paid_at >= "2020-01-01" AND
-            paid_at <= "2020-12-31" AND 
-            locations.branch_id = 2
-        GROUP BY
-            month, 
-            year, 
-            type_of_payment
-        ORDER BY
-            month ASC
+        $current_year = Carbon::now()->year;
+
+        if ($request->year != null) {
+            $current_year = $request->year;
+        }
+
+        if ($request->branch_id) {
+
+        }
+
+        $from = $current_year.'-01-01';
+        $to = $current_year.'-12-31';
+        
+        $payment_years = collect(DB::select('
+            SELECT DISTINCT
+                YEAR(paid_at) AS `year`
+            FROM
+                payments
+            WHERE
+                paid_at != "0000-00-00"
+                ORDER BY year desc
         '));
 
-        // [
-        //     {
-        //         particular: "San Vicente",
-        //         reservation: {
-        //             jan: 100000,
-        //             feb: 100000,
-        //             mar: 100000,
-        //             apr: 100000,
-        //             may: 100000,
-        //             june: 100000,
-        //             july: 100000,
-        //             aug: 150000,
-        //             sept: 100000,
-        //             oct: 100000,
-        //             nov: 100000,
-        //             dec: 100000,
-        //             total: 0
-        //         },
-        //         amortization: {
-        //             jan: 150000,
-        //             feb: 100000,
-        //             mar: 100000,
-        //             apr: 100000,
-        //             may: 100000,
-        //             june: 100000,
-        //             july: 100000,
-        //             aug: 100000,
-        //             sept: 100000,
-        //             oct: 100000,
-        //             nov: 100000,
-        //             dec: 100000,
-        //             total: 0
-        //         }
-        //     },
-        //     {
-        //         particular: "Tiniwisan",
-        //         reservation: {
-        //             jan: 100000,
-        //             feb: 100000,
-        //             mar: 100000,
-        //             apr: 100000,
-        //             may: 100000,
-        //             june: 100000,
-        //             july: 100000,
-        //             aug: 150000,
-        //             sept: 1003000,
-        //             oct: 100000,
-        //             nov: 100000,
-        //             dec: 100000,
-        //             total: 0
-        //         },
-        //         amortization: {
-        //             jan: 150000,
-        //             feb: 100000,
-        //             mar: 100000,
-        //             apr: 100000,
-        //             may: 1001000,
-        //             june: 100000,
-        //             july: 100000,
-        //             aug: 1050000,
-        //             sept: 100000,
-        //             oct: 100000,
-        //             nov: 100000,
-        //             dec: 100000,
-        //             total: 0
-        //         }
-        //     },
-        // ]
+        $sales = collect(DB::select('
+            SELECT DISTINCT
+                DATE_FORMAT(paid_at, "%b") AS `month`, 
+                MONTH(paid_at) AS `month_num`, 
+                type_of_payment, 
+                YEAR(paid_at) AS `year`, 
+                SUM(amount) AS amount_total, 
+                locations.location
+            FROM
+                payments
+                INNER JOIN
+                reservations
+                ON 
+                    payments.reservation_id = reservations.id
+                INNER JOIN
+                properties
+                ON 
+                    reservations.property_id = properties.id
+                INNER JOIN
+                locations
+                ON 
+                    properties.location_id = locations.id
+            WHERE
+                paid_at >= ? AND
+                paid_at <= ? AND 
+                locations.branch_id = ?
+            GROUP BY
+                month, 
+                year,
+                type_of_payment
+            ORDER BY
+            location, month_num ASC
+        ', [$from, $to, $request->branch_id]));
 
-        $data = [];
+        $grouped_sales = $sales->groupBy('location')->map(function ($months) {
+            return $months->groupBy('type_of_payment')->map(function ($items) {
+                $data = [];
+                $total = 0;
 
-        foreach ($sales as $sale) {
-            $arr = [];
-            $data['particular'] = $sale->location;
-
-            if ($sale->type_of_payment == 'Reservation Fee') {
-                $arr['reservation'] = [$sale->month => $sale->amount_total];
+                foreach ($items as $item) {
+                    $amount = (int) $item->amount_total;
+                    $total += $amount;
+    
+                    $data[$item->month] = $amount;
+                }
+    
+                $data['Total'] = $total;
                 
-            } else if ($sale->type_of_payment == 'Monthly Amortization') {
-                $arr['amortization'] = [$sale->month => $sale->amount_total];
-            }
-            
-            $data[] = $arr;
-            
-        }
-        dd($data);
-        
-        // ->map(function($q) {
-        //     return [
-        //         'particular' => $q->type_of_payment,
-        //         'month' => $q->month,
-        //         'total' => $q->amount_total
-        //     ];
-        // });
+                return $data;
+            });
+        });
 
-        return $sales;
-        // return 'test';
+        return response()->json([
+            'years'  => $payment_years->pluck('year'),
+            'sales' => $grouped_sales
+        ]);
     }
 
     /**

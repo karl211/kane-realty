@@ -95,6 +95,12 @@ class PaymentSeeder extends Seeder
                         ->first();
                     
                     if ($reservation) {
+                        if ($payment->type_of_payment == 'Fully Paid') {
+                            $reservation->update([
+                                'status' => 'Fully Paid'
+                            ]);
+                        }
+
                         $reservation->payments()->withoutGlobalScope('default_branch')
                             ->updateOrCreate([
                                 'buyer_id' => $profile->user_id,
