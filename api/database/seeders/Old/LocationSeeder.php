@@ -69,7 +69,7 @@ class LocationSeeder extends Seeder
 
             Location::create([
                 'branch_id' => $branch,
-                'location' => ucfirst(strtolower($location->location)),
+                'location' => ucwords(strtolower($location->location)),
                 'description' => isset($location->description) ? $location->description : 'none',
                 'type' => isset($location->type) ? $location->type : 'none',
                 'map' => $map,

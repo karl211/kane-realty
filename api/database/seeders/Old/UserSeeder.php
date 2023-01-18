@@ -295,7 +295,7 @@ class UserSeeder extends Seeder
             $branch = 2;
             $butuan = array("San Vicente", "Tiniwisan");
 
-            if (in_array($user->location, $butuan)) {
+            if (in_array(ucwords(strtolower($user->location)), $butuan)) {
                 $branch = 1;
             }
             
