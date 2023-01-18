@@ -68,7 +68,8 @@ class ReportController extends Controller
             GROUP BY
                 month, 
                 year,
-                type_of_payment
+                type_of_payment,
+                location
             ORDER BY
             location, month_num ASC
         ', [$from, $to, $request->branch_id]));

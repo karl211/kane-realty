@@ -59,7 +59,7 @@ class ReservationSeeder extends Seeder
                             $co_borrower_id = $buyer->coBorrowers()->first()->id;
                         }
             
-                        if ($reservation->transaction_at) {
+                        if ($reservation->transaction_at && $reservation->contract_price && $reservation->term && $reservation->monthly_amortization) {
                             $new_reservation = Reservation::withoutGlobalScope('default_branch')
                             ->updateOrCreate([
                                 'buyer_id' => $buyer->id,
@@ -70,7 +70,7 @@ class ReservationSeeder extends Seeder
                                 'monthly_amortization' => $reservation->monthly_amortization,
                                 'term' => $reservation->term,
                                 'transaction_at' => $reservation->transaction_at,
-                                'status' => 'On Going',
+                                'status' => trim(ucwords(strtolower($reservation->status))),
                             ]);
                         }
                     }

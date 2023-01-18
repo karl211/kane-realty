@@ -48,7 +48,7 @@ class PropertySeeder extends Seeder
                     'contract_price' => $property->contract_price,
                     'default_monthly_amortization' => $property->monthly_amortization,
                     'term' => $property->term,
-                    'status' => ucfirst(strtolower($property->status)),
+                    'status' => ucwords(strtolower($property->status)),
                     'is_active' => true,
                 ]);
             }

@@ -57,7 +57,7 @@
             <template #item="{ item }">
                 
                 <tr>
-                    <td>
+                    <td class="particular">
                         <h3 class="mt-2">{{item.particular}}</h3>
                         <!-- <p class="mb-1 ml-10" v-for="(data, i) in item.data" :key="i">{{ i }}</p> -->
                         <p class="mb-1 ml-10">Fully Paid</p>
@@ -275,5 +275,8 @@ export default {
 }
 .sales-header {
     width: 300px;
+}
+.particular {
+    min-width: 210px;
 }
 </style>

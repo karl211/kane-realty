@@ -105,8 +105,8 @@ class PaymentSeeder extends Seeder
                             ->updateOrCreate([
                                 'buyer_id' => $profile->user_id,
                                 'ar_number' => $payment->ar_number,
-                                'type_of_payment' => $payment->type_of_payment,
-                                'mode_of_payment' => $payment->mode_of_payment
+                                'type_of_payment' => trim(ucwords(strtolower($payment->type_of_payment))),
+                                'mode_of_payment' => trim(ucwords(strtolower($payment->mode_of_payment)))
                             ], [
                                 'or_number' => $payment->or_number,
                                 'amount' => $payment->amount,
