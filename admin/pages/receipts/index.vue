@@ -1,7 +1,7 @@
 <template>
     <div>
         <section v-if="loaded">
-        <h1 class="title">Manage Payments</h1>
+        <h1 class="title">Receipts</h1>
         <br>
         <v-row>
             <v-col>

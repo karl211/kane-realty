@@ -123,7 +123,8 @@ class PaymentRequest extends FormRequest
 
 
         // Mail::to($this->buyer->email)->send(new PaymentNotification());
-        Mail::to("k.monteadora@gmail.com")->send(new PaymentNotification());
+
+        // Mail::to("k.monteadora@gmail.com")->send(new PaymentNotification());
 
         return $payment;
     }

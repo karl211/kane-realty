@@ -1,7 +1,7 @@
 <template>
     <div>
       <section v-if="loaded">
-        <h1 class="title">Manage Reservations</h1>
+        <h1 class="title">Reservations</h1>
         <br>
         <v-row>
           <v-col>

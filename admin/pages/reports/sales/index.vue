@@ -1,10 +1,32 @@
 <template>
     <div>
     <section>
-        <div class="container text-center">
+        <!-- <v-select
+            v-model="filter_invoice"
+            :items="years"
+            label="Filter Year"
+            dense
+            outlined
+            width="100"
+            class="mx-1"
+        /> -->
+        <div class="container text-center sales-header">
             <h1>SALES</h1>
-            <h3>FOR THE YEAR 2022</h3>
+            <div class="d-flex justify-center">
+                <h3 class="w-100">FOR THE YEAR  </h3>
+                <v-select
+                    v-model="year"
+                    :items="years"
+                    dense
+                    hide-details
+                    class="ml-2 year-opt"
+                    @change="selectYear"
+                ></v-select>
+            </div>
+            
         </div>
+
+        
 
         <v-data-table 
             hide-default-footer
@@ -33,108 +55,125 @@
                 </thead>
             </template>
             <template #item="{ item }">
+                
                 <tr>
-                    <td>
+                    <td class="particular">
                         <h3 class="mt-2">{{item.particular}}</h3>
-                        <p class="mb-1 ml-10">RESERVATION FEE</p>
-                        <p class="mb-1 ml-10">AMORTIZATION</p>
+                        <!-- <p class="mb-1 ml-10" v-for="(data, i) in item.data" :key="i">{{ i }}</p> -->
+                        <p class="mb-1 ml-10">Fully Paid</p>
+                        <p class="mb-1 ml-10">Monthly Amortization</p>
+                        <p class="mb-1 ml-10">Reservation Fee</p>
                         <p class="mb-1 ml-0"><strong>TOTAL</strong></p>
                     </td>
+
                     <td class="text-center">
                         <h3 class="mt-2">&nbsp;</h3>
-                        <p class="mb-1" v-if="item.reservation">{{formatCurrency(item.reservation.jan)}}</p>
-                        <p class="mb-1" v-if="item.amortization">{{formatCurrency(item.amortization.jan)}}</p>
-                        <p class="mb-1 font-weight-bold">{{formatCurrency(250000)}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Fully Paid']?.Jan || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Monthly Amortization']?.Jan || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Reservation Fee']?.Jan || '-')}}</p>
+                        <p class="mb-1 font-weight-bold">{{ calculateTotal(item.data, 'Jan') }}</p>
                     </td>
                     <td class="text-center">
                         <h3 class="mt-2">&nbsp;</h3>
-                        <p class="mb-1" v-if="item.reservation">{{formatCurrency(item.reservation.feb)}}</p>
-                        <p class="mb-1" v-if="item.amortization">{{formatCurrency(item.amortization.feb)}}</p>
-                        <p class="mb-1 font-weight-bold">{{formatCurrency(250000)}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Fully Paid']?.Feb || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Monthly Amortization']?.Feb || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Reservation Fee']?.Feb || '-')}}</p>
+                        <p class="mb-1 font-weight-bold">{{ calculateTotal(item.data, 'Feb') }}</p>
                     </td>
                     <td class="text-center">
                         <h3 class="mt-2">&nbsp;</h3>
-                        <p class="mb-1" v-if="item.reservation">{{formatCurrency(item.reservation.mar)}}</p>
-                        <p class="mb-1" v-if="item.amortization">{{formatCurrency(item.amortization.mar)}}</p>
-                        <p class="mb-1 font-weight-bold">{{formatCurrency(250000)}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Fully Paid']?.Mar || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Monthly Amortization']?.Mar || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Reservation Fee']?.Mar || '-')}}</p>
+                        <p class="mb-1 font-weight-bold">{{ calculateTotal(item.data, 'Mar') }}</p>
                     </td>
                     <td class="text-center">
                         <h3 class="mt-2">&nbsp;</h3>
-                        <p class="mb-1" v-if="item.reservation">{{formatCurrency(item.reservation.apr)}}</p>
-                        <p class="mb-1" v-if="item.amortization">{{formatCurrency(item.amortization.apr)}}</p>
-                        <p class="mb-1 font-weight-bold">{{formatCurrency(250000)}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Fully Paid']?.Apr || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Monthly Amortization']?.Apr || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Reservation Fee']?.Apr || '-')}}</p>
+                        <p class="mb-1 font-weight-bold">{{ calculateTotal(item.data, 'Apr') }}</p>
                     </td>
                     <td class="text-center">
                         <h3 class="mt-2">&nbsp;</h3>
-                        <p class="mb-1" v-if="item.reservation">{{formatCurrency(item.reservation.may)}}</p>
-                        <p class="mb-1" v-if="item.amortization">{{formatCurrency(item.amortization.may)}}</p>
-                        <p class="mb-1 font-weight-bold">{{formatCurrency(250000)}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Fully Paid']?.May || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Monthly Amortization']?.May || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Reservation Fee']?.May || '-')}}</p>
+                        <p class="mb-1 font-weight-bold">{{ calculateTotal(item.data, 'May') }}</p>
                     </td>
                     <td class="text-center">
                         <h3 class="mt-2">&nbsp;</h3>
-                        <p class="mb-1" v-if="item.reservation">{{formatCurrency(item.reservation.june)}}</p>
-                        <p class="mb-1" v-if="item.amortization">{{formatCurrency(item.amortization.june)}}</p>
-                        <p class="mb-1 font-weight-bold">{{formatCurrency(250000)}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Fully Paid']?.Jun || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Monthly Amortization']?.Jun || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Reservation Fee']?.Jun || '-')}}</p>
+                        <p class="mb-1 font-weight-bold">{{ calculateTotal(item.data, 'Jun') }}</p>
                     </td>
                     <td class="text-center">
                         <h3 class="mt-2">&nbsp;</h3>
-                        <p class="mb-1" v-if="item.reservation">{{formatCurrency(item.reservation.july)}}</p>
-                        <p class="mb-1" v-if="item.amortization">{{formatCurrency(item.amortization.july)}}</p>
-                        <p class="mb-1 font-weight-bold">{{formatCurrency(250000)}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Fully Paid']?.Jul || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Monthly Amortization']?.Jul || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Reservation Fee']?.Jul || '-')}}</p>
+                        <p class="mb-1 font-weight-bold">{{ calculateTotal(item.data, 'Jul') }}</p>
                     </td>
                     <td class="text-center">
                         <h3 class="mt-2">&nbsp;</h3>
-                        <p class="mb-1" v-if="item.reservation">{{formatCurrency(item.reservation.aug)}}</p>
-                        <p class="mb-1" v-if="item.amortization">{{formatCurrency(item.amortization.aug)}}</p>
-                        <p class="mb-1 font-weight-bold">{{formatCurrency(250000)}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Fully Paid']?.Aug || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Monthly Amortization']?.Aug || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Reservation Fee']?.Aug || '-')}}</p>
+                        <p class="mb-1 font-weight-bold">{{ calculateTotal(item.data, 'Aug') }}</p>
                     </td>
                     <td class="text-center">
                         <h3 class="mt-2">&nbsp;</h3>
-                        <p class="mb-1" v-if="item.reservation">{{formatCurrency(item.reservation.sept)}}</p>
-                        <p class="mb-1" v-if="item.amortization">{{formatCurrency(item.amortization.sept)}}</p>
-                        <p class="mb-1 font-weight-bold">{{formatCurrency(250000)}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Fully Paid']?.Sep || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Monthly Amortization']?.Sep || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Reservation Fee']?.Sep || '-')}}</p>
+                        <p class="mb-1 font-weight-bold">{{ calculateTotal(item.data, 'Sep') }}</p>
                     </td>
                     <td class="text-center">
                         <h3 class="mt-2">&nbsp;</h3>
-                        <p class="mb-1" v-if="item.reservation">{{formatCurrency(item.reservation.oct)}}</p>
-                        <p class="mb-1" v-if="item.amortization">{{formatCurrency(item.amortization.oct)}}</p>
-                        <p class="mb-1 font-weight-bold">{{formatCurrency(250000)}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Fully Paid']?.Oct || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Monthly Amortization']?.Oct || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Reservation Fee']?.Oct || '-')}}</p>
+                        <p class="mb-1 font-weight-bold">{{ calculateTotal(item.data, 'Oct') }}</p>
                     </td>
                     <td class="text-center">
                         <h3 class="mt-2">&nbsp;</h3>
-                        <p class="mb-1" v-if="item.reservation">{{formatCurrency(item.reservation.nov)}}</p>
-                        <p class="mb-1" v-if="item.amortization">{{formatCurrency(item.amortization.nov)}}</p>
-                        <p class="mb-1 font-weight-bold">{{formatCurrency(250000)}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Fully Paid']?.Nov || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Monthly Amortization']?.Nov || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Reservation Fee']?.Nov || '-')}}</p>
+                        <p class="mb-1 font-weight-bold">{{ calculateTotal(item.data, 'Nov') }}</p>
                     </td>
                     <td class="text-center">
                         <h3 class="mt-2">&nbsp;</h3>
-                        <p class="mb-1" v-if="item.reservation">{{formatCurrency(item.reservation.dec)}}</p>
-                        <p class="mb-1" v-if="item.amortization">{{formatCurrency(item.amortization.dec)}}</p>
-                        <p class="mb-1 font-weight-bold">{{formatCurrency(250000)}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Fully Paid']?.Dec || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Monthly Amortization']?.Dec || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Reservation Fee']?.Dec || '-')}}</p>
+                        <p class="mb-1 font-weight-bold">{{ calculateTotal(item.data, 'Dec') }}</p>
                     </td>
                     <td class="text-center">
                         <h3 class="mt-2">&nbsp;</h3>
-                        <p class="mb-1" v-if="item.reservation">{{formatCurrency(item.reservation.total)}}</p>
-                        <p class="mb-1" v-if="item.amortization">{{formatCurrency(item.amortization.total)}}</p>
-                        <p class="mb-1 font-weight-bold">{{formatCurrency(250000)}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Fully Paid']?.Total || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Monthly Amortization']?.Total || '-')}}</p>
+                        <p class="mb-1">{{formatCurrency(item.data['Reservation Fee']?.Total || '-')}}</p>
+                        <p class="mb-1 font-weight-bold">{{ calculateTotal(item.data, 'Total') }}</p>
                     </td>
                 </tr>
             </template>
             <template slot="body.append">
                     <td class="font-weight-bold pl-4">GRAND TOTAL</td>
-                    <td class="text-center"><p class="font-weight-bold my-2">{{formatCurrency(500000)}}</p></td>
-                    <td class="text-center"><p class="font-weight-bold my-2">{{formatCurrency(500000)}}</p></td>
-                    <td class="text-center"><p class="font-weight-bold my-2">{{formatCurrency(500000)}}</p></td>
-                    <td class="text-center"><p class="font-weight-bold my-2">{{formatCurrency(500000)}}</p></td>
-                    <td class="text-center"><p class="font-weight-bold my-2">{{formatCurrency(500000)}}</p></td>
-                    <td class="text-center"><p class="font-weight-bold my-2">{{formatCurrency(500000)}}</p></td>
-                    <td class="text-center"><p class="font-weight-bold my-2">{{formatCurrency(500000)}}</p></td>
-                    <td class="text-center"><p class="font-weight-bold my-2">{{formatCurrency(500000)}}</p></td>
-                    <td class="text-center"><p class="font-weight-bold my-2">{{formatCurrency(500000)}}</p></td>
-                    <td class="text-center"><p class="font-weight-bold my-2">{{formatCurrency(500000)}}</p></td>
-                    <td class="text-center"><p class="font-weight-bold my-2">{{formatCurrency(500000)}}</p></td>
-                    <td class="text-center"><p class="font-weight-bold my-2">{{formatCurrency(500000)}}</p></td>
-                    <td class="text-center"><p class="font-weight-bold my-2">{{formatCurrency(500000)}}</p></td>
+                    <td class="text-center"><p class="font-weight-bold my-2">{{ grandTotal('Jan') }}</p></td>
+                    <td class="text-center"><p class="font-weight-bold my-2">{{ grandTotal('Feb') }}</p></td>
+                    <td class="text-center"><p class="font-weight-bold my-2">{{ grandTotal('Mar') }}</p></td>
+                    <td class="text-center"><p class="font-weight-bold my-2">{{ grandTotal('Apr') }}</p></td>
+                    <td class="text-center"><p class="font-weight-bold my-2">{{ grandTotal('May') }}</p></td>
+                    <td class="text-center"><p class="font-weight-bold my-2">{{ grandTotal('Jun') }}</p></td>
+                    <td class="text-center"><p class="font-weight-bold my-2">{{ grandTotal('Jul') }}</p></td>
+                    <td class="text-center"><p class="font-weight-bold my-2">{{ grandTotal('Aug') }}</p></td>
+                    <td class="text-center"><p class="font-weight-bold my-2">{{ grandTotal('Sep') }}</p></td>
+                    <td class="text-center"><p class="font-weight-bold my-2">{{ grandTotal('Oct') }}</p></td>
+                    <td class="text-center"><p class="font-weight-bold my-2">{{ grandTotal('Nov') }}</p></td>
+                    <td class="text-center"><p class="font-weight-bold my-2">{{ grandTotal('Dec') }}</p></td>
+                    <td class="text-center"><p class="font-weight-bold my-2">{{ grandTotal('Total') }}</p></td>
             </template>
         </v-data-table>
     </section>
@@ -143,124 +182,21 @@
 
 <script>
 // import _ from "lodash";
+import moment from 'moment';
 import { Report } from '../../../services/reports'
 export default {
     name: "PaymentsIndex",
     data () {
         return {
-            dateFormatted: this.formatDate((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)),
-            date: false,
             loading: false,
             loaded: false,
-            prof_title_id: "",
-            headers: [
-            { text: "Particular" },
-            { text: "Months" },
-            { text: "Property" },
-            { text: "Contract Price" },
-            { text: "Balance" },
-            { text: "Amount paid" },
-            { text: "Type" },
-            { text: "Mode" },
-            { text: "Actions", align: "center" },
-            ],
-            total: 0,
         
-            paginateData: null,
-            sales: [
-                {
-                    particular: "San Vicente",
-                    reservation: {
-                        jan: 100000,
-                        feb: 100000,
-                        mar: 100000,
-                        apr: 100000,
-                        may: 100000,
-                        june: 100000,
-                        july: 100000,
-                        aug: 150000,
-                        sept: 100000,
-                        oct: 100000,
-                        nov: 100000,
-                        dec: 100000,
-                        total: 0
-                    },
-                    amortization: {
-                        jan: 150000,
-                        feb: 100000,
-                        mar: 100000,
-                        apr: 100000,
-                        may: 100000,
-                        june: 100000,
-                        july: 100000,
-                        aug: 100000,
-                        sept: 100000,
-                        oct: 100000,
-                        nov: 100000,
-                        dec: 100000,
-                        total: 0
-                    }
-                },
-                {
-                    particular: "Tiniwisan",
-                    reservation: {
-                        jan: 100000,
-                        feb: 100000,
-                        mar: 100000,
-                        apr: 100000,
-                        may: 100000,
-                        june: 100000,
-                        july: 100000,
-                        aug: 150000,
-                        sept: 1003000,
-                        oct: 100000,
-                        nov: 100000,
-                        dec: 100000,
-                        total: 0
-                    },
-                    amortization: {
-                        jan: 150000,
-                        feb: 100000,
-                        mar: 100000,
-                        apr: 100000,
-                        may: 1001000,
-                        june: 100000,
-                        july: 100000,
-                        aug: 1050000,
-                        sept: 100000,
-                        oct: 100000,
-                        nov: 100000,
-                        dec: 100000,
-                        total: 0
-                    }
-                },
-            ],
-            payments: [],
-            search: {
-            page: 1,
-            search: ''
-            }
+            sales: [],
+            years: [],
+            year: moment().year(),
         }
     },
-    // computed: {
-    //     totals() {
-    //         return this.sales.map((sale) => {
-    //             let total = 0
-                
-    //             for (const key in sale) {
-    //                 if (!isNaN(sale[key])) {
-    //                     total += sale[key]
-    //                 }
-    //             }
-
-    //             sale.res_total = total
-
-    //             return sale
-    //         });
-            
-    //         // totals.fat = totals.fat.toFixed(1)
-    //     }
-    // },
+    
     watch: {
         loaded(value) {
             this.loaded = value
@@ -268,20 +204,6 @@ export default {
     },
     created() {
         this.getSales()
-
-        // this.sales.map((sale) => {
-        //     let total = 0
-            
-        //     for (const key in sale) {
-        //         if (!isNaN(sale[key])) {
-        //             total += sale[key]
-        //         }
-        //     }
-
-        //     sale.res_total = this.formatCurrency(total)
-
-        //     return sale
-        // });
     },
     mounted() {
     
@@ -290,35 +212,71 @@ export default {
         getSales() {
             this.loading = true
             
-            Report.sales(this.search).then((response) => {
-                // this.paginateData = response.data
-                // this.payments = response.data.data
-                // this.loaded = true
-                // this.loading = false
+            Report.sales({
+                year: this.year
+            }).then((response) => {
+                const data = []
+                for (const key in response.data.sales) {
+                    data.push({
+                        particular: key,
+                        data: response.data.sales[key]
+                    })
+                }
+
+                this.sales = data
+                this.years = response.data.years
             });
         },
-        // paginate(pageNumber) {
-        //     this.search.page = pageNumber
-        //     this.getSales(this.search);
-        // },
-        // searchPayment(value) {
-        //     this.payments = []
-        //     this.search.page = 1
-        //     this.search.search = value
 
-        //     this.getSales(this.search)
-        // },
-        // formatDate (date) {
-        //     if (!date) return null
+        calculateTotal (item, month) {
+            let total = 0
+            for (const key in item) {
+                if (item[key][month]) {
+                    total += item[key][month]
+                }
+            }
+            return this.formatCurrency(total)
+        },
 
-        //     const [year, month, day] = date.split('-')
-        //     return `${month}/${day}/${year}`
-        // },
+        grandTotal (month) {
+            let total = 0
+            this.sales.forEach(sale => {
+                for (const key in sale.data) {
+                    if (sale.data[key][month]) {
+                        total += sale.data[key][month]
+                    }
+                }
+            });
+            return this.formatCurrency(total)
+        },
+
+        selectYear (year) {
+            this.year = year
+            this.getSales()
+        }
     }
 }
 </script>
 <style>
 .w-21 {
     font-size: 14px !important;
+}
+.year-opt {
+    display: block;
+    font-size: 1.17em;
+    /* margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px; */
+    font-weight: bold;
+    position: relative;
+    bottom: 4px;
+    max-width: 80px;
+}
+.sales-header {
+    width: 300px;
+}
+.particular {
+    min-width: 210px;
 }
 </style>

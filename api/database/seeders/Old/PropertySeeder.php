@@ -29,7 +29,8 @@ class PropertySeeder extends Seeder
             new_reservations.`status`, 
             new_reservations.contract_price, 
             new_reservations.monthly_amortization, 
-            new_reservations.term
+            new_reservations.term,
+            new_reservations.sqm
         FROM
             new_reservations
             WHERE new_reservations.location is not null
@@ -43,11 +44,11 @@ class PropertySeeder extends Seeder
                 $location->properties()->withoutGlobalScope('default_branch')->updateOrCreate([
                     'block' => $property->block,
                     'lot' => $property->lot,
-                    'lot_size' => 'none',
+                    'lot_size' => $property->sqm . ' sqm',
                     'contract_price' => $property->contract_price,
                     'default_monthly_amortization' => $property->monthly_amortization,
                     'term' => $property->term,
-                    'status' => ucfirst(strtolower($property->status)),
+                    'status' => ucwords(strtolower($property->status)),
                     'is_active' => true,
                 ]);
             }

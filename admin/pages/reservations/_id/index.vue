@@ -82,11 +82,12 @@
 
                                                 <v-card-text class="text-left pt-0">
                                                     <div class="w-200">
-                                                        <h2 class="mb-3">{{ item.property.location.location }}</h2>
+                                                        <h2 class="mb-1">{{ item.property.location.location }}</h2>
                                                         <p class="ma-0">Block {{ item.property.block }}</p>
                                                         <p class="ma-0">Lot {{ item.property.lot }}</p>
-                                                        <p v-if="item.property.phase">Phase {{ item.property.phase }}</p>
-                                                        <p v-if="item.property.lot_size">Lot size {{ item.property.lot_size }}</p>
+                                                        <p v-if="item.property.phase" class="ma-0">Phase {{ item.property.phase }}</p>
+                                                        <p v-if="item.property.term" class="ma-0">Term {{ item.property.term }}</p>
+                                                        <p v-if="item.property.lot_size" class="ma-0">{{ item.property.lot_size }}</p>
                                                     </div>
                                                 </v-card-text>
 
@@ -104,7 +105,7 @@
                                                 <v-card-text class="text-left pt-0">
                                                     <div>
                                                         <h3 class="mb-1">Status</h3>
-                                                        <h3 class="ma-0 green--text">{{ item.status }}</h3>
+                                                        <h3 class="ma-0 green--text">{{ getStatus(item) }}</h3>
                                                     </div>
                                                 </v-card-text>
 
@@ -189,6 +190,7 @@
                                                 class="ml-auto mt-3"
                                                 elevation="0"
                                                 color="info"
+                                                :disabled="isPaymentDisabled"
                                                 @click="addPayment(item)"
                                             >
                                                 <v-icon>mdi-cash-clock</v-icon> &nbsp; Add Payment
@@ -369,6 +371,7 @@ export default {
             manageDocuments: false,
             showEditReservation: false,
             showEditPayment: false,
+            isPaymentDisabled: false,
             panel: [0],
             totalPayment: 0,
             buyer: null,
@@ -463,9 +466,8 @@ export default {
 
                 this.buyerReservations = buyerReservations
             }
-            
         },
-
+        
         getBalance (item) {
             const total = parseInt(item.contract_price) - parseInt(item.total_payment)
 
@@ -473,6 +475,15 @@ export default {
                 return '₱' + Number(0).toLocaleString()
             }
             return '₱' + Number(total).toLocaleString()
+        },
+
+        getStatus (item) {
+            if (this.getBalance(item) === "₱0") {
+                this.isPaymentDisabled = true
+                return 'Fully Paid'
+            }
+
+            return item.status
         },
 
         addPayment (item) {
