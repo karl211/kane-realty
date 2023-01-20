@@ -26,7 +26,7 @@ class ReservationResource extends JsonResource
             'contract_price' => $this->contract_price,
             'balance' => $this->contract_price,
             'term' => $this->term,
-            'date_of_transaction' => Carbon::parse($this->transaction_at)->format('M d, Y'),
+            'date_of_transaction' => Carbon::parse($this->transaction_at)->format('F d, Y'),
             'status' => $this->status,
             'sales_manager' => new UserResource($this->sales_manager),
             'sales_agent' => new UserResource($this->sales_agent),

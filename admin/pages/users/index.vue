@@ -7,8 +7,45 @@
         class="elevation-1"
       ></v-data-table> -->
     <section>
-      <h1 class="title">Users</h1>
-      <v-row>
+        <h1 class="title">Users</h1>
+        <br>
+        <v-row>
+            <v-col md="3" sm="6" xs="12" v-for="(property, i) in desserts" :key="i">
+                <v-card
+                    class="mx-auto mb-5"
+                    max-width="350"
+                    
+                >
+                    <v-card-text class="pa-0">
+                        <div class="container text-center pt-10">
+                            <v-img
+                                class="avatar-lg rounded-circle m-auto"
+                                src="http://minible-v-light.nuxt-vuejs.themesbrand.com/_nuxt/img/avatar-2.02aea0c.jpg"
+                            >
+                            </v-img>
+                            <h1 class="mt-5">Simon Ryles</h1>
+                            <h4 class="my-2">Full Stack Developer</h4> 
+                        </div>
+                        <div class="d-flex mt-3">
+                            <v-btn color="link" class="w-50 rounded-0 warning--text">
+                                <v-icon small>
+                                    mdi-pencil
+                                </v-icon> 
+                                Edit
+                            </v-btn>
+                            <v-btn color="link" class="w-50 rounded-0 danger--text">
+                                <v-icon small>
+                                    mdi-delete-forever
+                                </v-icon> 
+                                Delete
+                            </v-btn>
+                        </div>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+        </v-row>
+        
+      <!-- <v-row>
         <v-col></v-col>
         <v-col sm="5">
           <section class="d-flex">
@@ -32,9 +69,9 @@
             />
           </section>
         </v-col>
-      </v-row>
+      </v-row> -->
 
-      <v-data-table
+      <!-- <v-data-table
         hide-default-footer
         :loading="loading"
         :items="desserts"
@@ -54,23 +91,6 @@
             <td>{{ item.name }}</td>
             <td>
               <div class="d-flex">
-                <!-- <v-btn
-                  elevation="0"
-                  outlined
-                  class="mx-1"
-                  color="primary"
-                  @click="onImpersonate(item)"
-                  small
-                  >Login</v-btn
-                >
-                <v-btn
-                  elevation="0"
-                  outlined
-                  color="primary"
-                  small
-                  @click.stop="getDetails(item)"
-                  >More</v-btn
-                > -->
               </div>
             </td>
           </tr>
@@ -84,7 +104,7 @@
             collection="accounts"
           />
         </v-col>
-      </v-row>
+      </v-row> -->
     </section>
   </div>
 </template>
@@ -211,3 +231,24 @@ import { Auth } from '../../services/auth'
     }
   }
 </script>
+<style lang="scss">
+    .m-auto {
+        margin: auto;
+        text-align: center;
+    }
+
+    .card-text-wrap {
+        min-height: 100px;
+    }
+
+    .filling-empty-space-childs {
+        width: 25%;
+        height:0; 
+    }
+
+    .container-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around
+    }
+</style>

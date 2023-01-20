@@ -40,6 +40,7 @@
   
         <v-data-table
           hide-default-footer
+          disable-sort
           :loading="loading"
           :items="reservations"
           :headers="headers"
@@ -53,8 +54,8 @@
                     <span class="blue--text pointer">{{ item.name }}</span>
                 </td>
                 <td>{{ item.property.full_property }}</td>
-                <td>{{ item.contract_price }}</td>
-                <td>{{ item.balance }}</td>
+                <td>{{ formatCurrency(item.contract_price) }}</td>
+                <td>{{ formatCurrency(item.balance) }}</td>
                 
                 <td class="d-flex justify-center mt-3">
                     <div class="d-flex justify-content">

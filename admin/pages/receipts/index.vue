@@ -9,7 +9,7 @@
                     class="ml-2"
                     elevation="0"
                     color="info"
-                    @click="$router.push('/payments/create')"
+                    @click="$router.push('/receipts/create')"
                 >
                     <v-icon>mdi-cash-clock</v-icon> &nbsp; New Payment
                 </v-btn>
@@ -39,6 +39,7 @@
 
         <v-data-table
             hide-default-footer
+            disable-sort
             :loading="loading"
             :items="payments"
             :headers="headers"
@@ -47,12 +48,12 @@
         >
             <template #item="{ item }">
             <tr>
-                <td>{{ item.paid_at }}</td>
+                <td class="w-10">{{ item.paid_at }}</td>
                 <td>{{ item.ar_number }}</td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.property }}</td>
-                <td>{{ item.contract_price }}</td>
-                <td>{{ item.amount }}</td>
+                <td>{{ formatCurrency(item.contract_price) }}</td>
+                <td>{{ formatCurrency(item.amount) }}</td>
                 <td>{{ item.type_of_payment }}</td>
                 <td>{{ item.mode_of_payment }}</td>
                 <td>
