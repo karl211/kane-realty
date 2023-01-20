@@ -487,7 +487,7 @@ export default {
         },
 
         addPayment (item) {
-            this.$router.push({path: `/payments/create?buyer=${this.buyer.slug}&reservation=${item.id}`});
+            this.$router.push({path: `/receipts/create?buyer=${this.buyer.slug}&reservation=${item.id}`});
         },
 
         updateForm (form, key) {
