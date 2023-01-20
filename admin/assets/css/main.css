@@ -16,3 +16,21 @@
 .swal2-container {
     font-family: 'Roboto' !important;
 }
+
+.w-10 {
+    width: 160px;
+}
+
+.w-50 {
+    width: 50%;
+}
+
+.avatar-lg {
+    height: 86px !important;
+    width: 86px !important;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    padding: 1.25rem;
+}

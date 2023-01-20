@@ -215,18 +215,5 @@ export default {
 }
 </script>
 <style>
-    .card-text-wrap {
-        min-height: 100px;
-    }
- 
-    .container-wrap {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around
-    }
-
-    .filling-empty-space-childs {
-        width: 25%;
-        height:0; 
-    }
+    
 </style>

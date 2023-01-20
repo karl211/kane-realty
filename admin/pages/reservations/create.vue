@@ -140,7 +140,7 @@ export default {
                         icon: 'success',
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // this.$router.push({path: `/reservations`});
+                            this.$router.push({path: `/reservations`});
                         } 
                     })
                 }

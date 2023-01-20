@@ -39,13 +39,13 @@ class ReservationController extends Controller
     {
         $locations = Location::with('properties')
             ->with(['properties' => function($query) {
-                $query->where('status', 'On Going');
+                $query->where('status', 'Available');
             }])
             ->when(request()->location_id, function ($query) {
                 $query->where('id', request()->location_id);
             })
             ->whereHas('properties', function($q) {
-                $q->where('status', 'On Going');
+                $q->where('status', 'Available');
             })
             ->orderBy('location')
             ->get();

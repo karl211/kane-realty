@@ -20,9 +20,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::where('role_id', '!=', 5)->get();
 
-        return view('welcome', compact('users'));
+        // return view('welcome', compact('users'));
+        return response()->json(['data' => $users]);
     }
 
     public function getSalesManagers()
