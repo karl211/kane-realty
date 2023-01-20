@@ -338,7 +338,7 @@ export default {
         },
 
         cancel () {
-            this.$router.push({path: `/payments`});
+            this.$router.push({path: `/receipts`});
         },
 
         submit () {
