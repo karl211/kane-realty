@@ -29,6 +29,9 @@ class ReservationController extends Controller
     {
         $reservations = Reservation::with('property', 'buyer')
             ->has('buyer.profile')
+            ->when(request()->search, function ($query) {
+                $query->search(request()->search);
+            })
             ->orderBy('transaction_at', 'desc')
             ->paginate(10);
 

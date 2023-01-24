@@ -35,8 +35,9 @@
                         @input="searchProperty"
                     ></v-text-field> -->
                     <v-select
+                        v-if="statuses.length"
                         v-model="filter_status"
-                        :items="['Reserved', 'Available']"
+                        :items="statuses"
                         label="Filter Property"
                         dense
                         outlined
@@ -160,6 +161,7 @@ export default {
                 { text: "Status " , align: "left" },
                 { text: "Actions", align: "left" },
             ],
+            statuses: [],
             properties: [],
             search: {
                 page: 1,
@@ -170,13 +172,24 @@ export default {
     },
 
     created() {
+        this.getStatuses()
+        
         if (this.$route.query.id) {
             this.getProperties()
+            
             this.searchProperty = _.debounce(this.searchProperty, 400);
         }
     },
 
     methods: {
+        getStatuses() {
+            Property.statuses(this.search, this.$route.query.id).then((response) => {
+                if (response.data.length) {
+                    this.statuses = response.data
+                }
+            });
+        },
+
         getProperties() {
             Property.locationProperties(this.search, this.$route.query.id).then((response) => {
                 if (response.data.data.length) {

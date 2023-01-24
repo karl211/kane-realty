@@ -18,21 +18,21 @@
             <section class="d-flex">
                 
                 <v-text-field
-                    label="Name, Email, Address, User Type"
+                    label="Search Name or Email"
                     dense
                     outlined
                     class="mx-1"
-                    @input="searchPayment"
+                    @input="searchReservation"
                 ></v-text-field>
                 <v-select
                     v-model="prof_title_id"
-                    item-text="title"
-                    item-value="id"
-                    label="Account Title"
-                    placeholder="Select Account Title"
+                    :items="filters"
+                    label="Filter Status"
+                    placeholder="Select Status"
                     dense
                     outlined
                     class="mx-1"
+                    @change="searchReservation"
                 />
             </section>
           </v-col>
@@ -120,6 +120,7 @@ export default {
             ],
             
             paginateData: null,
+            filters: ['Reserved', 'Fully Paid'],
             reservations: [],
             search: {
                 page: 1,
@@ -142,14 +143,12 @@ export default {
 
     created() {
         this.getReservations()
-        this.searchPayment = _.debounce(this.searchPayment, 400);
+        this.searchReservation = _.debounce(this.searchReservation, 400);
     },
 
     methods: {
         getReservations() {
             this.loading = true
-            
-            
 
             Reservations.allReservations(this.search).then((response) => {
                 this.paginateData = response.data
@@ -158,19 +157,23 @@ export default {
                 this.loading = false
             });
         },
+
         paginate(pageNumber) {
             this.search.page = pageNumber
             this.getReservations(this.search);
         },
-        searchPayment(value) {
+
+        searchReservation(value) {
             this.reservations = []
             this.search.page = 1
             this.search.search = value
             this.getReservations(this.search)
         },
+
         show(id) {
             this.$router.push({path: `/reservations/${id}`});
         },
+
         deleteReservation(item) {
             Swal.fire({
                 title: 'Do you want to delete this reservation?',
@@ -208,7 +211,7 @@ export default {
                     })
                 }
             })
-        }
+        },
         // edit(id) {
         //     this.$router.push({path: `/reservations/${id}/update`});
         // }

@@ -28,6 +28,13 @@ class PropertyController extends Controller
         return PaymentResource::collection($payments);
     }
 
+    public function getStatuses()
+    {
+        $statuses = Property::select('status', 'location_id')->groupBy('status')->get();
+
+        return $statuses->pluck('status');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
