@@ -55,11 +55,7 @@ Route::middleware('auth:sanctum')
 
         Route::get('/locations/{location}/properties', [LocationController::class, 'getLocationProperties']);
 
-        Route::get('/networks', [UserController::class, 'getNetworks']);
-
-        Route::get('/users/search', [UserController::class, 'searchBuyer']);
-
-        Route::get('/documents', [UserController::class, 'getDocuments']);
+        
         
         Route::get('/reservations', [ReservationController::class, 'index']);
 
@@ -90,6 +86,18 @@ Route::middleware('auth:sanctum')
         Route::prefix('reports')->group(function(){
             Route::apiResource('/sales', ReportController::class);
         });
+
+        Route::prefix('users')->group(function(){
+            Route::get('/', [UserController::class, 'index']);
+
+            Route::get('/search', [UserController::class, 'searchBuyer']);
+
+            Route::post('/delete', [UserController::class, 'destroy']);
+        });
+
+        Route::get('/networks', [UserController::class, 'getNetworks']);
+
+        Route::get('/documents', [UserController::class, 'getDocuments']);
     }
 );
 

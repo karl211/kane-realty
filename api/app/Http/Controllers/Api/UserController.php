@@ -20,10 +20,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::where('role_id', '!=', 5)->get();
+        $users = User::with('profile')->where('role_id', '!=', 5)
+            ->where('role_id', '!=' ,auth()->user()->id)
+            ->get();
 
-        // return view('welcome', compact('users'));
-        return response()->json(['data' => $users]);
+        return UserResource::collection($users);
     }
 
     public function getSalesManagers()
@@ -62,5 +63,32 @@ class UserController extends Controller
         ->paginate(10);
         
         return UserResource::collection($buyers);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Reservation  $reservation
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $reservation = User::findOrFail($request->id);
+
+            $reservation->delete();
+            
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Successfully deleted'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
     }
 }
