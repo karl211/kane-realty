@@ -118,7 +118,11 @@ class Reservation extends Model
                     ->orWhere('middle_name', $search)
                     ->orWhere('last_name', $search)
                     ->orWhere(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".$search."%");
-            });
+            })
+            ->orWhere('status', $search);
+            // ->orWhereHas('property.location', function ($query) use ($search) {
+            //     return $query->where('location', 'LIKE', "%".$search."%");
+            // });
         }
         return $query;
     }

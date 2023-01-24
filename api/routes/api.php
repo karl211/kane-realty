@@ -78,6 +78,8 @@ Route::middleware('auth:sanctum')
         Route::post('/reservations', [ReservationController::class, 'store']);
 
         Route::get('/properties', [PropertyController::class, 'index']);
+        
+        Route::get('/properties/statuses', [PropertyController::class, 'getStatuses']);
 
         Route::post('/properties', [PropertyController::class, 'store']);
 

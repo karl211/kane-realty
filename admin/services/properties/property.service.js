@@ -14,7 +14,9 @@ const propertyService = class PropertyService extends BaseService
         return super.post(`${this.baseURL}/properties`, params, header);
     }
 
-    
+    statuses(params = {}){
+        return super.get(`${this.baseURL}/properties/statuses`, params);
+    }
 };
 
 export default propertyService
