@@ -28,7 +28,7 @@
                                 :error-messages="error.buyer_id"
                                 @update:search-input="searchBuyer"
                             >
-                                <template v-slot:selection="data">
+                                <!-- <template v-slot:selection="data">
                                     <v-chip
                                         v-bind="data.attrs"
                                         :input-value="data.selected"
@@ -47,6 +47,36 @@
                                             <v-list-item-title>{{ data.item.last_name }}, {{ data.item.first_name }} {{ data.item.middle_name }}</v-list-item-title>
                                             <v-list-item-subtitle>
                                                 <small class="text-md-caption">{{ data.item.email }}</small>
+                                            </v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </template>
+                                </template> -->
+
+                                <template v-slot:selection="data">
+                                    <v-chip
+                                        v-bind="data.attrs"
+                                        :input-value="data.selected"
+                                        close
+                                        @click:close="remove(data.item)"
+                                    >
+                                        <v-avatar left>
+                                            <v-img :src="data.item.profile.photo"></v-img>
+                                        </v-avatar>
+                                        {{ data.item.profile.last_name }}, {{ data.item.profile.first_name }} {{ data.item.profile.middle_name }}
+                                    </v-chip>
+                                </template>
+                                <template v-slot:item="data">
+                                    <template v-if="typeof data.item !== 'object'">
+                                        <v-list-item-content v-text="data.item"></v-list-item-content>
+                                    </template>
+                                    <template v-else>
+                                        <v-list-item-avatar>
+                                            <img :src="data.item.profile.photo">
+                                        </v-list-item-avatar>
+                                        <v-list-item-content @click="selectBuyer(data)">
+                                            <v-list-item-title class="font-weight-medium">{{ data.item.profile.last_name }}, {{ data.item.profile.first_name }} {{ data.item.profile.middle_name }}</v-list-item-title>
+                                            <v-list-item-subtitle>
+                                                <small class="text-md-caption blue--text">{{ data.item.email }}</small>
                                             </v-list-item-subtitle>
                                         </v-list-item-content>
                                     </template>
@@ -399,6 +429,7 @@ export default {
         remove (item) {
             this.buyer = ''
             this.buyers = []
+            this.mapLocations = []
         },
 
         searchBuyer (keyword) {
@@ -407,8 +438,8 @@ export default {
                 this.buyers = []
 
                 Auth.searchBuyer({search: keyword}).then((res) => {
-                    if (res.data.data.data.length) {
-                        this.buyers = res.data.data.data
+                    if (res.data.data.length) {
+                        this.buyers = res.data.data
                     }
                 });
             } else {
@@ -465,6 +496,7 @@ export default {
         },
 
         onChange () {
+            
             this.clear()
         }
 
