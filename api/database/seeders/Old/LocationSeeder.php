@@ -46,6 +46,11 @@ class LocationSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'bookkeeper',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ];
 
         Role::insert($roles);
