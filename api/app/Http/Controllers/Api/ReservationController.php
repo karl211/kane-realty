@@ -27,7 +27,7 @@ class ReservationController extends Controller
      */
     public function index(Request $request)
     {
-        $reservations = Reservation::with('property', 'buyer')
+        $reservations = Reservation::with('property', 'buyer', 'payments')
             ->has('buyer.profile')
             ->when(request()->search, function ($query) {
                 $query->search(request()->search);

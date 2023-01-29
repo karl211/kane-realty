@@ -93,13 +93,13 @@
 
                                                 <v-card-text class="text-left pt-0">
                                                     <div class="w-200">
-                                                        <h3 class="mb-1">Sales Manager</h3>
-                                                        <p class="ma-0">{{ item.sales_manager?.profile?.full_name || 'NONE' }}</p>
+                                                        <h3 class="mb-1">Payment</h3>
+                                                        <p class="ma-0">{{ item.amortization_count || 'NONE' }}</p>
                                                     </div>
-                                                    <div class="mt-2">
+                                                    <!-- <div class="mt-2">
                                                         <h3 class="mb-1">Sales Agent</h3>
                                                         <p class="ma-0">{{ item.sales_agent?.profile?.full_name || 'NONE' }}</p>
-                                                    </div>
+                                                    </div> -->
                                                 </v-card-text>
 
                                                 <v-card-text class="text-left pt-0">

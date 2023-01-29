@@ -18,6 +18,13 @@ class ReservationResource extends JsonResource
      */
     public function toArray($request) 
     {
+        $count_amortization = 0;
+        foreach ($this->payments as $payment) {
+            if ($payment->type_of_payment == 'Monthly Amortization') {
+                $count_amortization += 1;
+            }
+        }
+
         return [
             'id' => $this->id,
             'buyer_id' => $this->buyer->id,
@@ -28,11 +35,25 @@ class ReservationResource extends JsonResource
             'term' => $this->term,
             'date_of_transaction' => Carbon::parse($this->transaction_at)->format('F d, Y'),
             'status' => $this->status,
+            'amortization_count' => $this->ordinal($count_amortization),
             'sales_manager' => new UserResource($this->sales_manager),
             'sales_agent' => new UserResource($this->sales_agent),
             'attorney' => new AttorneyResource($this->attorney),
             'property' => new PropertyResource($this->property),
             'payments' => PaymentResource::collection($this->payments),
         ];
+    }
+
+    protected function ordinal($number) {
+        if ($number) {
+            $ends = array('th','st','nd','rd','th','th','th','th','th','th');
+            if ((($number % 100) >= 11) && (($number%100) <= 13))
+                return $number. 'th Amortization';
+            else
+                return $number. $ends[$number % 10] . ' Amortization';
+        }
+
+        return $number;
+        
     }
 }

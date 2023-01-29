@@ -136,6 +136,7 @@
                                                 outlined
                                                 hide-details="auto"
                                                 :error-messages="error.reservation_id"
+                                                @change="selectProperty"
                                             ></v-select>
                                         </v-col>
                                     </v-row>
@@ -280,10 +281,10 @@ export default {
         date: false,
         local: [
             {
-                label: 'Reservation'
+                label: 'Reservation Fee'
             },
             {
-                label: 'Amortization'
+                label: 'Monthly Amortization'
             },
         ],
         modeOfPayments: [
@@ -307,25 +308,21 @@ export default {
             },
         ],
 
-        currencyMask: createNumberMask({
-            prefix: '',
-            allowDecimal: false,
-            includeThousandsSeparator: true,
-            allowNegative: false,
-            allowLeadingZeroes: false
-        }),
         error: {},
         form: {
             buyer_id: null,
             paid_at: vm.formatDate((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)),
             mode_of_payment: 'Cash',
-            image: null
+            image: null,
+            amount: null,
         },
 
+        currencyMask: '',
         buyer: '',
         buyerData: {},
         buyers: [],
         mapLocations: [],
+        reservations: [],
     }),
 
     watch: {
@@ -337,8 +334,20 @@ export default {
             this.form.image = null
         },
 
+        // 'form.amount'() {
+        //     this.currencyMask = createNumberMask({
+        //         prefix: '',
+        //         allowDecimal: false,
+        //         includeThousandsSeparator: true,
+        //         allowNegative: false,
+        //         allowLeadingZeroes: false
+        //     })
+        // },
+
         form() {
             this.clear()
+
+            
         }
     },
 
@@ -488,11 +497,56 @@ export default {
                 }
             })
 
+            this.reservations = reservations
+
             if (this.$route.query?.reservation) {
+                const self = this
+
                 this.form.reservation_id = parseInt(this.$route.query?.reservation)
+
+                const selectedReservation = this.reservations.find(function(reservation) {
+                    return reservation.id === self.form.reservation_id
+                })
+
+                this.form.amount = selectedReservation.property.default_monthly_amortization
+
+                this.$nextTick(() => {
+                    this.currencyMask = createNumberMask({
+                        prefix: '',
+                        allowDecimal: false,
+                        includeThousandsSeparator: true,
+                        allowNegative: false,
+                        allowLeadingZeroes: false
+                    })
+                })
+
+                
             } else {
                 this.form.reservation_id = this.mapLocations[0].value
+
+                
+                
             }
+        },
+
+        selectProperty (reservationId) {
+            const selectedReservation = this.reservations.find(function(reservation) {
+                return reservation.id === reservationId
+            })
+
+            this.currencyMask = ''
+
+            this.form.amount = selectedReservation.property.default_monthly_amortization
+
+            this.$nextTick(() => {
+                this.currencyMask = createNumberMask({
+                    prefix: '',
+                    allowDecimal: false,
+                    includeThousandsSeparator: true,
+                    allowNegative: false,
+                    allowLeadingZeroes: false
+                })
+            })
         },
 
         onChange () {
