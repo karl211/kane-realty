@@ -6,7 +6,7 @@ const userService = class UserService extends BaseService
         return super.get(`${this.baseURL}/users`, params);
     }
 
-    remove(params = {}) {
+    removeUser(params = {}) {
         return super.post(`${this.baseURL}/users/delete`, params);
     }
 };
