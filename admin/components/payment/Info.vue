@@ -185,10 +185,10 @@ export default {
         },
         local: [
             {
-                label: 'Reservation'
+                label: 'Reservation Fee'
             },
             {
-                label: 'Amortization'
+                label: 'Monthly Amortization'
             },
         ],
         modeOfPayments: [

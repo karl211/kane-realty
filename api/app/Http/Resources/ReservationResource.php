@@ -48,9 +48,9 @@ class ReservationResource extends JsonResource
         if ($number) {
             $ends = array('th','st','nd','rd','th','th','th','th','th','th');
             if ((($number % 100) >= 11) && (($number%100) <= 13))
-                return $number. 'th Amortization';
+                return $number. 'th';
             else
-                return $number. $ends[$number % 10] . ' Amortization';
+                return $number. $ends[$number % 10];
         }
 
         return $number;
