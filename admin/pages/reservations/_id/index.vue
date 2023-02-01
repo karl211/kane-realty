@@ -1,10 +1,10 @@
 <template>
-    <v-container>
+    <div>
         <v-row>
-            <v-col cols="3">
+            <v-col sm="12" md="3" lg="3">
                 <BuyerInfo :buyer="buyer"/>
             </v-col>
-            <v-col cols="7">
+            <v-col sm="12" md="9" lg="9">
                 <v-card
                     v-if="buyer"
                     class="mx-auto max-card-h"
@@ -65,141 +65,141 @@
                     </v-card-title>
 
                     <v-card-text class="text-left max-overflow-h-2 overflow-y-auto">
-                        <v-row justify="center" class="ma-0">
-                            <!-- <v-expansion-panels accordion v-model="panel" multiple> -->
-                            <v-expansion-panels accordion multiple>
-                                <div class="">
-                                    <v-expansion-panel v-for="(item,i) in buyerReservations" :key="i" class="mt-1">
-                                        <v-expansion-panel-header>
-                                            <div class="d-flex">
+                        <v-expansion-panels accordion multiple>
+                            <v-expansion-panel v-for="(item,i) in buyerReservations" :key="i" class="mt-1">
+                                <v-expansion-panel-header class="px-0 property-header">
+                                    <v-row>
+                                        <v-col cols="5">
+                                            <v-card-text class="d-flex text-left pt-0">
                                                 <v-img
-                                                    class=" "
+                                                    class="mt-2 mr-2"
                                                     width="100"
                                                     height="100"
                                                     max-width="100"
                                                     :src="item.property.photo"
                                                 ></v-img>
-
-                                                <v-card-text class="text-left pt-0">
-                                                    <div class="w-200">
-                                                        <h2 class="mb-1">{{ item.property.location.location }}</h2>
-                                                        <p class="ma-0">Block {{ item.property.block }}</p>
-                                                        <p class="ma-0">Lot {{ item.property.lot }}</p>
-                                                        <p v-if="item.property.phase" class="ma-0">Phase {{ item.property.phase }}</p>
-                                                        <p v-if="item.property.term" class="ma-0">Term {{ item.property.term }}</p>
-                                                        <p v-if="item.property.lot_size" class="ma-0">{{ item.property.lot_size }}</p>
-                                                    </div>
-                                                </v-card-text>
-
-                                                <v-card-text class="text-left pt-0">
-                                                    <div class="w-200">
-                                                        <h3 class="mb-1">Payment</h3>
-                                                        <p class="ma-0">{{ item.amortization_count || 'NONE' }}</p>
-                                                    </div>
-                                                    <!-- <div class="mt-2">
-                                                        <h3 class="mb-1">Sales Agent</h3>
-                                                        <p class="ma-0">{{ item.sales_agent?.profile?.full_name || 'NONE' }}</p>
-                                                    </div> -->
-                                                </v-card-text>
-
-                                                <v-card-text class="text-left pt-0">
-                                                    <div>
-                                                        <h3 class="mb-1">Status</h3>
-                                                        <h3 class="ma-0 green--text">{{ getStatus(item) }}</h3>
-                                                    </div>
-                                                </v-card-text>
-
-                                                <v-card-text class="text-left pt-0">
-                                                    <div class="w-150">
-                                                        <h3 class="mb-1">Contract Price</h3>
-                                                        <h3 class="mb-3 orange--text">{{ '₱' + Number(item.contract_price).toLocaleString() }}</h3>
-                                                        <h3 class="mb-1">Balance</h3>
-                                                        <h3 class="mb-0 orange--text">{{ getBalance(item) }}</h3>
-                                                    </div>
-                                                    
-                                                </v-card-text>
-                                                
-                                            </div>
-                                            <div class="pencil" @click="editProperty(item)">
-                                                <v-icon >mdi-pencil-plus-outline</v-icon>
-                                            </div>
-                                        </v-expansion-panel-header>
-                                        <v-expansion-panel-content class="">
-                                            <v-divider></v-divider>
-                                            <br>
-                                            <h3>Payments</h3>
-                                            <div class="max-overflow-h overflow-y-auto">
-                                                <v-simple-table>
-                                                    <template v-slot:default>
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="text-left">
-                                                                    Date
-                                                                </th>
-                                                                
-                                                                <th class="text-left">
-                                                                    Type
-                                                                </th>
-                                                                <th class="text-left">
-                                                                    Mode
-                                                                </th>
-                                                                <th class="text-left">
-                                                                    Image
-                                                                </th>
-                                                                <th class="text-left">
-                                                                    Amount
-                                                                </th>
-                                                                <th class="text-left">
-                                                                    
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr
-                                                                v-for="(payment, index) in item.payments" :key="index"
-                                                            >
-                                                                <td width="250">{{ payment.paid_at }}</td>
-                                                                <td width="250">{{ payment.type_of_payment }}</td>
-                                                                <td width="150">{{ payment.mode_of_payment }}</td>
-                                                                <td width="150">{{ payment.original_image || 'NONE' }}</td>
-                                                                <td width="150">{{ '₱' + Number(payment.amount).toLocaleString() }}</td>
-                                                                <td width="150"><v-icon @click="showUpdatePayment(payment)">mdi-pencil-plus-outline</v-icon></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </template>
-                                                </v-simple-table>
-                                                <v-divider></v-divider>
-                                                <v-simple-table>
-                                                    <template v-slot:default>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td width="250"><h4>TOTAL:</h4></td>
-                                                                <td width="250"></td>
-                                                                <td width="150"></td>
-                                                                
-                                                                <td width="150" class="text-left">
-                                                                    <h3>{{ '₱' + Number(item.total_payment).toLocaleString() }}</h3>
-                                                                </td>
-                                                                <td width="100"></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </template>
-                                                </v-simple-table>
-                                            </div>
-                                            <v-btn
-                                                class="ml-auto mt-3"
-                                                elevation="0"
-                                                color="info"
-                                                :disabled="isPaymentDisabled"
-                                                @click="addPayment(item)"
-                                            >
-                                                <v-icon>mdi-cash-clock</v-icon> &nbsp; Add Payment
-                                            </v-btn>
-                                        </v-expansion-panel-content>
-                                    </v-expansion-panel>
-                                </div>
-                            </v-expansion-panels>
-                        </v-row>
+                                                <div class="w-200">
+                                                    <h2 class="mb-1">{{ item.property.location.location }}</h2>
+                                                    <p class="ma-0">Block {{ item.property.block }}</p>
+                                                    <p class="ma-0">Lot {{ item.property.lot }}</p>
+                                                    <p v-if="item.property.phase" class="ma-0">Phase {{ item.property.phase }}</p>
+                                                    <p v-if="item.property.term" class="ma-0">Term {{ item.property.term }}</p>
+                                                    <p v-if="item.property.lot_size" class="ma-0">{{ item.property.lot_size }}</p>
+                                                </div>
+                                            </v-card-text>
+                                        </v-col>
+                                        <v-col cols="2 px-0">
+                                            <v-card-text class="text-left pt-0 px-0">
+                                                <div class="text-center">
+                                                    <h3 class="mb-1">Amortization</h3>
+                                                    <p class="ma-0">{{ item.amortization_count || 'NONE' }}</p>
+                                                </div>
+                                                <!-- <div class="mt-2">
+                                                    <h3 class="mb-1">Sales Agent</h3>
+                                                    <p class="ma-0">{{ item.sales_agent?.profile?.full_name || 'NONE' }}</p>
+                                                </div> -->
+                                            </v-card-text>
+                                        </v-col>
+                                        <v-col cols="2">
+                                            <v-card-text class="text-left pt-0">
+                                                <div>
+                                                    <h3 class="mb-1">Status</h3>
+                                                    <h3 class="ma-0 green--text">{{ getStatus(item) }}</h3>
+                                                </div>
+                                            </v-card-text>
+                                        </v-col>
+                                        <v-col cols="3">
+                                            <v-card-text class="text-left pt-0">
+                                                <div class="w-150">
+                                                    <h3 class="mb-1">Contract Price</h3>
+                                                    <h3 class="mb-3 orange--text">{{ '₱' + Number(item.contract_price).toLocaleString() }}</h3>
+                                                    <h3 class="mb-1">Balance</h3>
+                                                    <h3 class="mb-0 orange--text">{{ getBalance(item) }}</h3>
+                                                </div>
+                                            </v-card-text>
+                                        </v-col>
+                                    </v-row>
+                                    <div class="pencil-property" @click="editProperty(item)">
+                                        <v-icon >mdi-pencil-plus-outline</v-icon>
+                                    </div>
+                                </v-expansion-panel-header>
+                                <v-expansion-panel-content class="">
+                                    <v-divider></v-divider>
+                                    <br>
+                                    <h3>Payments</h3>
+                                    <div class="max-overflow-h overflow-y-auto">
+                                        <v-simple-table>
+                                            <template v-slot:default>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-left">
+                                                            Date
+                                                        </th>
+                                                        
+                                                        <th class="text-left">
+                                                            Type
+                                                        </th>
+                                                        <th class="text-left">
+                                                            Mode
+                                                        </th>
+                                                        <th class="text-left">
+                                                            Image
+                                                        </th>
+                                                        <th class="text-left">
+                                                            Amount
+                                                        </th>
+                                                        <th class="text-left">
+                                                            
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr
+                                                        v-for="(payment, index) in item.payments" :key="index"
+                                                    >
+                                                        <td width="250">{{ payment.paid_at }}</td>
+                                                        <td width="250">{{ payment.type_of_payment }}</td>
+                                                        <td width="150">{{ payment.mode_of_payment }}</td>
+                                                        <td width="150">{{ payment.original_image || 'NONE' }}</td>
+                                                        <td width="150">{{ '₱' + Number(payment.amount).toLocaleString() }}</td>
+                                                        <td width="150">
+                                                            <v-icon @click="showUpdatePayment(payment)">mdi-pencil-plus-outline</v-icon>
+                                                            <v-icon @click="deletePayment(payment)">mdi-delete-outline</v-icon>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </template>
+                                        </v-simple-table>
+                                        <v-divider></v-divider>
+                                        <v-simple-table>
+                                            <template v-slot:default>
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="250"><h4>TOTAL:</h4></td>
+                                                        <td width="250"></td>
+                                                        <td width="150"></td>
+                                                        
+                                                        <td width="150" class="text-left">
+                                                            <h3>{{ '₱' + Number(item.total_payment).toLocaleString() }}</h3>
+                                                        </td>
+                                                        <td width="100"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </template>
+                                        </v-simple-table>
+                                    </div>
+                                    <v-btn
+                                        class="ml-auto mt-3"
+                                        elevation="0"
+                                        color="info"
+                                        :disabled="isPaymentDisabled"
+                                        @click="addPayment(item)"
+                                    >
+                                        <v-icon>mdi-cash-clock</v-icon> &nbsp; Add Payment
+                                    </v-btn>
+                                </v-expansion-panel-content>
+                            </v-expansion-panel>
+                        </v-expansion-panels>
                     </v-card-text>
                 </v-card>
                 <div v-else class="center-loading">
@@ -209,7 +209,7 @@
                     ></v-progress-circular>
                 </div>
             </v-col>
-            <v-col cols="2" v-if="buyerDocuments.length">
+            <v-col sm="12" md="12" lg="12" v-if="buyerDocuments.length">
                 <v-card
                     class="mx-auto"
                 >
@@ -229,15 +229,17 @@
                     </div>
                     </v-card-title>
                     <v-card-text  class="text-left">
-                        <div class="d-flex" v-for="(document,i) in buyerDocuments" :key="i">
-                            <v-checkbox
-                                :label="document.label"
-                                :input-value="document.value"
-                                readonly
-                                hide-details
-                                color="success"
-                            ></v-checkbox>
-                        </div>
+                        <v-row>
+                            <v-col xs="12" sm="4" md="4" lg="2" v-for="(document,i) in buyerDocuments" :key="i">
+                                <v-checkbox
+                                    :label="document.label"
+                                    :input-value="document.value"
+                                    readonly
+                                    hide-details
+                                    color="success"
+                                ></v-checkbox>
+                            </v-col>
+                        </v-row>
                     </v-card-text>
                 </v-card>
                 
@@ -358,7 +360,7 @@
                 </v-container>
             </v-form>
         </v-dialog>
-    </v-container>
+    </div>
 </template>
 <script>
 import Swal from 'sweetalert2'
@@ -601,29 +603,47 @@ export default {
         showUpdatePayment (payment) {
             this.showEditPayment = true
             this.selectedPayment = payment
-            // Reservations.updateOrCreateProperty(this.buyer.slug, this.form).then((response) => {
-            //     if (response.data) {
-            //         Swal.fire({
-            //             title: 'Done!',
-            //             text: 'Successfully added',
-            //             confirmButtonText: 'Okay',
-            //         }).then((result) => {
-            //             if (result.isConfirmed) {
-            //                 location.reload()
-            //             } 
-            //         })
-            //     }
-            // }).catch(error => {
-            //     // Handle error
-            //     if (error.response) {
-            //         Swal.fire(
-            //             'Ops.',
-            //             'Something went wrong',
-            //             'warning'
-            //         )
-            //         this.errors = error.response.data.errors
-            //     }
-            // })
+        
+        },
+
+        deletePayment (payment) {
+            Swal.fire({
+                title: 'Are you sure you want to delete this payment?',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                icon: 'warning',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Reservations.removePayment(this.buyer.slug, {id: payment.payment_id}).then((response) => {
+                        if (response.data) {
+                            Swal.fire({
+                                title: 'Done!',
+                                text: 'Successfully deleted',
+                                confirmButtonText: 'Okay',
+                                icon: 'success',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload()
+                                } 
+                            })
+                        }
+                    }).catch(error => {
+                        // Handle error
+                        if (error.response) {
+                            Swal.fire(
+                                'Ops.',
+                                'Something went wrong',
+                                'warning'
+                            )
+                            // const self = this
+                            // setTimeout(() => {
+                                
+                            // }, 1000);
+                            this.errors = error.response.data.errors
+                        }
+                    })
+                }
+            })
         },
 
         updatePayment () {
@@ -704,5 +724,15 @@ export default {
         position: absolute;
         right: 10px;
         top: 10px;
+    }
+
+    .pencil-property {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+    }
+
+    .property-header .mdi-chevron-down {
+        right: 20px;
     }
 </style>

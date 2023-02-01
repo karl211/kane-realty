@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\Payment;
 use App\Models\Location;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
@@ -233,4 +234,26 @@ class ReservationController extends Controller
             throw $e;
         }
     }
+
+    public function deletePayment(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $payment = Payment::findOrFail($request->id);
+
+            $payment->delete();
+            
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Successfully deleted'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
+    }
+    
 }

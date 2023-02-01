@@ -26,6 +26,10 @@ const reservationsService = class ReservationsService extends BaseService
         return super.post(`${this.baseURL}/reservations/delete`, params);
     }
 
+    removePayment(buyer, params = {}) {
+        return super.post(`${this.baseURL}/reservations/${buyer}/payment/delete`, params);
+    }
+
     getBuyer(buyer) {
         return super.get(`${this.baseURL}/reservations/${buyer}`);
     }

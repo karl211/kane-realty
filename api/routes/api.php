@@ -73,6 +73,8 @@ Route::middleware('auth:sanctum')
 
         Route::post('/reservations/{buyer:slug}/payment', [ReservationController::class, 'updatePayment']);
 
+        Route::post('/reservations/{buyer:slug}/payment/delete', [ReservationController::class, 'deletePayment']);
+
         
 
         Route::post('/reservations', [ReservationController::class, 'store']);
