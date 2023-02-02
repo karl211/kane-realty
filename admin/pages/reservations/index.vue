@@ -181,7 +181,7 @@ export default {
                 confirmButtonText: 'Yes',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Reservations.remove({id: item.id}).then((response) => {
+                    Reservations.removeReservation({id: item.id}).then((response) => {
                         if (response.data) {
                             Swal.fire({
                                 title: 'Done!',

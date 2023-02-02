@@ -22,7 +22,7 @@ const reservationsService = class ReservationsService extends BaseService
         return super.post(`${this.baseURL}/reservations`, params, header);
     }
 
-    remove(params = {}) {
+    removeReservation(params = {}) {
         return super.post(`${this.baseURL}/reservations/delete`, params);
     }
 

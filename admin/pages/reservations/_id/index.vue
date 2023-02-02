@@ -69,7 +69,7 @@
                             <v-expansion-panel v-for="(item,i) in buyerReservations" :key="i" class="mt-1">
                                 <v-expansion-panel-header class="px-0 property-header">
                                     <v-row>
-                                        <v-col cols="5">
+                                        <v-col cols="4">
                                             <v-card-text class="d-flex text-left pt-0">
                                                 <v-img
                                                     class="mt-2 mr-2"
@@ -88,7 +88,7 @@
                                                 </div>
                                             </v-card-text>
                                         </v-col>
-                                        <v-col cols="2 px-0">
+                                        <v-col cols="3 px-0">
                                             <v-card-text class="text-left pt-0 px-0">
                                                 <div class="text-center">
                                                     <h3 class="mb-1">Amortization</h3>
@@ -121,6 +121,9 @@
                                     </v-row>
                                     <div class="pencil-property" @click="editProperty(item)">
                                         <v-icon >mdi-pencil-plus-outline</v-icon>
+                                    </div>
+                                    <div class="delete-property" @click="deleteReservation(item)">
+                                        <v-icon >mdi-delete-outline</v-icon>
                                     </div>
                                 </v-expansion-panel-header>
                                 <v-expansion-panel-content class="">
@@ -230,7 +233,7 @@
                     </v-card-title>
                     <v-card-text  class="text-left">
                         <v-row>
-                            <v-col xs="12" sm="4" md="4" lg="2" v-for="(document,i) in buyerDocuments" :key="i">
+                            <v-col xs="12" sm="4" md="4" lg="3" v-for="(document,i) in buyerDocuments" :key="i">
                                 <v-checkbox
                                     :label="document.label"
                                     :input-value="document.value"
@@ -534,6 +537,46 @@ export default {
             this.form.selected_property = item.property.id
         },
 
+        deleteReservation (reservation) {
+            Swal.fire({
+                title: 'Are you sure you want to delete this property?',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                icon: 'warning',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Reservations.removeReservation({id: reservation.id}).then((response) => {
+                        if (response.data) {
+                            Swal.fire({
+                                title: 'Done!',
+                                text: 'Successfully deleted',
+                                confirmButtonText: 'Okay',
+                                icon: 'success',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload()
+                                } 
+                            })
+                        }
+                    }).catch(error => {
+                        // Handle error
+                        if (error.response) {
+                            Swal.fire(
+                                'Ops.',
+                                'Something went wrong',
+                                'warning'
+                            )
+                            // const self = this
+                            // setTimeout(() => {
+                                
+                            // }, 1000);
+                            this.errors = error.response.data.errors
+                        }
+                    })
+                }
+            })
+        },
+
         updateDocument () {
             const formData = new FormData()
             
@@ -727,6 +770,12 @@ export default {
     }
 
     .pencil-property {
+        position: absolute;
+        right: 45px;
+        top: 20px;
+    }
+
+    .delete-property {
         position: absolute;
         right: 20px;
         top: 20px;
