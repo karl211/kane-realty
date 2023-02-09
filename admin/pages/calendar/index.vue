@@ -57,18 +57,18 @@
                         </v-btn>
                     </template>
                     <v-list>
-                    <v-list-item @click="type = 'day'">
-                        <v-list-item-title>Day</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="type = 'week'">
-                        <v-list-item-title>Week</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="type = 'month'">
-                        <v-list-item-title>Month</v-list-item-title>
-                    </v-list-item>
-                    <!-- <v-list-item @click="type = '4day'">
-                        <v-list-item-title>4 days</v-list-item-title>
-                    </v-list-item> -->
+                        <v-list-item @click="type = 'day'">
+                            <v-list-item-title>Day</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="type = 'week'">
+                            <v-list-item-title>Week</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="type = 'month'">
+                            <v-list-item-title>Month</v-list-item-title>
+                        </v-list-item>
+                        <!-- <v-list-item @click="type = '4day'">
+                            <v-list-item-title>4 days</v-list-item-title>
+                        </v-list-item> -->
                     </v-list>
                 </v-menu>
             </v-toolbar>
@@ -94,7 +94,7 @@
             >
                 <v-card
                     color="grey lighten-4"
-                    min-width="350px"
+                    min-width="300px"
                     flat
                 >
                     <v-toolbar
@@ -104,7 +104,7 @@
                     <!-- <v-btn icon @click="edit">
                         <v-icon>mdi-pencil</v-icon>
                     </v-btn> -->
-                    <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+                    <!-- <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title> -->
                     <v-spacer></v-spacer>
                     <!-- <v-btn icon>
                         <v-icon>mdi-heart</v-icon>
@@ -116,49 +116,35 @@
                     <v-card-text>
                         <!-- <span v-html="selectedEvent.details"></span> -->
                         <div class="d-flex">
-                            <v-list-item-avatar>
-                                <img src="https://avatars0.githubusercontent.com/u/9064066?v=4&amp;s=460">
+                            <v-list-item-avatar >
+                                <img :src="selectedEvent.photo">
                             </v-list-item-avatar>
                             <v-list-item-content>
-                                <v-list-item-title class="font-weight-medium">lastname, first_name middle</v-list-item-title>
+                                <v-list-item-title class="text-xl-h5 font-weight-medium">{{ selectedEvent.name_only }}</v-list-item-title>
                                 <v-list-item-subtitle>
-                                    <small class="text-md-caption blue--text">email@sam.com</small>
+                                    <small class="text-xl-h6 blue--text">{{ selectedEvent.property }}</small>
+                                </v-list-item-subtitle>
+                                <v-list-item-subtitle>
+                                    <small class="text-xl-h6 blue--text">Monthly Amortization - {{ formatCurrency(selectedEvent.monthly_amortization) }}</small>
                                 </v-list-item-subtitle>
                             </v-list-item-content>
                         </div>
-                        <div class="d-flex">
-                            <v-list-item-avatar>
-                                <img src="https://avatars0.githubusercontent.com/u/9064066?v=4&amp;s=460">
-                            </v-list-item-avatar>
-                            <v-list-item-content>
-                                <v-list-item-title class="font-weight-medium">lastname, first_name middle</v-list-item-title>
-                                <v-list-item-subtitle>
-                                    <small class="text-md-caption blue--text">email@sam.com</small>
-                                </v-list-item-subtitle>
-                            </v-list-item-content>
-                        </div>
-                        <div class="d-flex">
-                            <v-list-item-avatar>
-                                <img src="https://avatars0.githubusercontent.com/u/9064066?v=4&amp;s=460">
-                            </v-list-item-avatar>
-                            <v-list-item-content>
-                                <v-list-item-title class="font-weight-medium">lastname, first_name middle</v-list-item-title>
-                                <v-list-item-subtitle>
-                                    <small class="text-md-caption blue--text">email@sam.com</small>
-                                </v-list-item-subtitle>
-                            </v-list-item-content>
-                        </div>
-                        
-                        
                     </v-card-text>
-                    <v-card-actions>
-                    <v-btn
-                        text
-                        color="secondary"
-                        @click="selectedOpen = false"
-                    >
-                        Close
-                    </v-btn>
+                    <v-card-actions class="d-flex justify-space-between">
+                        <v-btn
+                            text
+                            color="secondary"
+                            @click="selectedOpen = false"
+                        >
+                            Close
+                        </v-btn>
+                        <v-btn
+                            text
+                            color="primary"
+                            @click="viewBuyerInfo"
+                        >
+                            View
+                        </v-btn>
                     </v-card-actions>
                 </v-card>
             </v-menu>
@@ -213,6 +199,7 @@ export default {
             this.$refs.calendar.next()
         },
         showEvent ({ nativeEvent, event }) {
+            console.log(event)
             const open = () => {
                 this.selectedEvent = event
                 this.selectedElement = nativeEvent.target
@@ -270,6 +257,11 @@ export default {
             // alert()
         },
 
+        viewBuyerInfo () {
+            
+            this.$router.push({path: `/reservations/${this.selectedEvent.buyer_slug}`});
+        },
+
         getPastDues () {
             Calendar.pastDues().then((response) => {
                 if (response.data) {
@@ -277,7 +269,12 @@ export default {
                         if (dues) {
                             dues.forEach(due => {
                                 this.events.push({
+                                    buyer_slug: due.buyer_slug,
+                                    photo: due.photo,
                                     name: due.name + ' - ' + due.property,
+                                    name_only: due.name,
+                                    property: due.property,
+                                    monthly_amortization: due.monthly_amortization,
                                     start: new Date(`${due.due_date}T00:00:00`),
                                     // end: second,
                                     color: this.colors[0],
@@ -345,3 +342,9 @@ export default {
     },
   }
 </script>
+<style>
+    .v-menu__content {
+        max-width: 450px !important;
+        min-width: 450px !important;
+    }
+</style>
