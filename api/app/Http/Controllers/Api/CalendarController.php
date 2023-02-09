@@ -19,7 +19,7 @@ class CalendarController extends Controller
             ->when(request()->search, function ($query) {
                 $query->search(request()->search);
             })
-            ->where('status', 'On Going')
+            ->where('status', 'Reserved')
             ->paginate(999999)
             ->through(function($reservation){
                 
@@ -106,6 +106,7 @@ class CalendarController extends Controller
                     }
 
                     $past_dues[] = [
+                        'buyer_slug' => $reservation->buyer->slug,
                         'due_date' => $due_date,
                         'monthly_amortization' => $reservation->monthly_amortization,
                         'status' => 'Past due',
