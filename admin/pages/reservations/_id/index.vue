@@ -138,7 +138,12 @@
                                                         <th class="text-left">
                                                             Date
                                                         </th>
-                                                        
+                                                        <th class="text-left">
+                                                            AR No.
+                                                        </th>
+                                                        <th class="text-left">
+                                                            OR No.
+                                                        </th>
                                                         <th class="text-left">
                                                             Type
                                                         </th>
@@ -160,6 +165,9 @@
                                                     <tr
                                                         v-for="(payment, index) in item.payments" :key="index"
                                                     >
+                                                        <td width="250">{{ payment.paid_at }}</td>
+                                                        <td width="250">{{ payment.ar_number }}</td>
+                                                        <td width="250">{{ payment.or_number }}</td>
                                                         <td width="250">{{ payment.paid_at }}</td>
                                                         <td width="250">{{ payment.type_of_payment }}</td>
                                                         <td width="150">{{ payment.mode_of_payment }}</td>
