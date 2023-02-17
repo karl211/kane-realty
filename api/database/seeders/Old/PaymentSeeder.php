@@ -88,7 +88,7 @@ class PaymentSeeder extends Seeder
                     ->where('lot', $payment->lot)
                     ->first();
 
-                if ($property) {
+                if ($property && $payment->date_of_payment) {
                     $reservation = Reservation::withoutGlobalScope('default_branch')
                         ->where('property_id', $property->id)
                         ->where('buyer_id', $profile->user_id)
@@ -102,15 +102,14 @@ class PaymentSeeder extends Seeder
                         }
 
                         $reservation->payments()->withoutGlobalScope('default_branch')
-                            ->updateOrCreate([
+                            ->create([
                                 'buyer_id' => $profile->user_id,
-                                'ar_number' => $payment->ar_number,
+                                'ar_number' => trim($payment->ar_number),
                                 'type_of_payment' => trim(ucwords(strtolower($payment->type_of_payment))),
-                                'mode_of_payment' => trim(ucwords(strtolower($payment->mode_of_payment)))
-                            ], [
-                                'or_number' => $payment->or_number,
-                                'amount' => $payment->amount,
+                                'mode_of_payment' => trim(ucwords(strtolower($payment->mode_of_payment))),
                                 'paid_at' => $payment->date_of_payment,
+                                'or_number' => trim($payment->or_number),
+                                'amount' => trim($payment->amount),
                             ]);
                     }
                 }

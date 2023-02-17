@@ -50,6 +50,7 @@
             <tr>
                 <td class="w-10">{{ item.paid_at }}</td>
                 <td>{{ item.ar_number }}</td>
+                <td>{{ item.or_number }}</td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.property }}</td>
                 <td>{{ formatCurrency(item.contract_price) }}</td>
@@ -110,6 +111,7 @@ export default {
             prof_title_id: "",
             headers: [
                 { text: "Date Paid" },
+                { text: "AR No." },
                 { text: "OR No." },
                 { text: "Name" },
                 { text: "Property" },
