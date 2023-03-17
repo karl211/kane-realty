@@ -67,7 +67,10 @@ class LocationController extends Controller
 
     public function getLocationProperties(Location $location, Request $request)
     {
-        $properties = $location->properties()->search(request('search'))->paginate(10);
+        $properties = $location->properties()
+            ->whereNotIn('status', ['Agents', 'Church'])
+            ->search(request('search'))
+            ->paginate(10);
 
         return PropertyResource::collection($properties);
         
