@@ -203,7 +203,7 @@
                                         class="ml-auto mt-3"
                                         elevation="0"
                                         color="info"
-                                        :disabled="isPaymentDisabled"
+                                        :disabled="getStatus(item) === 'Fully Paid'"
                                         @click="addPayment(item)"
                                     >
                                         <v-icon>mdi-cash-clock</v-icon> &nbsp; Add Payment
@@ -491,6 +491,7 @@ export default {
         },
 
         getStatus (item) {
+            console.log(item)
             if (this.getBalance(item) === "₱0") {
                 this.isPaymentDisabled = true
                 return 'Fully Paid'

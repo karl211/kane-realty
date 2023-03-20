@@ -41,6 +41,12 @@ class PropertySeeder extends Seeder
             $location = Location::withoutGlobalScope('default_branch')->where('location', $property->location)->first();
 
             if ($location) {
+                $status = ucwords(strtolower($property->status));
+                
+                if ($status == 'Cancelled/available') {
+                    $status = 'For Assume';
+                }
+
                 $location->properties()->withoutGlobalScope('default_branch')->updateOrCreate([
                     'block' => $property->block,
                     'lot' => $property->lot,
@@ -48,7 +54,7 @@ class PropertySeeder extends Seeder
                     'contract_price' => $property->contract_price,
                     'default_monthly_amortization' => $property->monthly_amortization,
                     'term' => $property->term,
-                    'status' => ucwords(strtolower($property->status)),
+                    'status' => $status,
                     'is_active' => true,
                 ]);
             }

@@ -96,6 +96,11 @@
                                 <v-card-text class="text-left">
                                     <v-row>
                                         <v-col cols="6">
+                                            <h3>Amortization: {{ selectedReservation.amortization_count_advance }} Payment</h3>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row>
+                                        <v-col cols="6">
                                             <v-menu
                                                 ref="date"
                                                 v-model="date"
@@ -320,6 +325,7 @@ export default {
         currencyMask: '',
         buyer: '',
         buyerData: {},
+        selectedReservation: {},
         buyers: [],
         mapLocations: [],
         reservations: [],
@@ -507,6 +513,8 @@ export default {
                 const selectedReservation = this.reservations.find(function(reservation) {
                     return reservation.id === self.form.reservation_id
                 })
+
+                this.selectedReservation = selectedReservation
 
                 this.form.amount = selectedReservation.property.default_monthly_amortization
 
