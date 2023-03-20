@@ -491,7 +491,6 @@ export default {
         },
 
         getStatus (item) {
-            console.log(item)
             if (this.getBalance(item) === "₱0") {
                 this.isPaymentDisabled = true
                 return 'Fully Paid'
