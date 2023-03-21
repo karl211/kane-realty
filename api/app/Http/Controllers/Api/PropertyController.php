@@ -30,7 +30,7 @@ class PropertyController extends Controller
 
     public function getStatuses()
     {
-        $statuses = Property::select('status', 'location_id')->groupBy('status')->get();
+        $statuses = Property::select('status', 'location_id')->whereNotIn('status', ['Agents', 'Church'])->groupBy('status')->get();
 
         return $statuses->pluck('status');
     }

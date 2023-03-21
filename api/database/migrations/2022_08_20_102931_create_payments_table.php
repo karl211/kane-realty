@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('paid_at');
             $table->string('ar_number')->nullable();
             $table->string('or_number')->nullable();
-            $table->integer('amount');
+            $table->float('amount', 8, 2);
             $table->string('type_of_payment')->nullable();
             $table->string('mode_of_payment')->nullable();
             $table->string('image')->nullable();

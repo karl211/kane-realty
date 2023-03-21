@@ -203,7 +203,7 @@
                                         class="ml-auto mt-3"
                                         elevation="0"
                                         color="info"
-                                        :disabled="isPaymentDisabled"
+                                        :disabled="getStatus(item) === 'Fully Paid'"
                                         @click="addPayment(item)"
                                     >
                                         <v-icon>mdi-cash-clock</v-icon> &nbsp; Add Payment
