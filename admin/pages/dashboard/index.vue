@@ -1,18 +1,45 @@
 <template>
   <div>
     <v-container fluid>
-        <v-row
+        <v-row>
+            <v-col lg="3" cols="12" v-for="(item,index) in activityLog" :key="index">
+                <v-card elevation="2" class="rounded-lg">
+                    <v-card-text class="d-flex justify-space-between align-center">
+                        <div>
+                            <strong>{{ item.title }}</strong> <br>
+                            <span>Last 3 weeks</span>
+                        </div>
+                        <v-avatar size="60" :color="item.color" style="border: 3px solid #444">
+                            <span style="color: white">{{item.amount}} +</span>
+                        </v-avatar>
+                    </v-card-text>
+                    <v-card-actions class="d-flex justify-space-between">
+
+
+                    </v-card-actions>
+                </v-card>
+            </v-col>
+        </v-row>
+        <!-- <v-row
             class="card-stats"
             align="start">
             <v-col md="3">
-                <v-card class="pa-2">
-                    <v-card-title>
-                        For Cancellation
-                    </v-card-title>
-                    <v-card-subtitle>
-                        2000
-                    </v-card-subtitle>
-                </v-card>
+         
+                <v-card elevation="2" class="rounded-lg">
+                            <v-card-text class="d-flex justify-space-between align-center">
+                                <div>
+                                    <strong>{{ item.title }}</strong> <br>
+                                    <span>Last 3 weeks</span>
+                                </div>
+                                <v-avatar size="60" :color="item.color" style="border: 3px solid #444">
+                                    <span style="color: white">{{item.amount}} +</span>
+                                </v-avatar>
+                            </v-card-text>
+                            <v-card-actions class="d-flex justify-space-between">
+
+
+                            </v-card-actions>
+                        </v-card>
             </v-col>
             <v-col md="3">
                 <v-card class="pa-2 card-stats">
@@ -43,7 +70,7 @@
                     </v-card-subtitle>
                 </v-card>
             </v-col>
-        </v-row>
+        </v-row> -->
         <v-row>
             <v-col cols="6">
                 <v-card
@@ -86,6 +113,60 @@
                     </v-list>
                 </v-card>
             </v-col>
+            <v-col cols="12" lg="6">
+                <v-card>
+                    <v-card-title>Activities</v-card-title>
+                    <v-card-text class="py-0">
+                        <v-timeline align-top dense>
+                            <v-timeline-item color="indigo" small>
+                                <strong>5 Minuts ago</strong>
+                                <div class="text-caption">
+                                   You have new order please check this out
+                                </div>
+                            </v-timeline-item>
+                            <v-timeline-item color="green" small>
+                                <strong>35 Minuts ago</strong>
+                                <div class="text-caption mb-2">
+                                    A Product has delivered!
+                                </div>
+                            </v-timeline-item>
+
+                            <v-timeline-item color="indigo" small>
+                                <strong>44 Minuts ago</strong>
+                                <div class="text-caption">
+                                    You have new order please check this out
+                                </div>
+                            </v-timeline-item>
+                            <v-timeline-item color="indigo" small>
+                                <strong>5 Minuts ago</strong>
+                                <div class="text-caption">
+                                   You have new order please check this out
+                                </div>
+                            </v-timeline-item>
+                            <v-timeline-item color="green" small>
+                                <strong>35 Minuts ago</strong>
+                                <div class="text-caption mb-2">
+                                    A Product has delivered!
+                                </div>
+                            </v-timeline-item>
+
+                            <v-timeline-item color="indigo" small>
+                                <strong>44 Minuts ago</strong>
+                                <div class="text-caption">
+                                    You have new order please check this out
+                                </div>
+                            </v-timeline-item>
+                            <v-timeline-item color="indigo" small>
+                                <strong>44 Minuts ago</strong>
+                                <div class="text-caption">
+                                    You have new order please check this out
+                                </div>
+                            </v-timeline-item>
+                        </v-timeline>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+            <v-col cols="12"></v-col>
         </v-row>
     </v-container>
   </div>
@@ -96,6 +177,17 @@ export default {
     name: 'HomePages',
     data () {
         return {
+            activityLog: [
+                    {title: 'For Cancellation', amount: 50, icon: 'mdi-account', color: 'cyan lighten-3'},
+                    {title: 'For Assume', amount: 3433, icon: 'mdi-account-group-outline', color: 'green darken-2'},
+                    {title: 'Total Sales', amount: 3433, icon: 'mdi-account-group-outline', color: 'blue-grey darken-1'},
+                    {
+                        title: 'Total Reservation',
+                        amount: 3433,
+                        icon: 'mdi-account-group-outline',
+                        color: 'deep-orange darken-1'
+                    },
+                ],
         items: [
             { header: 'This Month' },
             {
