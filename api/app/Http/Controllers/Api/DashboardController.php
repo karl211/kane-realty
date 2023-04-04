@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Models\Property;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
@@ -14,8 +15,25 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        //
+        
     }
+
+    public function getStatuses()
+    {
+        $availables = Property::where('status', 'Available')->get();
+        $reserves = Property::where('status', 'Reserved')->get();
+        $assumes = Property::where('status', 'For Assume')->get();
+        $cancels = Property::where('status', 'Cancelled')->get();
+
+        return [
+            'total_available' => count($availables),
+            'total_reserved' => count($reserves),
+            'total_for_assumes' => count($assumes),
+            'total_cancels' => count($cancels)
+        ];
+    }
+
+    
 
     /**
      * Show the form for creating a new resource.

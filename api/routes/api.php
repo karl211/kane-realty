@@ -37,6 +37,8 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::middleware('auth:sanctum')
     ->group(function () {
+        Route::get('/dashboard/statuses', [DashboardController::class, 'getStatuses']);
+
         Route::get('/branches', [AuthController::class, 'getBranches']);
 
         Route::get('/payments', [PaymentController::class, 'index']);
