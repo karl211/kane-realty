@@ -7,7 +7,6 @@
                     <v-card-text class="d-flex justify-space-between align-center">
                         <div>
                             <strong>{{ item.title }}</strong> <br>
-                            <!-- <span>Last 3 weeks</span> -->
                         </div>
                         <v-avatar size="60" :color="item.color" style="border: 3px solid #444">
                             <span style="color: white">{{item.total}}</span>
@@ -20,57 +19,6 @@
                 </v-card>
             </v-col>
         </v-row>
-        <!-- <v-row
-            class="card-stats"
-            align="start">
-            <v-col md="3">
-         
-                <v-card elevation="2" class="rounded-lg">
-                            <v-card-text class="d-flex justify-space-between align-center">
-                                <div>
-                                    <strong>{{ item.title }}</strong> <br>
-                                    <span>Last 3 weeks</span>
-                                </div>
-                                <v-avatar size="60" :color="item.color" style="border: 3px solid #444">
-                                    <span style="color: white">{{item.total}} +</span>
-                                </v-avatar>
-                            </v-card-text>
-                            <v-card-actions class="d-flex justify-space-between">
-
-
-                            </v-card-actions>
-                        </v-card>
-            </v-col>
-            <v-col md="3">
-                <v-card class="pa-2 card-stats">
-                    <v-card-title>
-                        For Assume
-                    </v-card-title>
-                    <v-card-subtitle>
-                        2000
-                    </v-card-subtitle>
-                </v-card>
-            </v-col>
-            <v-col md="3">
-                <v-card class="pa-2">
-                    <v-card-title>
-                        Total Sales
-                    </v-card-title>
-                    <v-card-subtitle>2
-                    </v-card-subtitle>
-                </v-card>
-            </v-col>
-            <v-col md="3">
-                <v-card class="pa-2">
-                    <v-card-title>
-                        Total Reservation
-                    </v-card-title>
-                    <v-card-subtitle>
-                        2000
-                    </v-card-subtitle>
-                </v-card>
-            </v-col>
-        </v-row> -->
         <v-row>
             <v-col cols="6">
                 <v-card

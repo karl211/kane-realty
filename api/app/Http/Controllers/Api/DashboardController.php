@@ -26,12 +26,6 @@ class DashboardController extends Controller
         $cancels = Property::where('status', 'Cancelled')->get();
 
         return [
-            // [
-            //     'title' => 'Total Available',
-            //     'amount' => count($availables),
-            //     'icon' => 'mdi-account-group-outline',
-            //     'color' => 'deep-orange darken-1'
-            // ],
             'total_available' => count($availables),
             'total_reserved' => count($reserves),
             'total_for_assumes' => count($assumes),
