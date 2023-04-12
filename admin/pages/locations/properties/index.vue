@@ -81,6 +81,7 @@
                             color="warning"
                             small
                             icon
+                            @click="editProperty(item)"
                         >
                             <v-icon>mdi-file-edit-outline</v-icon>
                         </v-btn>
@@ -90,6 +91,7 @@
                             color="danger"
                             small
                             icon
+                            @click="deleteProperty"
                         >
                             <v-icon>mdi-delete</v-icon>
                         </v-btn>
@@ -137,6 +139,47 @@
             <div class="filling-empty-space-childs"></div>
             <div class="filling-empty-space-childs"></div> -->
         </div>
+
+        <v-dialog
+            v-model="showEditReservation"
+            width="800px"
+        >
+            <v-form>
+                <v-container class="pa-0">
+                    <v-card>
+                        <v-card-title class="pb-0 ml-6">
+                            <h3>Update Property</h3>
+                        </v-card-title>
+                        <v-form>
+                            <v-container class="px-10">
+                                <PropertyEdit size="sm" :errors="errors" :property="selectedProperty" @chooseProperty="updateForm($event, 'chooseProperty')"/>
+                                <br>
+                                <v-divider></v-divider>
+                                <br>
+                                <div class="d-flex justify-end">
+                                    <v-btn
+                                        class="ml-2"
+                                        elevation="0"
+                                        color="warning"
+                                        @click="showEditReservation = false"
+                                    >
+                                        Cancel
+                                    </v-btn>
+                                    <v-btn
+                                        class="ml-2"
+                                        elevation="0"
+                                        color="primary"
+                                        @click="updateProperty"
+                                    >
+                                        Submit
+                                    </v-btn>
+                                </div>
+                            </v-container>
+                        </v-form>
+                    </v-card>
+                </v-container>
+            </v-form>
+        </v-dialog>
     </section>
 </template>
 
@@ -168,6 +211,13 @@ export default {
                 search: ''
             },
             paginateData: null,
+            showEditReservation: false,
+            errors: {},
+            selectedProperty: {},
+            form: {
+                selected_property: null,
+                chooseProperty: {},
+            }
         }
     },
 
@@ -223,6 +273,48 @@ export default {
             this.search.page = 1
             this.search.search = value
             this.getProperties()
+        },
+
+        editProperty(item) {
+            this.selectedProperty = item.property
+            this.showEditReservation = true
+            // this.form.selected_property = item.property.id
+        },
+
+        updateProperty () {
+            // Reservations.updateOrCreateProperty(this.buyer.slug, this.form).then((response) => {
+            //     if (response.data) {
+            //         Swal.fire({
+            //             title: 'Done!',
+            //             text: 'Successfully added',
+            //             confirmButtonText: 'Okay',
+            //             icon: 'success',
+            //         }).then((result) => {
+            //             if (result.isConfirmed) {
+            //                 location.reload()
+            //             } 
+            //         })
+            //     }
+            // }).catch(error => {
+            //     // Handle error
+            //     if (error.response) {
+            //         Swal.fire(
+            //             'Ops.',
+            //             'Something went wrong',
+            //             'warning'
+            //         )
+            //         this.errors = error.response.data.errors
+            //     }
+            // })
+        },
+
+        updateForm (form, key) {
+            this.form[key] = form
+            // console.log(this.form)
+        },
+
+        deleteProperty() {
+
         }
     },
 }
