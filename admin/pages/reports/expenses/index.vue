@@ -64,25 +64,33 @@
             </section>
         </v-col>
         </v-row>
-
+        <br>
         <v-data-table
-        hide-default-footer
-        :loading="loading"
-        :items="payments"
-        :headers="headers"
-        :items-per-page="5"
-        :server-items-length="payments.length"
+            hide-default-footer
+            :loading="loading"
+            :items="payments"
+            :headers="headers"
+            :items-per-page="5"
+            :server-items-length="payments.length"
         >
         <template #item="{ item }">
             <tr>
             <td>{{ item.ar_number }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.property }}</td>
-            <td>{{ item.contract_price }}</td>
-            <td>{{ item.balance }}</td>
-            <td>{{ item.amount_paid }}</td>
-            <td>{{ item.type_of_payment }}</td>
-            <td>{{ item.mode_of_payment }}</td>
+            <td>{{ item.ar_number }}</td>
+            <td>{{ item.ar_number }}</td>
+            <td>{{ item.ar_number }}</td>
+            <td>{{ item.ar_number }}</td>
+            <td>{{ item.ar_number }}</td>
+            <td>{{ item.ar_number }}</td>
+            <td>{{ item.ar_number }}</td>
+            <td>{{ item.ar_number }}</td>
+            <td>{{ item.ar_number }}</td>
+            <td>{{ item.ar_number }}</td>
+            <td>{{ item.ar_number }}</td>
+            <td>{{ item.ar_number }}</td>
+            <td>{{ item.ar_number }}</td>
+            <td>{{ item.ar_number }}</td>
+            <td>{{ item.ar_number }}</td>
             <td>
                 <div class="d-flex justify-content">
                     <v-btn
@@ -135,15 +143,23 @@ export default {
         loaded: false,
         prof_title_id: "",
         headers: [
-        { text: "AR No." },
-        { text: "Name" },
-        { text: "Property" },
-        { text: "Contract Price" },
-        { text: "Balance" },
-        { text: "Amount paid" },
-        { text: "Type" },
-        { text: "Mode" },
-        { text: "Actions", align: "center" },
+        { align: 'center', text: "Date" },
+        { align: 'center', text: "PARTICULAR" },
+        { align: 'center', text: "RECEIPT NO." },
+        { align: 'center', text: "AMOUNT" },
+        { align: 'center', text: "AGENTS COMMISSION" },
+        { align: 'center', text: "SALARY" },
+        { align: 'center', text: "OFFICE RENTAL EXPENSE" },
+        { align: 'center', text: "UTILITY EXPENSE" },
+        { align: 'center', text: "FUEL & GASOLINE" },
+        { align: 'center', text: "OFFICE/MATERIALS & SUPPLIES" },
+        { align: 'center', text: "REPAIR & MAINTENANCE" },
+        { align: 'center', text: "REPRESENTATION EXPENSE" },
+        { align: 'center', text: "RETAINER'S FEE" },
+        { align: 'center', text: "LOT CANCELLATION" },
+        { align: 'center', text: "WEB SYSTEM DEVELOPMENT" },
+        { align: 'center', text: "OTHERS" },
+        { align: 'center', text: "Actions"},
         ],
     
         paginateData: null,
@@ -171,10 +187,11 @@ export default {
         this.loading = true
         
         Auth.payments(this.search).then((response) => {
-        this.paginateData = response.data
-        this.payments = response.data.data
-        this.loaded = true
-        this.loading = false
+            console.log(response.data.data)
+            this.paginateData = response.data
+            this.payments = response.data.data
+            this.loaded = true
+            this.loading = false
         });
     },
     paginate(pageNumber) {
