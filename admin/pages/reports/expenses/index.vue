@@ -91,7 +91,7 @@
             <td>{{ item.ar_number }}</td>
             <td>{{ item.ar_number }}</td>
             <td>{{ item.ar_number }}</td>
-            <td>
+            <!-- <td>
                 <div class="d-flex justify-content">
                     <v-btn
                         elevation="0"
@@ -112,7 +112,7 @@
                         <v-icon>mdi-delete</v-icon>
                     </v-btn>
                 </div>
-            </td>
+            </td> -->
             </tr>
         </template>
         </v-data-table>
@@ -159,7 +159,7 @@ export default {
         { align: 'center', text: "LOT CANCELLATION" },
         { align: 'center', text: "WEB SYSTEM DEVELOPMENT" },
         { align: 'center', text: "OTHERS" },
-        { align: 'center', text: "Actions"},
+        // { align: 'center', text: "Actions"},
         ],
     
         paginateData: null,
