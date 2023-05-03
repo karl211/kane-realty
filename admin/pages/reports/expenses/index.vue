@@ -1,78 +1,164 @@
 <template>
     <div>
-    <section v-if="loaded">
-        <div class="container text-center expense-header">
-            <h1>EXPENSES</h1>
-            <div class="d-flex justify-center">
-                <h3 class="w-100">FOR THE YEAR  </h3>
-                <v-select
-                    v-model="year"
-                    :items="years"
-                    dense
-                    hide-details
-                    class="ml-2 year-opt"
-                    @change="selectYear(year)"
-                ></v-select>
+        <section v-if="loaded">
+            <div class="container text-center expense-header">
+                <h1>EXPENSES</h1>
+                <div class="d-flex justify-center">
+                    <h3 class="w-100">FOR THE YEAR  </h3>
+                    <v-select
+                        v-model="year"
+                        :items="years"
+                        dense
+                        hide-details
+                        class="ml-2 year-opt"
+                        @change="selectYear(year)"
+                    ></v-select>
+                </div>
             </div>
-        </div>
-        <br>
-        <v-data-table
-            hide-default-footer
-            :loading="loading"
-            :items="expenses"
-            :headers="headers"
-            :items-per-page="5"
-            :server-items-length="expenses.length"
-        >
-            <template #item="{ item }">
-                <tr>
-                    <td class="text-center">
-                        <div style="width: 100px;">
-                            {{ item.date }}
-                        </div>
-                    </td>
-                    <td>{{ item.particular }}</td>
-                    <td class="text-center">{{ item.receipt_no }}</td>
-                    <td class="text-center">{{ formatCurrency(item.amount) }}</td>
-                    <td>{{ formatCurrency(item.agents_commission_san_vicente) }}</td>
-                    <td>{{ formatCurrency(item.agents_commission_tiniwisan) }}</td>
-                    <td>{{ formatCurrency(item.salary) }}</td>
-                    <td>{{ formatCurrency(item.office_rental_expense) }}</td>
-                    <td>{{ formatCurrency(item.utility_expense) }}</td>
-                    <td>{{ formatCurrency(item.fuel_gasoline) }}</td>
-                    <td>{{ formatCurrency(item.office_materials) }}</td>
-                    <td>{{ formatCurrency(item.repair_maintenance) }}</td>
-                    <td>{{ formatCurrency(item.representation_expense) }}</td>
-                    <td>{{ formatCurrency(item.transportation) }}</td>
-                    <td>{{ formatCurrency(item.retainers) }}</td>
-                    <td>{{ formatCurrency(item.lot_cancellation) }}</td>
-                    <td>{{ formatCurrency(item.web_system_development) }}</td>
-                    <td>{{ formatCurrency(item.others) }}</td>
-                </tr>
-            </template>
-            <template slot="body.append">
-                    <td class="font-weight-bold pl-4">TOTAL</td>
-                    <td></td>
-                    <td class="text-center">
-                        {{ getTotal('amount') }}
-                        <!-- <p class="font-weight-bold my-2">
-                            
-                        </p> -->
-                        
-                    </td>
-            </template>
-        </v-data-table>
-        <v-row justify="space-between">
-        <v-col></v-col>
-        <!-- <v-col class="text-right">
-            <TablePagination
-            v-if="payments.length"
-            :paginate-data="paginateData"
-            @paginate="paginate"
-            />
-        </v-col> -->
-        </v-row>
-    </section>
+            <v-dialog
+                v-model="dialog"
+                width="1000px"
+            >
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        class="ml-auto"
+                        elevation="0"
+                        color="info"
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                        <v-icon>mdi-cash</v-icon> Add Expense
+                    </v-btn>
+                </template>
+                <v-card>
+                    <v-card-title class="pb-0 ml-6">
+                        <h3>Add Expense</h3>
+                    </v-card-title>
+                    <v-form>
+                        <v-container class="px-10">
+                            <ExpenseAdd size="sm"/>
+                            <br>
+                            <v-divider></v-divider>
+                            <br>
+                            <div class="d-flex justify-end">
+                                <v-btn
+                                    class="ml-2"
+                                    elevation="0"
+                                    color="warning"
+                                    @click="dialog = false"
+                                >
+                                    Cancel
+                                </v-btn>
+                                <v-btn
+                                    class="ml-2"
+                                    elevation="0"
+                                    color="primary"
+                                >
+                                    Submit
+                                </v-btn>
+                            </div>
+                        </v-container>
+                    </v-form>
+                </v-card>
+            </v-dialog>
+            <br>
+            <v-data-table
+                hide-default-footer
+                :loading="loading"
+                :items="expenses"
+                :headers="headers"
+                :items-per-page="5"
+                :server-items-length="expenses.length"
+            >
+                <template #item="{ item }">
+                    <tr>
+                        <td class="text-center">
+                            <div style="width: 100px;">
+                                {{ item.date }}
+                            </div>
+                        </td>
+                        <td>{{ item.particular }}</td>
+                        <td class="text-center">{{ item.receipt_no }}</td>
+                        <td class="text-center">{{ formatCurrency(item.amount) }}</td>
+                        <td>{{ formatCurrency(item.agents_commission_san_vicente) }}</td>
+                        <td>{{ formatCurrency(item.agents_commission_tiniwisan) }}</td>
+                        <td>{{ formatCurrency(item.salary) }}</td>
+                        <td>{{ formatCurrency(item.office_rental_expense) }}</td>
+                        <td>{{ formatCurrency(item.utility_expense) }}</td>
+                        <td>{{ formatCurrency(item.fuel_gasoline) }}</td>
+                        <td>{{ formatCurrency(item.office_materials) }}</td>
+                        <td>{{ formatCurrency(item.repair_maintenance) }}</td>
+                        <td>{{ formatCurrency(item.representation_expense) }}</td>
+                        <td>{{ formatCurrency(item.transportation) }}</td>
+                        <td>{{ formatCurrency(item.retainers) }}</td>
+                        <td>{{ formatCurrency(item.lot_cancellation) }}</td>
+                        <td>{{ formatCurrency(item.web_system_development) }}</td>
+                        <td>{{ formatCurrency(item.others) }}</td>
+                    </tr>
+                </template>
+                <template slot="body.append">
+                        <td class="font-weight-bold pl-4">TOTAL</td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-center">
+                            {{ getTotal('amount') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('agents_commission_san_vicente') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('agents_commission_tiniwisan') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('salary') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('office_rental_expense') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('utility_expense') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('fuel_gasoline') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('office_materials') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('repair_maintenance') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('representation_expense') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('transportation') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('retainers') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('lot_cancellation') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('web_system_development') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('others') }}
+                        </td>
+                </template>
+            </v-data-table>
+            <v-row justify="space-between">
+            <v-col></v-col>
+            <!-- <v-col class="text-right">
+                <TablePagination
+                v-if="payments.length"
+                :paginate-data="paginateData"
+                @paginate="paginate"
+                />
+            </v-col> -->
+            </v-row>
+        </section>
+        
     </div>
 </template>
 
@@ -113,6 +199,7 @@ export default {
             years: ['2022'],
             year: '2022',
             total: 0,
+            dialog: false,
             search: {
                 page: 1,
                 search: ''
@@ -133,10 +220,13 @@ export default {
     
     },
     methods: {
-        getTotal(item) {
-            console.log(item)
-            return this.formatCurrency(123123)
-            // return orderby(item.entities, ['entity', 'value'], ['asc', 'asc'])
+        getTotal(itemKey) {
+            let total = 0
+            this.expenses.forEach(expense => {
+                total += expense[itemKey]
+            });
+
+            return this.formatCurrency(total)
         },
         getExpenses() {
             this.loading = true
