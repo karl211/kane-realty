@@ -187,7 +187,6 @@ class ParticularSeeder extends Seeder
                     'particular_id' => $new_particular->id,
                     'date' => ($particular->date) ? $particular->date : null,
                     'receipt_no' => ($particular->receipt_no) ? $particular->receipt_no : null,
-                    'amount' => ($particular->amount) ? $particular->amount : null,
                     'agents_commission_san_vicente' => ($particular->agents_commission_san_vicente) ? $particular->agents_commission_san_vicente : null,
                     'agents_commission_tiniwisan' => ($particular->agents_commission_tiniwisan) ? $particular->agents_commission_tiniwisan : null,
                     'salary' => ($particular->salary) ? $particular->salary : null,

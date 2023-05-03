@@ -90,7 +90,8 @@ Route::middleware('auth:sanctum')
         // Route::get('/sales-managers', [UserController::class, 'getSalesManagers']);
 
         Route::prefix('reports')->group(function(){
-            Route::apiResource('/sales', ReportController::class);
+            Route::get('/sales', [ReportController::class, 'getSales']);
+            Route::get('/expenses', [ReportController::class, 'getExpenses']);
         });
 
         Route::prefix('users')->group(function(){

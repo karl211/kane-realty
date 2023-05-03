@@ -18,7 +18,6 @@ return new class extends Migration
             $table->unsignedBigInteger('particular_id');
             $table->date('date');
             $table->string('receipt_no');
-            $table->float('amount', 8, 2);
             $table->float('agents_commission_san_vicente', 8, 2);
             $table->float('agents_commission_tiniwisan', 8, 2);
             $table->float('salary', 8, 2);

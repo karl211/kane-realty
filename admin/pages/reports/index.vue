@@ -75,36 +75,36 @@
         >
         <template #item="{ item }">
             <tr>
-            <td>{{ item.ar_number }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.property }}</td>
-            <td>{{ item.contract_price }}</td>
-            <td>{{ item.balance }}</td>
-            <td>{{ item.amount_paid }}</td>
-            <td>{{ item.type_of_payment }}</td>
-            <td>{{ item.mode_of_payment }}</td>
-            <td>
-                <div class="d-flex justify-content">
-                    <v-btn
-                        elevation="0"
-                        depressed
-                        color="warning"
-                        small
-                        icon
-                    >
-                        <v-icon>mdi-file-edit-outline</v-icon>
-                    </v-btn>
-                    <v-btn
-                        class="ml-2"
-                        elevation="0"
-                        color="danger"
-                        small
-                        icon
-                    >
-                        <v-icon>mdi-delete</v-icon>
-                    </v-btn>
-                </div>
-            </td>
+                <td>{{ item.ar_number }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.property }}</td>
+                <td>{{ item.contract_price }}</td>
+                <td>{{ item.balance }}</td>
+                <td>{{ item.amount_paid }}</td>
+                <td>{{ item.type_of_payment }}</td>
+                <td>{{ item.mode_of_payment }}</td>
+                <td>
+                    <div class="d-flex justify-content">
+                        <v-btn
+                            elevation="0"
+                            depressed
+                            color="warning"
+                            small
+                            icon
+                        >
+                            <v-icon>mdi-file-edit-outline</v-icon>
+                        </v-btn>
+                        <v-btn
+                            class="ml-2"
+                            elevation="0"
+                            color="danger"
+                            small
+                            icon
+                        >
+                            <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                    </div>
+                </td>
             </tr>
         </template>
         </v-data-table>
@@ -189,7 +189,7 @@ export default {
         this.getPayments(this.search)
     },
     formatDate (date) {
-            if (!date) return null
+        if (!date) return null
 
             const [year, month, day] = date.split('-')
             return `${month}/${day}/${year}`
