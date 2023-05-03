@@ -91,7 +91,6 @@
                             outlined
                             hide-details="auto"
                             :error-messages="error.contract_price"
-                            readonly
                         ></v-text-field>
                     </v-col>
                 </v-row>
