@@ -23,7 +23,6 @@
                     @change="selectYear"
                 ></v-select>
             </div>
-            
         </div>
 
         
