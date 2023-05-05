@@ -92,6 +92,7 @@ Route::middleware('auth:sanctum')
         Route::prefix('reports')->group(function(){
             Route::get('/sales', [ReportController::class, 'getSales']);
             Route::get('/expenses', [ReportController::class, 'getExpenses']);
+            Route::post('/expenses', [ReportController::class, 'createExpenses']);
         });
 
         Route::prefix('users')->group(function(){

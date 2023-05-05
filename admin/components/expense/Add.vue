@@ -1,13 +1,13 @@
 <template>
     <v-form ref="form" class="mx-2" lazy-validation>
         <v-row>
-            <v-col v-if="size !== 'sm'" cols="4">
+            <!-- <v-col v-if="size !== 'sm'" cols="4">
                 <h3>Choose Property</h3>
-            </v-col>
+            </v-col> -->
 
-            <v-col :cols="colSize">
+            <v-col cols="12">
                 <v-row>
-                    <v-col cols="6" class="pb-0">
+                    <v-col cols="12" class="pb-0">
                         <v-menu
                             ref="date"
                             v-model="date"
@@ -31,7 +31,7 @@
                                 ></v-text-field>
                             </template>
                             <v-date-picker
-                                v-model="form.transaction_at"
+                                v-model="form.date"
                                 no-title
                                 @input="date = false"
                             ></v-date-picker>
@@ -39,23 +39,23 @@
                     </v-col>
                 </v-row>
                 <v-row>
-                    <v-col cols="6" class="pb-0">
-                        <v-autocomplete
-                            v-model="form.network_id"
-                            :items="particulars"
+                    <v-col cols="12" class="pb-0">
+                        <v-text-field
+                            v-model="form.particular"
                             label="Particular"
+                            class="required"
                             required
                             dense
                             outlined
-                            hide-details
-                            @change="selectNetwork"
-                        ></v-autocomplete>
+                            hide-details="auto"
+                            :error-messages="error.term"
+                        ></v-text-field>
                     </v-col>
                 </v-row>
                 <v-row>
-                    <v-col cols="6" class="pb-0">
+                    <v-col cols="12" class="pb-0">
                         <v-text-field
-                            v-model="form.term"
+                            v-model="form.receipt_no"
                             label="Receipt No."
                             class="required"
                             required
@@ -68,21 +68,21 @@
                 </v-row>
                 
                 <v-row>
-                    <v-col cols="6" class="pb-0">
+                    <v-col cols="8" class="pb-0">
                         <v-select
-                            v-model="form.sales_agent_id"
+                            v-model="form.expense"
                             :items="expenses"
                             label="Select Expense"
                             required
                             dense
                             outlined
                             hide-details
-                            @change="selectAgent"
+                            @change="selectExpense"
                         ></v-select>
                     </v-col>
-                    <v-col cols="6" class="pb-0">
+                    <v-col cols="4" class="pb-0">
                         <v-text-field
-                            v-model="form.contract_price"
+                            v-model="form.amount"
                             prepend-inner-icon="mdi-currency-php"
                             label="Amount"
                             class="required"
@@ -93,13 +93,31 @@
                             :error-messages="error.contract_price"
                         ></v-text-field>
                     </v-col>
+                    <v-col cols="12" class="pb-0">
+                        <v-file-input
+                            v-model="form.image"
+                            accept="image/*"
+                            prepend-icon=""
+                            label="Select file"
+                            hide-details="auto"
+                        ></v-file-input>
+                        <v-img
+                            v-if="form.image"
+                            contain
+                            max-height="400"
+                            max-width="500"
+                            :src="url('image')"
+                        />
+                    </v-col>
+
+                    
                 </v-row>
             </v-col>
         </v-row>
     </v-form>
 </template>
 <script>
-import { Reservations } from '../../services/reservations'
+// import { Reservations } from '../../services/reservations'
 import ReservationMixin from "~/mixins/ReservationMixin.js"
 
 export default {
@@ -134,10 +152,14 @@ export default {
             "OFFICE/MATERIALS & SUPPLIES",
             "REPAIR & MAINTENANCE",
             "REPRESENTATION EXPENSE",
+            "TRANSPORTATION EXPENSE",
             "RETAINER'S FEE",
             "LOT CANCELLATION",
             "WEB SYSTEM DEVELOPMENT",
-            "OTHERS" ,
+            "PROFESSIONAL FEE",
+            "PROCESSING FEE",
+            "EQUIPMENT",
+            "OTHERS",
         ],
         particulars: [
             "JOEL AMPIT 2ND COMMISION TINIWISAN 2 LOTS",
@@ -304,176 +326,43 @@ export default {
         phases: [],
         salesManagers: [],
         salesAgents: [],
-        componentName: 'chooseProperty',
+        componentName: 'addExpense',
         colSize: "8",
         error: {},
         form: {
-            transaction_at: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-            selectedLocation: {
-                location_id: null,
-                block: null,
-                lot: null,
-                phase: null
-            },
-            contract_price: null,
-            monthly_amortization: null,
-            term: null,
-            network_id: null,
-            sales_manager_id: null,
-            sales_agent_id: null,
+            date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+            particular: null,
+            receipt_no: null,
+            expense: null,
+            amount: null,
+            image: null,
         }
         
     }),
 
     watch: {
-        // size (val) {
-        //     console.log(val)
-        //     if (val === 'sm') {
-        //         this.colSize = "12"
-        //     }
-        // },
-
         form: {
             handler(val){
                 this.clear()
-                this.$emit('chooseProperty', val)
+                this.$emit('addExpense', val)
             },
             deep: true
         },
-        'form.transaction_at'(val) {
+        'form.date'(val) {
             this.dateFormatted = this.formatDate(val)
         },
     },
 
     created () {
-        console.log(this.property)
     },
 
     mounted () {
-        if (this.size === 'sm') {
-            this.colSize = "12"
-        }
 
-        this.getLocations()
-        this.getNetworks()
     },
 
     methods: {
-
-        getLocations () {
-            Reservations.locations().then((response) => {
-                this.locations = response.data.data
-                this.mapLocations = this.locations.map(function(data) {
-                    return {
-                        text: data.location,
-                        value: data.id
-                    }
-                })
-            });
-        },
-
-        getNetworks () {
-            Reservations.networks().then((response) => {
-                this.networks = response.data.data
-                this.mapNetworks = this.mapArray(this.networks, 'name', 'id')
-            });
-        },
-
-        mapArray(arr, text, value) {
-            return [...new Set(arr.map(function(data) {
-                return {
-                    text: data[text],
-                    value: data[value]
-                }
-            }))]
-        },
-
-        getBlocks (properties) {
-            return [...new Set(properties.map(item => item.block))]
-        },
-
-        getLots (properties) {
-            const self = this
-
-            return [...new Set(properties.filter(function(item) {
-                return item.block === self.form.selectedLocation.block
-            }).map(item => item.lot))]
-        },
-
-        getPhases (properties) {
-            const self = this
-
-            return [...new Set(properties.filter(function(item) {
-                    return item.block === self.form.selectedLocation.block && item.lot === self.form.selectedLocation.lot
-            }).map(item => item.phase))]
-        },
-
-        selectLocation(value, type) {
-            this.form.selectedLocation[type] = value
-            
-            const self = this
-            const location = this.locations.find(function(data) {
-                return data.id === self.form.selectedLocation.location_id
-            })
-
-            this.blocks = this.mapArray(location.properties, 'block', 'block')
-
-            this.lots = this.getLots(location.properties)
-
-            this.phases = this.getPhases(location.properties)
-
-            if (type === 'lot') {
-                const propery = location.properties.find(function(data) {
-                    return data.block === self.form.selectedLocation.block && data.lot === self.form.selectedLocation.lot
-                })
-
-                if (propery) {
-                    this.form.contract_price = Number(propery.contract_price).toLocaleString()
-                    this.form.monthly_amortization = Number(propery.default_monthly_amortization).toLocaleString()
-                    this.form.term = propery.term
-                }
-            }
-        },
-
-        selectNetwork(value) {
-            this.form.sales_manager_id =  null
-            this.form.sales_agent_id =  null
-            this.salesManagers = []
-
-            this.form.network_id = value
-
-            if (value) {
-                const network = this.networks.find(function(data) {
-                    return data.id === value
-                })
-
-                this.salesManagers = this.mapArray(network.sales_managers, 'name', 'id')
-            }
-        },
-
-        selectManager(value) {
-            this.form.sales_agent_id =  null
-            this.salesAgents = []
-            this.form.sales_manager_id = value
-
-            if (value) {
-                const self = this
-                const network = this.networks.find(function(data) {
-                    return data.id === self.form.network_id
-                })
-                
-                const manager = network.sales_managers.find(function(item) {
-                    return item.id === self.form.sales_manager_id
-                })
-
-                if (manager.sales_manager_agents.length) {
-                    this.salesAgents = this.mapArray(manager.sales_manager_agents, 'name', 'id')
-                }
-            }
-        },
-
-        selectAgent(value) {
-            this.form.sales_agent_id = value
+        selectExpense(value) {
+            this.form.expense = value
         },
     },
 }
