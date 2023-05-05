@@ -26,9 +26,19 @@ class ExpenseResource extends JsonResource
         $amount = $this->agents_commission_san_vicente + $this->agents_commission_tiniwisan + $this->salary + 
             $this->office_rental_expense + $this->utility_expense + $this->fuel_gasoline + 
             $this->office_materials + $this->repair_maintenance + $this->representation_expense + $this->transportation +
-            $this->retainers + $this->lot_cancellation + $this->web_system_development + $this->others;
+            $this->retainers + $this->lot_cancellation + $this->web_system_development + $this->professional_fee + $this->processing_fee + $this->equipment + $this->others;
+
+        $file_url = null;
+        $file_path = 'expenses/' . $this->id . '/' . $this->image;
+
+        if ($this->image) {
+            $file_url = Storage::disk('s3')->temporaryUrl($file_path, now()->addMinutes(15));
+        }
 
         return [
+            'particular' => $this->particular,
+            'file_name' => $this->image,
+            'file_url' => $file_url,
             'date' => $this->date,
             'receipt_no' => $this->receipt_no,
             'amount' => $amount,
@@ -45,8 +55,11 @@ class ExpenseResource extends JsonResource
             'retainers' => $this->retainers,
             'lot_cancellation' => $this->lot_cancellation,
             'web_system_development' => $this->web_system_development,
+            'professional_fee' => $this->professional_fee,
+            'processing_fee' => $this->processing_fee,
+            'equipment' => $this->equipment,
             'others' => $this->others,
-            'particular' => $this->particular->name,
+            
 
         ];
     }

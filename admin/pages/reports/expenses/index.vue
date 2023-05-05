@@ -17,7 +17,7 @@
             </div>
             <v-dialog
                 v-model="dialog"
-                width="1000px"
+                width="700px"
             >
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -36,7 +36,7 @@
                     </v-card-title>
                     <v-form>
                         <v-container class="px-10">
-                            <ExpenseAdd size="sm"/>
+                            <ExpenseAdd size="sm" @addExpense="updateForm($event)"/>
                             <br>
                             <v-divider></v-divider>
                             <br>
@@ -53,6 +53,7 @@
                                     class="ml-2"
                                     elevation="0"
                                     color="primary"
+                                    @click="submit"
                                 >
                                     Submit
                                 </v-btn>
@@ -67,7 +68,6 @@
                 :loading="loading"
                 :items="expenses"
                 :headers="headers"
-                :items-per-page="5"
                 :server-items-length="expenses.length"
             >
                 <template #item="{ item }">
@@ -77,27 +77,39 @@
                                 {{ item.date }}
                             </div>
                         </td>
+                        <td>
+                            <v-img
+                                contain
+                                max-height="100"
+                                max-width="100"
+                                :src="item.file_url"
+                            />
+                        </td>
                         <td>{{ item.particular }}</td>
                         <td class="text-center">{{ item.receipt_no }}</td>
                         <td class="text-center">{{ formatCurrency(item.amount) }}</td>
-                        <td>{{ formatCurrency(item.agents_commission_san_vicente) }}</td>
-                        <td>{{ formatCurrency(item.agents_commission_tiniwisan) }}</td>
-                        <td>{{ formatCurrency(item.salary) }}</td>
-                        <td>{{ formatCurrency(item.office_rental_expense) }}</td>
-                        <td>{{ formatCurrency(item.utility_expense) }}</td>
-                        <td>{{ formatCurrency(item.fuel_gasoline) }}</td>
-                        <td>{{ formatCurrency(item.office_materials) }}</td>
-                        <td>{{ formatCurrency(item.repair_maintenance) }}</td>
-                        <td>{{ formatCurrency(item.representation_expense) }}</td>
-                        <td>{{ formatCurrency(item.transportation) }}</td>
-                        <td>{{ formatCurrency(item.retainers) }}</td>
-                        <td>{{ formatCurrency(item.lot_cancellation) }}</td>
-                        <td>{{ formatCurrency(item.web_system_development) }}</td>
-                        <td>{{ formatCurrency(item.others) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.agents_commission_san_vicente) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.agents_commission_tiniwisan) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.salary) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.office_rental_expense) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.utility_expense) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.fuel_gasoline) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.office_materials) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.repair_maintenance) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.representation_expense) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.transportation) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.retainers) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.lot_cancellation) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.web_system_development) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.professional_fee) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.processing_fee) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.equipment) }}</td>
+                        <td class="text-center">{{ formatCurrency(item.others) }}</td>
                     </tr>
                 </template>
                 <template slot="body.append">
                         <td class="font-weight-bold pl-4">TOTAL</td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td class="text-center">
@@ -143,6 +155,15 @@
                             {{ getTotal('web_system_development') }}
                         </td>
                         <td class="text-center">
+                            {{ getTotal('professional_fee') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('processing_fee') }}
+                        </td>
+                        <td class="text-center">
+                            {{ getTotal('equipment') }}
+                        </td>
+                        <td class="text-center">
                             {{ getTotal('others') }}
                         </td>
                 </template>
@@ -164,6 +185,7 @@
 
 <script>
 import _ from "lodash";
+import Swal from 'sweetalert2'
 import { Expense } from '../../../services/expenses'
 export default {
     name: "ExpensesIndex",
@@ -176,6 +198,7 @@ export default {
             prof_title_id: "",
             headers: [
             { align: 'center', text: "Date", width: '10%' },
+            { align: 'center', text: "Image" },
             { align: 'center', text: "PARTICULAR" },
             { align: 'center', text: "RECEIPT NO." },
             { align: 'center', text: "AMOUNT" },
@@ -188,18 +211,23 @@ export default {
             { align: 'center', text: "OFFICE/MATERIALS & SUPPLIES" },
             { align: 'center', text: "REPAIR & MAINTENANCE" },
             { align: 'center', text: "REPRESENTATION EXPENSE" },
+            { align: 'center', text: "TRANSPORTATION EXPENSE" },
             { align: 'center', text: "RETAINER'S FEE" },
             { align: 'center', text: "LOT CANCELLATION" },
             { align: 'center', text: "WEB SYSTEM DEVELOPMENT" },
+            { align: 'center', text: "PROFESSIONAL FEE" },
+            { align: 'center', text: "PROCESSING FEE" },
+            { align: 'center', text: "EQUIPMENT" },
             { align: 'center', text: "OTHERS" },
             // { align: 'center', text: "Actions"},
             ],
             paginateData: null,
             expenses: [],
-            years: ['2022'],
+            years: ['2022', '2023'],
             year: '2022',
             total: 0,
             dialog: false,
+            form: {},
             search: {
                 page: 1,
                 search: ''
@@ -220,6 +248,72 @@ export default {
     
     },
     methods: {
+        updateForm (form) {
+            this.form = form
+        },
+
+        submit () {
+            const formData = new FormData()
+
+            this.form.branch_id = localStorage.getItem('branch')
+            this.form.amount = this.formatAmount(this.form.amount)
+            
+            Object.entries(this.form).forEach(([key, obj]) => {
+                if (obj) {
+                    if (key === 'image') {
+                        formData.append(key, obj);
+                    } else {
+                        formData.append(key, JSON.stringify(obj));
+                    }
+                }
+            })
+
+            Expense.create(formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then((response) => {
+                if (response.data) {
+                    this.dialog = false
+
+                    Swal.fire({
+                        title: 'Done!',
+                        text: 'Successfully added',
+                        confirmButtonText: 'Okay',
+                        icon: 'success',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload()
+                        } 
+                    })
+                }
+            }).catch(error => {
+                // Handle error
+                if (error.response) {
+                    if (error.response.data.message) {
+                        Swal.fire(
+                            'Ops.',
+                            error.response.data.message,
+                            'warning'
+                        )
+                    } else {
+                        Swal.fire(
+                            'Ops.',
+                            'Something went wrong',
+                            'warning'
+                        )
+                    }
+
+                    this.error = error.response.data.errors
+                }
+            })
+        },
+
+        selectYear (year) {
+            this.year = year
+            this.getExpenses()
+        },
+
         getTotal(itemKey) {
             let total = 0
             this.expenses.forEach(expense => {
@@ -231,8 +325,7 @@ export default {
         getExpenses() {
             this.loading = true
             
-            Expense.all(this.search).then((response) => {
-                console.log()
+            Expense.all({year: this.year}).then((response) => {
                 this.expenses = response.data.data
                 // this.paginateData = response.data
                 // this.payments = response.data.data
@@ -264,10 +357,20 @@ export default {
         //     this.total =
         //     return 123123
         // },
-        selectYear (year) {
-            this.year = year
-            this.getExpenses()
+        
+
+        url (url) {
+            if (!url) return;
+
+            if (typeof url === 'object') {
+                return URL.createObjectURL(url);
+            } else {
+                return url
+            }
         },
+        
+
+        
 
         // grandTotals () {
         //     // const total = month
