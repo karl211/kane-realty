@@ -4,15 +4,57 @@
             <div class="container text-center expense-header">
                 <h1>EXPENSES</h1>
                 <div class="d-flex justify-center">
-                    <h3 class="w-100">FOR THE YEAR  </h3>
-                    <v-select
-                        v-model="year"
-                        :items="years"
-                        dense
-                        hide-details
-                        class="ml-2 year-opt"
-                        @change="selectYear(year)"
-                    ></v-select>
+                    <h3 v-if="isMonthly == 'Yearly'" class="w-100">
+                        FOR THE YEAR 
+                        <v-select
+                            v-model="year"
+                            :items="years"
+                            dense
+                            hide-details
+                            class="ml-2 year-opt text-center"
+                            @change="selectYear(year)"
+                        >
+                            <template v-slot:selection="{ item }">
+                                <span class="d-flex justify-center" style="width: 100%;">
+                                    {{ item }}
+                                </span>
+                            </template>
+                        </v-select>
+                    </h3>
+                    <h3 v-else class="w-100 text-center">FOR THE MONTH 
+                        <v-select
+                            v-model="defaultSelectedMonth"
+                            item-text="label"
+                            item-value="value"
+                            :items="months"
+                            dense
+                            hide-details
+                            class="ml-2 year-opt mb-3"
+                            @change="selectMonth"
+                        >
+                            <template v-slot:selection="{ item }">
+                                <span class="d-flex justify-center" style="width: 100%;">
+                                    {{ item.label }}
+                                </span>
+                            </template>
+                        </v-select>
+                        <span class="year-margin">YEAR</span>
+                        <v-select
+                            v-model="year"
+                            :items="years"
+                            dense
+                            hide-details
+                            class="ml-2 mt-0 year-opt"
+                            @change="selectYear(year)"
+                        >
+                            <template v-slot:selection="{ item }">
+                                <span class="d-flex justify-center" style="width: 100%;">
+                                    {{ item }}
+                                </span>
+                            </template>
+                        </v-select>
+                    </h3>
+                    
                 </div>
             </div>
             <v-dialog
@@ -62,6 +104,17 @@
                     </v-form>
                 </v-card>
             </v-dialog>
+
+            <v-switch
+            v-model="isMonthly"
+            hide-details
+            true-value="Monthly"
+            false-value="Yearly"
+            :label="`${isMonthly}`"
+            class="float-end"
+            @change="selectFilter"
+            ></v-switch>
+            <br>
             <br>
             <v-data-table
                 hide-default-footer
@@ -224,7 +277,63 @@ export default {
             paginateData: null,
             expenses: [],
             years: ['2022', '2023'],
+            months: [
+                {
+                    label: 'January',
+                    value: '01'
+                },
+                {
+                    label: 'February',
+                    value: '02'
+                },
+                {
+                    label: 'March',
+                    value: '03'
+                },
+                {
+                    label: 'April',
+                    value: '04'
+                },
+                {
+                    label: 'May',
+                    value: '05'
+                },
+                {
+                    label: 'June',
+                    value: '06'
+                },
+                {
+                    label: 'July',
+                    value: '07'
+                },
+                {
+                    label: 'August',
+                    value: '08'
+                },
+                {
+                    label: 'September',
+                    value: '09'
+                },
+                {
+                    label: 'October',
+                    value: '10'
+                },
+                {
+                    label: 'November',
+                    value: '11'
+                },
+                {
+                    label: 'December',
+                    value: '12'
+                },
+            ],
+            defaultSelectedMonth: {
+                label: "January",
+                value: '01'
+            },
             year: '2022',
+            month: 0,
+            isMonthly: "Yearly",
             total: 0,
             dialog: false,
             form: {},
@@ -311,6 +420,25 @@ export default {
 
         selectYear (year) {
             this.year = year
+            
+            if (this.isMonthly === 'Yearly') {
+                this.month = 0
+            }
+            this.getExpenses()
+        },
+
+        selectMonth (month) {
+            this.month = month
+            this.getExpenses()
+        },
+
+        selectFilter () {
+            if (this.isMonthly === 'Yearly') {
+                this.month = 0
+            } else {
+                this.month = "01"
+            }
+
             this.getExpenses()
         },
 
@@ -325,7 +453,7 @@ export default {
         getExpenses() {
             this.loading = true
             
-            Expense.all({year: this.year}).then((response) => {
+            Expense.all({year: this.year, month: this.month}).then((response) => {
                 this.expenses = response.data.data
                 // this.paginateData = response.data
                 // this.payments = response.data.data
@@ -384,9 +512,13 @@ export default {
 </script>
 <style>
     .expense-header {
-        width: 300px;
+        width: 200px;
     }
     .expense-header h3{
         width: 400px;
+    }
+    .year-margin {
+        position: relative;
+        left: -10px;
     }
 </style>

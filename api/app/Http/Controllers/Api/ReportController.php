@@ -109,8 +109,18 @@ class ReportController extends Controller
     public function getExpenses(Request $request)
     {
         $year = $request->year;
+        $month = null;
+
+        
+
         $start = $year . '-01-01';
         $end = $year . '-12-31';
+
+        if ($request->month) {
+            $month = $request->month;
+            $start = $year . '-' . $month . '-01';
+            $end = $year . '-' . $month . '-31';
+        }
 
         $expenses = Expense::where('date', '>=', $start)
             ->where('date', '<=', $end)
