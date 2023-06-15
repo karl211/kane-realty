@@ -87,16 +87,16 @@ class ReservationRequest extends FormRequest
             'personalInformation.zip_code' => 'required',
             'personalInformation.contact_number' => 'required',
 
-            'coBorrowerInformation.last_name' => 'required',
-            'coBorrowerInformation.first_name' => 'required',
-            'coBorrowerInformation.middle_name' => 'required',
-            'coBorrowerInformation.date_of_birth' => 'required',
-            'coBorrowerInformation.gender' => 'required',
-            'coBorrowerInformation.contact_number' => 'required',
+            // 'coBorrowerInformation.last_name' => 'required',
+            // 'coBorrowerInformation.first_name' => 'required',
+            // 'coBorrowerInformation.middle_name' => 'required',
+            // 'coBorrowerInformation.date_of_birth' => 'required',
+            // 'coBorrowerInformation.gender' => 'required',
+            // 'coBorrowerInformation.contact_number' => 'required',
 
             'employmentStatus.employment' => 'required',
 
-            'valid_id' => 'required|max:1000',
+            // 'valid_id' => 'required|max:1000',
         ];
         
         if (isset($this->personal_information['civil_status']) && ($this->personal_information['civil_status'] == 'Married')) {
@@ -292,7 +292,7 @@ class ReservationRequest extends FormRequest
 
     protected function createCoBorrower($buyer)
     {
-        if (isset($this->co_borrower_information) && $this->co_borrower_information['first_name'] && $this->co_borrower_information['last_name']) {
+        if (isset($this->co_borrower_information) && isset($this->co_borrower_information['first_name']) && isset($this->co_borrower_information['last_name'])) {
             return $buyer->coBorrowers()->create($this->co_borrower_information);
         }
 
@@ -301,7 +301,7 @@ class ReservationRequest extends FormRequest
 
     protected function createAttorney()
     {
-        if (isset($this->attorney_information) && $this->attorney_information['first_name'] && $this->attorney_information['last_name']) {
+        if (isset($this->attorney_information) && isset($this->attorney_information['first_name']) && isset($this->attorney_information['last_name'])) {
             return Attorney::create($this->attorney_information);
         }
 
