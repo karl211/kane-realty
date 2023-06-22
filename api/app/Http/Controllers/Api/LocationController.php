@@ -19,6 +19,8 @@ class LocationController extends Controller
      */
     public function index()
     {
+        $this->authorize('location_access');
+
         $locations = Location::with('properties')
             // ->when(request()->location_id, function ($query) {
             //     $query->where('id', request()->location_id);

@@ -19,6 +19,8 @@ class ReportController extends Controller
      */
     public function getSales(Request $request)
     {
+        $this->authorize('report_access');
+
         $current_year = Carbon::now()->year;
 
         if ($request->year != null) {
@@ -108,10 +110,10 @@ class ReportController extends Controller
      */
     public function getExpenses(Request $request)
     {
+        $this->authorize('report_access');
+
         $year = $request->year;
         $month = null;
-
-        
 
         $start = $year . '-01-01';
         $end = $year . '-12-31';

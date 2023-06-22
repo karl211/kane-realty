@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 import { Location } from '../../services/locations'
 export default {
     name: "PropertiesIndex",
@@ -83,7 +84,15 @@ export default {
                 if (response.data) {
                     this.locations = response.data.data
                 }
-            });
+            }).catch(error => {
+                if (error.response) {
+                    Swal.fire(
+                        'Ops.',
+                        error.response.data.message,
+                        'warning'
+                    )
+                }
+            })
         }
     },
 }

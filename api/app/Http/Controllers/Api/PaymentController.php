@@ -18,6 +18,8 @@ class PaymentController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('receipt_access');
+
         $payments = Payment::with('reservation.buyer', 'reservation.property')
                 ->whereHas('reservation.buyer', function($q) use($request){
                     $q->where('branch_id', $request->branch_id);
@@ -109,6 +111,8 @@ class PaymentController extends Controller
      */
     public function destroy(Request $request)
     {
+        $this->authorize('receipt_delete');
+
         try {
             DB::beginTransaction();
 

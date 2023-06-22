@@ -13,6 +13,8 @@ class CalendarController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('calendar_access');
+
         $data = [];
 
         $reservations = Reservation::with('buyer.profile', 'property')
@@ -20,7 +22,7 @@ class CalendarController extends Controller
                 $query->search(request()->search);
             })
             ->where('status', 'Reserved')
-            ->paginate(999999)
+            ->paginate(40)
             ->through(function($reservation){
                 
                 if (count($this->filterData($reservation)['past_dues'])) {

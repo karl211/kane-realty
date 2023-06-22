@@ -147,7 +147,7 @@
                         src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"
                     >
                     </v-avatar>
-                    <span>Marcus <v-icon>mdi-chevron-down</v-icon></span>
+                    <span>{{ $auth.user.profile.first_name }} <v-icon>mdi-chevron-down</v-icon></span>
                 </v-btn>
             </template>
 

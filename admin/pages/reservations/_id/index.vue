@@ -571,7 +571,7 @@ export default {
                         if (error.response) {
                             Swal.fire(
                                 'Ops.',
-                                'Something went wrong',
+                                error.response.data.message,
                                 'warning'
                             )
                             // const self = this
@@ -683,7 +683,7 @@ export default {
                         if (error.response) {
                             Swal.fire(
                                 'Ops.',
-                                'Something went wrong',
+                                error.response.data.message,
                                 'warning'
                             )
                             // const self = this
@@ -734,7 +734,7 @@ export default {
                 if (error.response) {
                     Swal.fire(
                         'Ops.',
-                        'Something went wrong',
+                        error.response.data.message,
                         'warning'
                     )
                     this.errors = error.response.data.errors

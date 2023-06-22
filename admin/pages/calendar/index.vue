@@ -153,6 +153,7 @@
     </v-row>
 </template>
 <script>
+import Swal from 'sweetalert2'
 import { Calendar } from '../../services/calendars'
 export default {
     name: 'CalendarPage',
@@ -336,7 +337,15 @@ export default {
                 //     }
                 //     return false
                 // })
-            });
+            }).catch(error => {
+                if (error.response) {
+                    Swal.fire(
+                        'Ops.',
+                        error.response.data.message,
+                        'warning'
+                    )
+                }
+            })
         }
         
     },

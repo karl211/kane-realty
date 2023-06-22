@@ -17,6 +17,8 @@ class PropertyController extends Controller
      */
     public function index()
     {
+        $this->authorize('invoice_access');
+        
         $payments = Payment::with('reservation.buyer', 'reservation.property')
                 ->whereHas('reservation.buyer', function($q) use($request){
                     $q->where('branch_id', $request->branch_id);
