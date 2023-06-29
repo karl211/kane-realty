@@ -23,7 +23,7 @@
         <div v-for="item in items" :key="item.title">
             
             <v-list-group
-                v-if="item.title == 'Reports'"
+                v-if="item.title == 'Reports' && item.isShow"
                 :value="true"
                 no-action
                 sub-group
@@ -48,7 +48,7 @@
             </v-list-group>
             
             <v-list-item
-                v-else
+                v-else-if="item.isShow"
                 :to="item.to"
                 color="primary">
                 <v-list-item-icon>
@@ -60,12 +60,6 @@
                 </v-list-item-content>
             </v-list-item>
         </div>
-
-        
-
-        
-
-        
     </v-list>
     </v-navigation-drawer>
 </template>
@@ -79,26 +73,48 @@ export default {
         }
     },
     data: () => ({
-    drawer: null,
-    items: [
-        { title: 'Dashboard', icon: 'mdi-view-dashboard', to: '/dashboard' },
-        { title: 'Calendar', icon: 'mdi-calendar', to: '/calendar' },
-        { title: 'Reservations', icon: 'mdi-book-account', to: '/reservations' },
-        { title: 'Receipts', icon: 'mdi-cash-clock', to: '/receipts' },
-        { title: 'Locations', icon: 'mdi-home-group', to: '/locations' },
-        { title: 'Invoices', icon: 'mdi-list-box-outline', to: '/invoices' },
-        { title: 'Reports', icon: 'mdi-note', to: '/reports' },
-        { title: 'Users', icon: 'mdi-account', to: '/users' },
-    ],
-    admins: [
-        { title: 'Sales', icon: 'mdi-network-pos', to: '/reports/sales' },
-        { title: 'Expenses', icon: 'mdi-cash-fast', to: '/reports/expenses' },
-    ],
+        drawer: null,
+        items: [
+            { menu_id: 'dashboard_access', isShow: false, title: 'Dashboard', icon: 'mdi-view-dashboard', to: '/dashboard' },
+            { menu_id: 'calendar_access', isShow: false, title: 'Calendar', icon: 'mdi-calendar', to: '/calendar' },
+            { menu_id: 'reservation_access', isShow: false, title: 'Reservations', icon: 'mdi-book-account', to: '/reservations' },
+            { menu_id: 'receipt_access', isShow: false, title: 'Receipts', icon: 'mdi-cash-clock', to: '/receipts' },
+            { menu_id: 'location_access', isShow: false, title: 'Locations', icon: 'mdi-home-group', to: '/locations' },
+            { menu_id: 'invoice_access', isShow: false, title: 'Invoices', icon: 'mdi-list-box-outline', to: '/invoices' },
+            { menu_id: 'report_access', isShow: false, title: 'Reports', icon: 'mdi-note', to: '/reports' },
+            { menu_id: 'user_management_access', isShow: false, title: 'Users', icon: 'mdi-account', to: '/users' },
+        ],
+        admins: [
+            { title: 'Sales', icon: 'mdi-network-pos', to: '/reports/sales' },
+            { title: 'Expenses', icon: 'mdi-cash-fast', to: '/reports/expenses' },
+        ],
     }),
     watch: {
-    toggleSidebar(val) {
-        this.drawer = val
-    }
+        toggleSidebar(val) {
+            this.drawer = val
+        }
+    },
+    created () {
+        const permissions = this.$auth.user.permissions
+        const roles = this.$auth.user.roles
+        
+        if (roles.length) {
+            if (roles[0].name === 'Super Admin') {
+                this.items.forEach(item => {
+                    item.isShow = true
+                });
+            } else {
+                permissions.forEach(permission => {
+                    const menu = this.items.find(function (item) {
+                        return item.menu_id === permission.name
+                    })
+
+                    if (menu) {
+                        menu.isShow = true
+                    }
+                });
+            }
+        }
     }
 }
 </script>

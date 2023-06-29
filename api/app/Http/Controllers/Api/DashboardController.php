@@ -20,6 +20,8 @@ class DashboardController extends Controller
 
     public function getStatuses()
     {
+        $this->authorize('dashboard_access');
+
         $availables = Property::where('status', 'Available')->get();
         $reserves = Property::where('status', 'Reserved')->get();
         $assumes = Property::where('status', 'For Assume')->get();

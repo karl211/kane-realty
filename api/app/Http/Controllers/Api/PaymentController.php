@@ -112,7 +112,7 @@ class PaymentController extends Controller
     public function destroy(Request $request)
     {
         $this->authorize('receipt_delete');
-
+        
         try {
             DB::beginTransaction();
 

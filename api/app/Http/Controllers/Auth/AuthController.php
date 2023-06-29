@@ -36,8 +36,21 @@ class AuthController extends Controller
 
     public function getUser(Request $request)
     {
+        $user_menu = auth()->user()->getAllPermissions()->whereIn('name', [
+            'user_management_access',
+            'permission_access',
+            'role_access',
+            'user_access',
+            'calendar_access',
+            'reservation_access',
+            'receipt_access',
+            'location_access',
+            'invoice_access',
+            'report_access'
+        ])->pluck('name');
+
         return response()->json([
-            'data' => auth()->user()->load('profile')
+            'data' => auth()->user()->load('profile'),
         ], 200);
     }
 

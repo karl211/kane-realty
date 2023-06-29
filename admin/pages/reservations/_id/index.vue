@@ -574,10 +574,6 @@ export default {
                                 error.response.data.message,
                                 'warning'
                             )
-                            // const self = this
-                            // setTimeout(() => {
-                                
-                            // }, 1000);
                             this.errors = error.response.data.errors
                         }
                     })
