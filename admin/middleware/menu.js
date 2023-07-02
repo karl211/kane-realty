@@ -36,7 +36,7 @@ export default function(context) {
                         adminRoutes.push('receipts');
                         adminRoutes.push('receipts-create');
                     }
-                    else if (menu === 'calendar') {
+                    else if (menu === 'calendar' || menu === 'dashboard') {
                         adminRoutes.push(menu);
                     }
                     else {

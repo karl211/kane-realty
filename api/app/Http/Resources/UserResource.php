@@ -20,7 +20,8 @@ class UserResource extends JsonResource
             'slug' => $this->slug,
             'email' => $this->email,
             'role' => $this->role_id,
-            'role_name' => ucwords($this->role->name),
+            'role_name' => ucwords($this->getRoleNames()->first()),
+            'permissions' => $this->getAllPermissions()->pluck('name'),
             'profile' => new ProfileResource($this->profile),
         ];
     }

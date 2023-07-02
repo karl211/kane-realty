@@ -100,6 +100,10 @@ Route::middleware('auth:sanctum')
 
             Route::get('/search', [UserController::class, 'searchBuyer']);
 
+            Route::get('/employees', [UserController::class, 'getEmployees']);
+
+            Route::post('/permissions/save', [UserController::class, 'savePermission']);
+
             Route::post('/delete', [UserController::class, 'destroy']);
         });
 

@@ -29,7 +29,7 @@ import { User } from '../../services/users'
 
     methods: {
         getUsers () {
-            User.all().then((res) => {
+            User.employees().then((res) => {
                 this.users = res.data.data
             });
         },

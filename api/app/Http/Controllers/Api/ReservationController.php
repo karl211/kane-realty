@@ -89,7 +89,8 @@ class ReservationController extends Controller
 
     public function updateOrCreateProperty(User $buyer, BuyerUpdateOrPropertyRequest $request)
     {
-        dd('test');
+        
+
         try {
             DB::beginTransaction();
 

@@ -28,45 +28,35 @@ class PermissionSeeder extends Seeder
             'user_management_access',
             'permission_create',
             'permission_edit',
-            'permission_show',
             'permission_delete',
             'permission_access',
             'role_create',
             'role_edit',
-            'role_show',
             'role_delete',
             'role_access',
             'user_create',
             'user_edit',
-            'user_show',
             'user_delete',
             'user_access',
-            'calendar_create',
-            'calendar_show',
             'calendar_access',
             'reservation_create',
             'reservation_edit',
-            'reservation_show',
             'reservation_delete',
             'reservation_access',
             'receipt_create',
             'receipt_edit',
-            'receipt_show',
             'receipt_delete',
             'receipt_access',
             'location_create',
             'location_edit',
-            'location_show',
             'location_delete',
             'location_access',
             'invoice_access',
             'invoice_create',
-            'invoice_show',
             'invoice_edit',
             'invoice_delete',
             'report_access',
             'report_create',
-            'report_show',
             'report_edit',
             'report_delete',
         ];
@@ -85,32 +75,26 @@ class PermissionSeeder extends Seeder
         
         $bookepper_role = Role::create(['name' => 'bookepper']);
 
-        $bookepper = User::where('email', 'honeybeb@admin.com')->first();
-        $bookepper->givePermissionTo(['report_access', 'report_show']);
+        $bookepper = User::where('email', 'honeybeb@admin.com')->withTrashed()->first();
+        $bookepper->givePermissionTo(['report_access']);
         $bookepper->assignRole('bookepper');
 
         $business_admin_role = Role::create(['name' => 'business administrator']);
-        $business_ad = User::where('email', 'rose@admin.com')->first();
+        $business_ad = User::where('email', 'rose@admin.com')->withTrashed()->first();
         $business_ad->givePermissionTo([
             'calendar_access',
-            'calendar_create',
-            'calendar_show',
 
             'reservation_access',
             'reservation_create',
-            'reservation_show',
 
             'receipt_access',
             'receipt_create',
-            'receipt_show',
             
             'location_access',
             'location_create',
-            'location_show',
 
             'invoice_access',
             'invoice_create',
-            'invoice_show',
         ]);
         $business_ad->assignRole('business administrator');
 

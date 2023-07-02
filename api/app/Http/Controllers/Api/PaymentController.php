@@ -49,6 +49,8 @@ class PaymentController extends Controller
      */
     public function store(PaymentRequest $request)
     {
+        $this->authorize('receipt_create');
+
         try {
             DB::beginTransaction();
 

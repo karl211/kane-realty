@@ -58,6 +58,8 @@ class BuyerUpdateOrPropertyRequest extends FormRequest
             $recent_reservation = $buyer->reservations()->latest()->first();
             
             if ($this->selected_property) {
+                abort_if(! auth()->user()->hasPermissionTo('reservation_edit'), 403, 'This action is unauthorized');
+
                 $reservation = $buyer->reservations()->where('property_id', $this->selected_property)->first();
                 
                 $reservation->property->update([
@@ -74,6 +76,8 @@ class BuyerUpdateOrPropertyRequest extends FormRequest
                     'transaction_at' => $choose_property['transaction_at'],
                 ]);
             } else {
+                abort_if(! auth()->user()->hasPermissionTo('reservation_create'), 403, 'This action is unauthorized');
+
                 $reservation = $buyer->reservations()->create([
                     'property_id' => $property->id,
                     'co_borrower_id' => $recent_reservation->co_borrower_id,

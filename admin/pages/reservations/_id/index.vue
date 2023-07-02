@@ -531,7 +531,7 @@ export default {
                 if (error.response) {
                     Swal.fire(
                         'Ops.',
-                        'Something went wrong',
+                        error.response.data.message,
                         'warning'
                     )
                     this.errors = error.response.data.errors
@@ -639,7 +639,7 @@ export default {
                 if (error.response) {
                     Swal.fire(
                         'Ops.',
-                        'Something went wrong',
+                        error.response.data.message,
                         'warning'
                     )
                     this.errors = error.response.data.errors

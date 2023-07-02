@@ -149,7 +149,7 @@ export default {
                 if (error.response) {
                     Swal.fire(
                         'Ops.',
-                        'Something went wrong',
+                        error.response.data.message,
                         'warning'
                     )
                     // const self = this
