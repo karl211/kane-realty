@@ -135,6 +135,23 @@ export default {
                 ]
             },
             { 
+                key: 'document_access', 
+                label: 'documents', 
+                value: false,
+                sub_accesses: [
+                    {
+                        key: 'document_edit',
+                        label: 'edit',
+                        value: false
+                    },
+                    {
+                        key: 'document_delete',
+                        label: 'delete',
+                        value: false
+                    }
+                ]
+            },
+            { 
                 key: 'receipt_access', 
                 label: 'receipts', 
                 value: false,

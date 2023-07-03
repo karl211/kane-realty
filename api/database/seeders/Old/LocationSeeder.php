@@ -2,7 +2,7 @@
 
 namespace Database\Seeders\Old;
 
-use App\Models\Role;
+use Spatie\Permission\Models\Role;
 use App\Models\Branch;
 use App\Models\Location;
 use Illuminate\Database\Seeder;
@@ -22,38 +22,28 @@ class LocationSeeder extends Seeder
         
         $roles = [
             [
-                'name' => 'admin',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'name' => 'Super Admin',
             ],
             [
-                'name' => 'cashier',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'name' => 'bookepper',
+            ],
+            [
+                'name' => 'business administrator',
             ],
             [
                 'name' => 'sales manager',
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'sales agent',
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'buyer',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'bookkeeper',
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
         ];
 
-        Role::insert($roles);
+        foreach ($roles as $role) {
+            Role::create($role);
+        }
 
         $locations = DB::connection('mysql2')->select("
         SELECT DISTINCT

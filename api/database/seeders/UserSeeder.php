@@ -24,6 +24,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+        // php artisan db:seed --class="Database\\Seeders\\UserSeeder"
         // \App\Models\User::factory(5000)->create(); 
         $roles = [
             [
@@ -69,7 +70,6 @@ class UserSeeder extends Seeder
 
         $users =  [
             [
-                'role_id' => 1,
                 'branch_id' => 1,
                 'name' => 'Super Admin',
                 'email' => 'kane@admin.com',
@@ -89,7 +89,6 @@ class UserSeeder extends Seeder
             $slug = SlugService::createSlug(User::class, 'slug', $name);
 
             $user = User::create([
-                "role_id" => $role->id,
                 'branch_id' => 1,
                 "name" => $name,
                 "email" => Str::random(10). '@gmail.com',
@@ -115,14 +114,14 @@ class UserSeeder extends Seeder
                 'photo' => 'https://loremflickr.com/640/480/business?'. random_int(1, 5000),
             ]);
 
-            if ($role->id == 5) {
+            if ($role->name == 'buyer') {
                 for ($i2=1; $i2 < 2; $i2++) {
                     $doc = Document::inRandomOrder()->first();
                     $user->documents()->attach($doc->id);
                 }
             }
 
-            if ($role->id == 3) {
+            if ($role->name == 'sales manager') {
                 NetworkSalesManager::insert([
                     "network_id" => Network::inRandomOrder()->first()->id,
                     "manager_id" => $user->id,
@@ -131,8 +130,12 @@ class UserSeeder extends Seeder
                 ]);
             }
 
-            if ($role->id == 4) {
-                $manager = User::where('role_id', 3)->inRandomOrder()->first();
+            if ($role->name == 'sales agent') {
+                $manager = User::whereHas('roles', function($q) {
+                        $q->where('name', 'sales agent');
+                    })
+                    ->inRandomOrder()
+                    ->first();
 
                 if ($manager) {
                     SalesManagerAgent::insert([

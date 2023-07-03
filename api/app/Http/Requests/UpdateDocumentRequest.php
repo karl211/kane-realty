@@ -59,6 +59,8 @@ class UpdateDocumentRequest extends FormRequest
                     ->first();
 
             if ($db_document && $this[$document->title] == 'null') {
+                abort_if(! auth()->user()->hasPermissionTo('document_delete'), 403, 'Remove document is unauthorized');
+
                 Storage::disk('s3')->delete('buyers/' . $buyer->id . '/' . $document->title . '/' . $db_document->file);
 
                 $buyer->documents()->newPivotQuery()
@@ -69,6 +71,8 @@ class UpdateDocumentRequest extends FormRequest
                     ->delete();
             }
             else if ($this->hasFile($document->title)) {
+                abort_if(! auth()->user()->hasPermissionTo('document_edit'), 403, 'This action is unauthorized');
+
                 if ($db_document && $db_document->file) {
                     Storage::disk('s3')->delete('buyers/' . $buyer->id . '/' . $document->title . '/' . $db_document->file);
                 }

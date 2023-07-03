@@ -24,20 +24,6 @@ class ExpenseRequest extends FormRequest
      */
     public function authorize()
     { 
-        // $this->reservation = Reservation::with('payments', 'property')->findOrFail($this->reservation_id);
-        
-        // $total_payments = (int) $this->reservation->payments()->total();
-
-        // $this->buyer = User::where('role_id', 5)->findOrFail($this->buyer_id);
-
-        // if ($total_payments >= $this->reservation->contract_price) {
-        //     abort(403, 'This property is fully paid');
-        // }
-
-        // if (!$this->buyer) {
-        //     abort(403, 'Not authorized');
-        // }
-
         return true;
     }
 

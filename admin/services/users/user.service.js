@@ -2,10 +2,6 @@ import BaseService from '../base.services'
 
 const userService = class UserService extends BaseService
 {
-    all(params = {}){
-        return super.get(`${this.baseURL}/users`, params);
-    }
-
     employees(params = {}){
         return super.get(`${this.baseURL}/users/employees`, params);
     }

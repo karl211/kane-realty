@@ -20,18 +20,15 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('profile')->where('role_id', '!=', 5)
-            ->with('roles')
-            ->where('role_id', '!=' ,auth()->user()->id)
-            ->get();
-
-        return UserResource::collection($users);
+  
     }
 
     public function getEmployees()
     {
-        $users = User::with('profile')->where('role_id', '!=', 5)
-            ->where('role_id', '!=' ,auth()->user()->id)
+        $this->authorize('user_access');
+
+        $users = User::with('profile')
+            ->where('id', '!=' ,auth()->user()->id)
             ->whereHas('roles', function($q) {
                 $q->whereIn('name', ['bookepper', 'business administrator']);
             })
@@ -42,7 +39,10 @@ class UserController extends Controller
 
     public function getSalesManagers()
     {
-        $users = User::where('role_id', 3)->get();
+        $users = User::whereHas('roles', function($q) {
+            $q->where('name', 'sales manager');
+        })
+        ->get();
 
         return response()->json(['data' => $users]);
     }

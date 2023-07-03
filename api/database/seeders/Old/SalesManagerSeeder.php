@@ -77,7 +77,6 @@ class SalesManagerSeeder extends Seeder
             ->updateOrCreate([
                 'email' => $manager->Email
             ], [
-                "role_id" => 3,
                 'slug' => $slug,
                 'password' => Hash::make('secretpass' . strtolower($manager->LastName)), // password
             ]);
@@ -103,7 +102,6 @@ class SalesManagerSeeder extends Seeder
                 ->updateOrCreate([
                     'email' => $agent->Email
                 ], [
-                    "role_id" => 4,
                     'slug' => $slug,
                     'password' => Hash::make('secretpass' . strtolower($agent->LastName)), // password
                 ]);

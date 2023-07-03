@@ -20,11 +20,23 @@ class ReservationFactory extends Factory
      */
     public function definition()
     {
-        $buyer = User::with('coBorrowers')->where('role_id', 5)->inRandomOrder()->first();
+        $buyer = User::with('coBorrowers')->whereHas('roles', function($q) {
+                $q->where('name', 'buyer');
+            })
+            ->inRandomOrder()
+            ->first();
         $attorny = Attorney::inRandomOrder()->first();
         $network = Network::inRandomOrder()->first();
-        $manager = User::where('role_id', 3)->inRandomOrder()->first();
-        $agent = User::where('role_id', 4)->inRandomOrder()->first();
+        $manager = User::whereHas('roles', function($q) {
+                $q->where('name', 'sales manager');
+            })
+            ->inRandomOrder()
+            ->first();
+        $agent = User::whereHas('roles', function($q) {
+                $q->where('name', 'sales agent');
+            })
+            ->inRandomOrder()
+            ->first();
 
         if ($buyer && $manager && $attorny) {
             return [

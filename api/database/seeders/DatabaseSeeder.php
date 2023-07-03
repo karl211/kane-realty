@@ -2,17 +2,18 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Database\Seeders\BranchSeeder;
 use Database\Seeders\DocumentSeeder;
 use Database\Seeders\Old\UserSeeder;
-use Database\Seeders\Old\ReservationSeeder;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\Old\PaymentSeeder;
 use Database\Seeders\Old\LocationSeeder;
 use Database\Seeders\Old\PropertySeeder;
-use Database\Seeders\Old\BuyerDocumentSeeder;
+use Database\Seeders\Old\ReservationSeeder;
 use Database\Seeders\Old\SalesManagerSeeder;
-use Database\Seeders\Old\PaymentSeeder;
+use Database\Seeders\Old\BuyerDocumentSeeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -28,7 +29,9 @@ class DatabaseSeeder extends Seeder
             LocationSeeder::class,
             PropertySeeder::class,
             DocumentSeeder::class,
+            
             UserSeeder::class,
+            PermissionSeeder::class,
             ReservationSeeder::class,
             PaymentSeeder::class,
             // BuyerDocumentSeeder::class,

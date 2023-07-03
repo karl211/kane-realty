@@ -25,7 +25,6 @@ class User extends Authenticatable
         'branch_id',
         'email',
         'password',
-        'role_id',
         'slug',
     ];
 
@@ -85,11 +84,6 @@ class User extends Authenticatable
     public function reservations()
     {
         return $this->hasMany(Reservation::class, 'buyer_id');
-    }
-
-    public function role()
-    {
-        return $this->belongsTo(Role::class, 'role_id');
     }
 
     public function documents()

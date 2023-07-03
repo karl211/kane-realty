@@ -25,7 +25,43 @@ class PermissionSeeder extends Seeder
         // create permissions
         $permissions = [
             'dashboard_access',
-            'user_management_access',
+
+            'calendar_access',
+
+            'reservation_create',
+            'reservation_edit',
+            'reservation_delete',
+            'reservation_access',
+
+            'document_access',
+            'document_edit',
+            'document_delete',
+            
+            'receipt_create',
+            'receipt_edit',
+            'receipt_delete',
+            'receipt_access',
+
+            'location_create',
+            'location_edit',
+            'location_delete',
+            'location_access',
+
+            'invoice_access',
+            'invoice_create',
+            'invoice_edit',
+            'invoice_delete',
+
+            'report_access',
+            'report_create',
+            'report_edit',
+            'report_delete',
+
+            'user_create',
+            'user_edit',
+            'user_delete',
+            'user_access',
+
             'permission_create',
             'permission_edit',
             'permission_delete',
@@ -34,31 +70,6 @@ class PermissionSeeder extends Seeder
             'role_edit',
             'role_delete',
             'role_access',
-            'user_create',
-            'user_edit',
-            'user_delete',
-            'user_access',
-            'calendar_access',
-            'reservation_create',
-            'reservation_edit',
-            'reservation_delete',
-            'reservation_access',
-            'receipt_create',
-            'receipt_edit',
-            'receipt_delete',
-            'receipt_access',
-            'location_create',
-            'location_edit',
-            'location_delete',
-            'location_access',
-            'invoice_access',
-            'invoice_create',
-            'invoice_edit',
-            'invoice_delete',
-            'report_access',
-            'report_create',
-            'report_edit',
-            'report_delete',
         ];
 
         foreach ($permissions as $permission)   {
@@ -68,18 +79,18 @@ class PermissionSeeder extends Seeder
         }
 
         // gets all permissions via Gate::before rule; see AuthServiceProvider
-        Role::create(['name' => 'Super Admin']);
+        Role::updateOrCreate(['name' => 'Super Admin']);
         $admin = User::where('email', 'kane@admin.com')->first();
         $admin->assignRole('Super Admin');
 
         
-        $bookepper_role = Role::create(['name' => 'bookepper']);
+        $bookepper_role = Role::updateOrCreate(['name' => 'bookepper']);
 
         $bookepper = User::where('email', 'honeybeb@admin.com')->withTrashed()->first();
         $bookepper->givePermissionTo(['report_access']);
         $bookepper->assignRole('bookepper');
 
-        $business_admin_role = Role::create(['name' => 'business administrator']);
+        $business_admin_role = Role::updateOrCreate(['name' => 'business administrator']);
         $business_ad = User::where('email', 'rose@admin.com')->withTrashed()->first();
         $business_ad->givePermissionTo([
             'calendar_access',
@@ -105,7 +116,18 @@ class PermissionSeeder extends Seeder
         ];
 
         foreach ($roles as $new_role) {
-            Role::create($new_role);
+            Role::updateOrCreate($new_role);
+        }
+
+        $this->updateBuyersRole();
+    }
+
+    protected function updateBuyersRole()
+    {
+        $buyers = User::doesntHave('roles')->get();
+
+        foreach ($buyers as $buyer) {
+            $buyer->assignRole('buyer');
         }
     }
 }

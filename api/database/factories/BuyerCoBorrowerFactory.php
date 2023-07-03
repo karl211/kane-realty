@@ -18,7 +18,11 @@ class BuyerCoBorrowerFactory extends Factory
     public function definition()
     {
         return [
-            'buyer_id' => User::where('role_id', 5)->inRandomOrder()->first()->id,
+            'buyer_id' => User::whereHas('roles', function($q) {
+                    $q->where('name', 'buyer');
+                })
+                ->inRandomOrder()
+                ->first()->id,
             'first_name' => fake()->name(),
             'last_name' => fake()->name(),
             'middle_name' => fake()->name(),

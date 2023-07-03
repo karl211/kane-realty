@@ -251,18 +251,18 @@ class ReservationRequest extends FormRequest
 
     protected function createBuyer()
     {
-        $role = Role::where('name', 'buyer')->first();
         $name = $this->personal_information['first_name'] . ' ' . $this->personal_information['last_name'];
         $slug = SlugService::createSlug(User::class, 'slug', $name);
 
         $buyer = User::create([
             "branch_id" => $this->branch_id,
-            "role_id" => $role->id,
             "name" => $name,
             "email" => $this->personal_information['email'],
             "slug" => $slug,
             'password' => Hash::make(Str::random(10))
         ]);
+
+        $buyer->assignRole('buyer');
         
         $this->createBuyerProfile($buyer);
 

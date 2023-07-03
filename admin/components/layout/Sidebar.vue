@@ -82,7 +82,7 @@ export default {
             { menu_id: 'location_access', isShow: false, title: 'Locations', icon: 'mdi-home-group', to: '/locations' },
             { menu_id: 'invoice_access', isShow: false, title: 'Invoices', icon: 'mdi-list-box-outline', to: '/invoices' },
             { menu_id: 'report_access', isShow: false, title: 'Reports', icon: 'mdi-note', to: '/reports' },
-            { menu_id: 'user_management_access', isShow: false, title: 'Users', icon: 'mdi-account', to: '/users' },
+            { menu_id: 'user_access', isShow: false, title: 'Users', icon: 'mdi-account', to: '/users' },
         ],
         admins: [
             { title: 'Sales', icon: 'mdi-network-pos', to: '/reports/sales' },

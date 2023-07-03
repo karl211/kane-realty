@@ -96,8 +96,6 @@ Route::middleware('auth:sanctum')
         });
 
         Route::prefix('users')->group(function(){
-            Route::get('/', [UserController::class, 'index']);
-
             Route::get('/search', [UserController::class, 'searchBuyer']);
 
             Route::get('/employees', [UserController::class, 'getEmployees']);
