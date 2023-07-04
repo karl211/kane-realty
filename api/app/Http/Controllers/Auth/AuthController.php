@@ -36,7 +36,7 @@ class AuthController extends Controller
 
     public function getUser(Request $request)
     {
-        $user_menu = auth()->user()->getAllPermissions()->whereIn('name', [
+        auth()->user()->getAllPermissions()->whereIn('name', [
             'user_management_access',
             'permission_access',
             'role_access',
