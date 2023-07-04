@@ -459,7 +459,15 @@ export default {
                 // this.payments = response.data.data
                 this.loaded = true
                 this.loading = false
-            });
+            }).catch(error => {
+                if (error.response) {
+                    Swal.fire(
+                        'Ops.',
+                        error.response.data.message,
+                        'warning'
+                    )
+                }
+            })
         },
         paginate(pageNumber) {
             this.search.page = pageNumber

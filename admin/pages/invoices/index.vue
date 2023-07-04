@@ -113,6 +113,7 @@
 
 <script>
 import _ from "lodash";
+import Swal from 'sweetalert2'
 import { Invoice } from '../../services/invoices'
 export default {
     name: "PaymentsIndex",
@@ -197,7 +198,15 @@ export default {
                     }
                     return false
                 })
-            });
+            }).catch(error => {
+                if (error.response) {
+                    Swal.fire(
+                        'Ops.',
+                        error.response.data.message,
+                        'warning'
+                    )
+                }
+            })
         },
 
         selectFilter () {

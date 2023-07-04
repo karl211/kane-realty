@@ -28,6 +28,8 @@ class ReservationController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('reservation_access');
+
         $reservations = Reservation::with('property', 'buyer', 'payments')
             ->has('buyer.profile')
             ->when(request()->search, function ($query) {
@@ -65,6 +67,8 @@ class ReservationController extends Controller
      */
     public function store(ReservationRequest $request)
     {
+        $this->authorize('reservation_create');
+
         try {
             DB::beginTransaction();
 
@@ -85,6 +89,8 @@ class ReservationController extends Controller
 
     public function updateOrCreateProperty(User $buyer, BuyerUpdateOrPropertyRequest $request)
     {
+        
+
         try {
             DB::beginTransaction();
 
@@ -126,7 +132,8 @@ class ReservationController extends Controller
 
     public function updatePayment(User $buyer, UpdatePaymentRequest $request)
     {
-        // return $request->all();
+        $this->authorize('receipt_edit');
+
         try {
             DB::beginTransaction();
 
@@ -216,6 +223,8 @@ class ReservationController extends Controller
      */
     public function destroy(Request $request)
     {
+        $this->authorize('reservation_delete');
+
         try {
             DB::beginTransaction();
 
@@ -237,6 +246,8 @@ class ReservationController extends Controller
 
     public function deletePayment(Request $request)
     {
+        $this->authorize('receipt_delete');
+
         try {
             DB::beginTransaction();
 

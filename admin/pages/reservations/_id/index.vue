@@ -150,13 +150,13 @@
                                                         <th class="text-left">
                                                             Mode
                                                         </th>
-                                                        <th class="text-left">
+                                                        <th class="text-center">
                                                             Image
                                                         </th>
                                                         <th class="text-left">
                                                             Amount
                                                         </th>
-                                                        <th class="text-left">
+                                                        <th class="text-center">
                                                             
                                                         </th>
                                                     </tr>
@@ -168,10 +168,20 @@
                                                         <td width="250">{{ payment.paid_at }}</td>
                                                         <td width="250">{{ payment.ar_number }}</td>
                                                         <td width="250">{{ payment.or_number }}</td>
-                                                        <td width="250">{{ payment.paid_at }}</td>
                                                         <td width="250">{{ payment.type_of_payment }}</td>
                                                         <td width="150">{{ payment.mode_of_payment }}</td>
-                                                        <td width="150">{{ payment.original_image || 'NONE' }}</td>
+                                                        
+                                                        <td width="150">
+                                                            <v-img
+                                                                v-if="payment.file_url"
+                                                                contain
+                                                                max-height="100"
+                                                                max-width="100"
+                                                                :src="payment.file_url"
+                                                                class="mx-auto"
+                                                            />
+                                                            <span v-else>NONE</span>
+                                                        </td>
                                                         <td width="150">{{ '₱' + Number(payment.amount).toLocaleString() }}</td>
                                                         <td width="150">
                                                             <v-icon @click="showUpdatePayment(payment)">mdi-pencil-plus-outline</v-icon>
@@ -188,7 +198,8 @@
                                                     <tr>
                                                         <td width="250"><h4>TOTAL:</h4></td>
                                                         <td width="250"></td>
-                                                        <td width="150"></td>
+                                                        <td width="250"></td>
+                                                        <td width="250"></td>
                                                         
                                                         <td width="150" class="text-left">
                                                             <h3>{{ '₱' + Number(item.total_payment).toLocaleString() }}</h3>
@@ -531,7 +542,7 @@ export default {
                 if (error.response) {
                     Swal.fire(
                         'Ops.',
-                        'Something went wrong',
+                        error.response.data.message,
                         'warning'
                     )
                     this.errors = error.response.data.errors
@@ -571,13 +582,9 @@ export default {
                         if (error.response) {
                             Swal.fire(
                                 'Ops.',
-                                'Something went wrong',
+                                error.response.data.message,
                                 'warning'
                             )
-                            // const self = this
-                            // setTimeout(() => {
-                                
-                            // }, 1000);
                             this.errors = error.response.data.errors
                         }
                     })
@@ -614,11 +621,25 @@ export default {
             }).catch(error => {
                 // Handle error
                 if (error.response) {
-                    Swal.fire(
-                        'Ops.',
-                        'Something went wrong',
-                        'warning'
-                    )
+                    if (error.response.data.message === 'Remove document is unauthorized') {
+                        Swal.fire({
+                            title: 'Ops',
+                            text: 'Remove document is unauthorized',
+                            confirmButtonText: 'Okay',
+                            icon: 'warning',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload()
+                            }
+                        })
+                    } else {
+                        Swal.fire(
+                            'Ops.',
+                            error.response.data.message,
+                            'warning'
+                        )
+                    }
+                    
                     this.errors = error.response.data.errors
                 }
             })
@@ -643,7 +664,7 @@ export default {
                 if (error.response) {
                     Swal.fire(
                         'Ops.',
-                        'Something went wrong',
+                        error.response.data.message,
                         'warning'
                     )
                     this.errors = error.response.data.errors
@@ -683,7 +704,7 @@ export default {
                         if (error.response) {
                             Swal.fire(
                                 'Ops.',
-                                'Something went wrong',
+                                error.response.data.message,
                                 'warning'
                             )
                             // const self = this
@@ -734,7 +755,7 @@ export default {
                 if (error.response) {
                     Swal.fire(
                         'Ops.',
-                        'Something went wrong',
+                        error.response.data.message,
                         'warning'
                     )
                     this.errors = error.response.data.errors

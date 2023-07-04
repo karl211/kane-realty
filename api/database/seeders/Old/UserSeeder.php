@@ -25,7 +25,6 @@ class UserSeeder extends Seeder
         $slug = SlugService::createSlug(User::class, 'slug', 'Super Admin');
         $users =  [
             [
-                'role_id' => 1,
                 'branch_id' => 1,
                 'email' => 'kane@admin.com',
                 'email_verified_at' => now(),
@@ -36,7 +35,6 @@ class UserSeeder extends Seeder
                 'middle_name' => 'Admin',
             ],
             [
-                'role_id' => 6,
                 'branch_id' => 1,
                 'email' => 'honeybeb@admin.com',
                 'email_verified_at' => now(),
@@ -47,7 +45,6 @@ class UserSeeder extends Seeder
                 'middle_name' => 'Admin',
             ],
             [
-                'role_id' => 6,
                 'branch_id' => 1,
                 'email' => 'rose@admin.com',
                 'email_verified_at' => now(),
@@ -61,13 +58,22 @@ class UserSeeder extends Seeder
 
         foreach ($users as $user) {
             $admin = User::create([
-                'role_id' => $user['role_id'],
                 'branch_id' => $user['branch_id'],
                 'email' => $user['email'],
                 'email_verified_at' => now(),
                 'slug' => $user['slug'],
                 'password' => $user['password']
             ]);
+
+            // if ($user['email'] == 'honeybeb@admin.com') {
+            //     $admin->assignRole('bookepper');
+            // }
+            // else if ($user['email'] == 'rose@admin.com') {
+            //     $admin->assignRole('business administrator');
+            // }
+            // else if ($user['email'] == 'kane@admin.com') {
+            //     $admin->assignRole('Super Admin');
+            // }
 
             $admin->profile()->withoutGlobalScope('default_branch')
             ->updateOrCreate([
@@ -152,13 +158,14 @@ class UserSeeder extends Seeder
             }
             
             $user_data = User::updateOrCreate([
-                "role_id" => 5,
                 'branch_id' => $branch,
                 'email' => $email
             ], [
                 'slug' => $slug,
                 'password' => Hash::make('secretpass' . strtolower($user->last_name)), // password
             ]);
+
+            $user_data->assignRole('buyer');
 
             $user_data->profile()->withoutGlobalScope('default_branch')
             ->updateOrCreate([

@@ -153,10 +153,10 @@
     </v-row>
 </template>
 <script>
+import Swal from 'sweetalert2'
 import { Calendar } from '../../services/calendars'
 export default {
     name: 'CalendarPage',
-    middleware: 'auth',
     data: () => ({
         focus: '',
         type: 'month',
@@ -301,7 +301,6 @@ export default {
 
                     
                     // response.data.forEach(function(i) { count[i.due_date] = (count[i.due_date]||0) + 1;});
-                    console.log(count.sort());
                 }
                 // this.paginateData = response.data
                 // this.loaded = true
@@ -336,7 +335,15 @@ export default {
                 //     }
                 //     return false
                 // })
-            });
+            }).catch(error => {
+                if (error.response) {
+                    Swal.fire(
+                        'Ops.',
+                        error.response.data.message,
+                        'warning'
+                    )
+                }
+            })
         }
         
     },

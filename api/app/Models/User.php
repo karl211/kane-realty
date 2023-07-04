@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,7 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, Sluggable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, Sluggable, SoftDeletes, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +25,6 @@ class User extends Authenticatable
         'branch_id',
         'email',
         'password',
-        'role_id',
         'slug',
     ];
 
@@ -84,11 +84,6 @@ class User extends Authenticatable
     public function reservations()
     {
         return $this->hasMany(Reservation::class, 'buyer_id');
-    }
-
-    public function role()
-    {
-        return $this->belongsTo(Role::class, 'role_id');
     }
 
     public function documents()

@@ -20,8 +20,18 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('profile')->where('role_id', '!=', 5)
-            ->where('role_id', '!=' ,auth()->user()->id)
+  
+    }
+
+    public function getEmployees()
+    {
+        $this->authorize('user_access');
+
+        $users = User::with('profile')
+            ->where('id', '!=' ,auth()->user()->id)
+            ->whereHas('roles', function($q) {
+                $q->whereIn('name', ['bookepper', 'business administrator']);
+            })
             ->get();
 
         return UserResource::collection($users);
@@ -29,7 +39,10 @@ class UserController extends Controller
 
     public function getSalesManagers()
     {
-        $users = User::where('role_id', 3)->get();
+        $users = User::whereHas('roles', function($q) {
+            $q->where('name', 'sales manager');
+        })
+        ->get();
 
         return response()->json(['data' => $users]);
     }
@@ -63,6 +76,42 @@ class UserController extends Controller
         ->paginate(10);
         
         return UserResource::collection($buyers);
+    }
+
+    public function savePermission(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $all_access = [];
+
+            $user =  User::findOrFail($request->user_id);
+
+            $accesses = collect($request->access)->where('value', true);
+
+            foreach ($accesses as $access) {
+                if (isset($access['sub_accesses']) && count($access['sub_accesses'])) {
+                    $all_access[] = $access['key'];
+                    $sub_accesses = collect($access['sub_accesses'])->where('value', true)->pluck('key')->toArray();
+                    $all_access = array_merge($all_access, $sub_accesses);
+                } else {
+                    $all_access[] = $access['key'];
+                }
+            }
+
+            $user->syncPermissions($all_access);
+
+            DB::commit();
+
+            return response()->json([
+                'data'  => $all_access,
+                'message' => 'Successfully saved'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
     }
 
     /**

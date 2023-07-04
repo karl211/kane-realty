@@ -120,6 +120,7 @@
   </div>
 </template>
 <script>
+import Swal from 'sweetalert2'
 import { Dashboard } from '../../services/dashboard'
 export default {
     name: 'HomePages',
@@ -203,7 +204,15 @@ export default {
                         return status
                     })
                 }
-            });
+            }).catch(error => {
+                if (error.response) {
+                    Swal.fire(
+                        'Ops.',
+                        error.response.data.message,
+                        'warning'
+                    )
+                }
+            })
         }
     },
     mounted() {

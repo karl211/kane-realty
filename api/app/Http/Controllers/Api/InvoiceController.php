@@ -16,6 +16,8 @@ class InvoiceController extends Controller
         // if (isset(request('search'))) {
         //     $search = request('search')['search'];
         // }
+
+        $this->authorize('invoice_access');
         
         $reservations = Reservation::with('buyer.profile', 'property', 'payments')
             ->with(['payments' => function($query) {

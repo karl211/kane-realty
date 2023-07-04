@@ -27,7 +27,10 @@ class PaymentRequest extends FormRequest
         
         $total_payments = (int) $this->reservation->payments()->total();
 
-        $this->buyer = User::where('role_id', 5)->findOrFail($this->buyer_id);
+        $this->buyer = User::whereHas('roles', function($q) {
+                $q->where('name', 'buyer');
+            })
+            ->findOrFail($this->buyer_id);
 
         if ($total_payments >= $this->reservation->contract_price) {
             abort(403, 'This property is fully paid');

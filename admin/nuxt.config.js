@@ -115,7 +115,7 @@ export default {
   },
 
   router: {
-    middleware: ['auth']
+    middleware: ['auth', 'menu']
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

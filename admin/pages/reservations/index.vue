@@ -155,7 +155,15 @@ export default {
                 this.reservations = response.data.data
                 this.loaded = true
                 this.loading = false
-            });
+            }).catch(error => {
+                if (error.response) {
+                    Swal.fire(
+                        'Ops.',
+                        error.response.data.message,
+                        'warning'
+                    )
+                }
+            })
         },
 
         paginate(pageNumber) {
@@ -199,13 +207,9 @@ export default {
                         if (error.response) {
                             Swal.fire(
                                 'Ops.',
-                                'Something went wrong',
+                                error.response.data.message,
                                 'warning'
                             )
-                            // const self = this
-                            // setTimeout(() => {
-                                
-                            // }, 1000);
                             this.errors = error.response.data.errors
                         }
                     })

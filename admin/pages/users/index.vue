@@ -24,12 +24,12 @@ import { User } from '../../services/users'
     },
     
     created () {
-        this.getUsers() 
+        this.getEmployees() 
     },
 
     methods: {
-        getUsers () {
-            User.all().then((res) => {
+        getEmployees () {
+            User.employees().then((res) => {
                 this.users = res.data.data
             });
         },

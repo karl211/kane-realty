@@ -58,6 +58,8 @@ class BuyerUpdateOrPropertyRequest extends FormRequest
             $recent_reservation = $buyer->reservations()->latest()->first();
             
             if ($this->selected_property) {
+                abort_if(! auth()->user()->hasPermissionTo('reservation_edit'), 403, 'This action is unauthorized');
+
                 $reservation = $buyer->reservations()->where('property_id', $this->selected_property)->first();
                 
                 $reservation->property->update([
@@ -66,18 +68,20 @@ class BuyerUpdateOrPropertyRequest extends FormRequest
 
                 $reservation->update([
                     'property_id' => $property->id,
-                    'co_borrower_id' => $recent_reservation->co_borrower_id,
-                    'attorney_id' => $recent_reservation->attorney_id,
+                    'co_borrower_id' => (isset($recent_reservation->co_borrower_id)) ? $recent_reservation->co_borrower_id : null,
+                    'attorney_id' => (isset($recent_reservation->attorney_id)) ? $recent_reservation->attorney_id : null,
                     'contract_price' => $property->contract_price,
                     'monthly_amortization' => $property->default_monthly_amortization,
                     'term' => $property->term,
                     'transaction_at' => $choose_property['transaction_at'],
                 ]);
             } else {
+                abort_if(! auth()->user()->hasPermissionTo('reservation_create'), 403, 'This action is unauthorized');
+
                 $reservation = $buyer->reservations()->create([
                     'property_id' => $property->id,
-                    'co_borrower_id' => $recent_reservation->co_borrower_id,
-                    'attorney_id' => $recent_reservation->attorney_id,
+                    'co_borrower_id' => (isset($recent_reservation->co_borrower_id)) ? $recent_reservation->co_borrower_id : null,
+                    'attorney_id' => (isset($recent_reservation->attorney_id)) ? $recent_reservation->attorney_id : null,
                     'contract_price' => $property->contract_price,
                     'monthly_amortization' => $property->default_monthly_amortization,
                     'term' => $property->term,

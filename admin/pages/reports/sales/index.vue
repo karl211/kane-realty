@@ -181,6 +181,7 @@
 
 <script>
 // import _ from "lodash";
+import Swal from 'sweetalert2'
 import moment from 'moment';
 import { Report } from '../../../services/reports'
 export default {
@@ -224,7 +225,15 @@ export default {
 
                 this.sales = data
                 this.years = response.data.years
-            });
+            }).catch(error => {
+                if (error.response) {
+                    Swal.fire(
+                        'Ops.',
+                        error.response.data.message,
+                        'warning'
+                    )
+                }
+            })
         },
 
         calculateTotal (item, month) {

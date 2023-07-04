@@ -36,14 +36,21 @@ class AuthController extends Controller
 
     public function getUser(Request $request)
     {
-        // $data = ['message' => 'This is a test!'];
-
-        // Mail::to('k.monteadora@gmail.com')->send(new TestEmail($data));
-
-        
+        auth()->user()->getAllPermissions()->whereIn('name', [
+            'user_management_access',
+            'permission_access',
+            'role_access',
+            'user_access',
+            'calendar_access',
+            'reservation_access',
+            'receipt_access',
+            'location_access',
+            'invoice_access',
+            'report_access'
+        ])->pluck('name');
 
         return response()->json([
-            'data' => auth()->user()->where('branch_id', 1)->first()
+            'data' => auth()->user()->load('profile'),
         ], 200);
     }
 
