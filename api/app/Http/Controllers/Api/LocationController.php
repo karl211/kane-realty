@@ -69,13 +69,29 @@ class LocationController extends Controller
 
     public function getLocationProperties(Location $location, Request $request)
     {
-        $properties = $location->properties()
-            ->whereNotIn('status', ['Agents', 'Church'])
-            ->search(request('search'))
-            ->paginate(10);
+        $blocks = $location->properties()->pluck('block')->unique()->values();
 
-        return PropertyResource::collection($properties);
-        
+        if ($request->block != 'null' && $request->lot != 'null') {
+
+            $properties = $location->properties()
+                ->whereNotIn('status', ['Agents', 'Church'])
+                ->where('block', $request->block)
+                ->where('lot', $request->lot)
+                ->get();
+        } else {
+            $properties = $location->properties()
+                ->whereNotIn('status', ['Agents', 'Church'])
+                ->where('status', $request->status)
+                ->paginate(10);
+        }
+
+
+        return PropertyResource::customCollection($properties, $blocks);
+    }
+
+    public function getLocationLots(Location $location, Request $request)
+    {
+        return $location->properties()->where('block', $request->block)->pluck('lot')->unique()->values();
     }
 
     /**

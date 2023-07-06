@@ -1,7 +1,7 @@
 <template>
     <section>
         <br>
-        <!-- <div class="d-flex justify-space-between mx-6">
+        <div class="d-flex justify-space-between">
             <h1 class="title ml-2 text-h4">{{ location }} <small>Properties</small></h1>
             <v-btn
                 class="ml-2"
@@ -9,40 +9,43 @@
                 color="info"
                 @click="$router.push('/locations/properties/create?id=' + $route.query.id + '&location=' + location)"
             >
-                <v-icon>mdi-home-plus</v-icon> Add Property
+                <v-icon>mdi-cash-clock</v-icon> &nbsp; New Property
             </v-btn>
-        </div> -->
-        <h1 class="title ml-2 text-h4">{{ location }} <small>Properties</small></h1>
+        </div>
         <br>
         <v-row>
             <v-col>
-                <v-btn
-                    class="ml-2"
-                    elevation="0"
-                    color="info"
-                    @click="$router.push('/locations/properties/create?id=' + $route.query.id + '&location=' + location)"
-                >
-                    <v-icon>mdi-cash-clock</v-icon> &nbsp; New Property
-                </v-btn>
+                
+                <v-select
+                    v-if="statuses.length"
+                    v-model="filter_property.status"
+                    :items="statuses"
+                    label="Filter Property"
+                    dense
+                    outlined
+                    class="mx-1 w-10"
+                    @change="selectFilter"
+                />
             </v-col>
-            <v-col sm="2">
+            <v-col sm="3">
                 <section class="d-flex">
-                    <!-- <v-text-field
-                        label="Search status"
-                        dense
-                        outlined
-                        class="mx-1"
-                        @input="searchProperty"
-                    ></v-text-field> -->
                     <v-select
-                        v-if="statuses.length"
-                        v-model="filter_status"
-                        :items="statuses"
-                        label="Filter Property"
+                        v-model="filter_property.block"
+                        :items="blocks"
+                        label="Block"
                         dense
                         outlined
                         class="mx-1"
-                        @change="selectFilter"
+                        @change="selectBlock"
+                    />
+                    <v-select
+                        v-model="filter_property.lot"
+                        :items="lots"
+                        label="Lot"
+                        dense
+                        outlined
+                        class="mx-1"
+                        @change="selectLot"
                     />
                 </section>
             </v-col>
@@ -81,6 +84,7 @@
                             color="warning"
                             small
                             icon
+                            @click="showUpdateProperty(item)"
                         >
                             <v-icon>mdi-file-edit-outline</v-icon>
                         </v-btn>
@@ -100,44 +104,16 @@
         </v-data-table>
         <v-row justify="space-between">
             <v-col></v-col>
-            <v-col class="text-right">
-            <TablePagination
-                v-if="properties.length"
-                :paginate-data="paginateData"
-                @paginate="paginate"
-            />
+            <v-col v-if="properties.length && paginateData" class="text-right">
+                <TablePagination
+                    :paginate-data="paginateData"
+                    @paginate="paginate"
+                />
             </v-col>
         </v-row>
-        <div class="container-wrap">
-            
-            <!-- <v-card
-                class="mx-auto mb-10"
-                max-width="350"
-                v-for="(property, i) in properties" :key="i"
-            >
-                <v-img
-                    class="white--text align-end"
-                    height="200px"
-                    :src="property.photo"
-                >
-                <v-card-title>{{ property.model }}</v-card-title>
-                </v-img>
-
-                <v-card-text class="text--primary">
-                    <div>Status: <span class="green--text font-weight-medium">{{ property.status }}</span></div>
-                    <div>Block {{ property.block }}, Lot {{ property.lot }} <span v-if="property.phase">, Phase {{ property.phase }}</span></div>
-                    <div>Lot Size: {{ property.lot_size }}</div>
-                    <div>Floor Area: {{ property.floor_area }}</div>
-                    <div>Contract Price: {{ '₱' + Number(property.contract_price).toLocaleString() }}</div>
-                    <div>Default Amortization: {{ '₱' + Number(property.default_monthly_amortization).toLocaleString() }}</div>
-                    <div>Term: {{ property.term }}</div>
-                </v-card-text>
-            </v-card>
-            <div class="filling-empty-space-childs"></div>
-            <div class="filling-empty-space-childs"></div>
-            <div class="filling-empty-space-childs"></div> -->
-        </div>
+        <PropertyEdit :value="showEditProperty" @close="showEditProperty = false"/>
     </section>
+    
 </template>
 
 <script>
@@ -147,9 +123,9 @@ export default {
     name: "PropertiesIndex",
     data () {
         return {
-            filter_status: 'Reserved',
             loading: false,
             location: null,
+            locationId: null,
             headers: [
                 { text: "Image" , align: "left" },
                 { text: "Property" , align: "left" },
@@ -161,13 +137,20 @@ export default {
                 { text: "Status " , align: "left" },
                 { text: "Actions", align: "left" },
             ],
+            blocks: [],
+            lots: [],
             statuses: [],
             properties: [],
-            search: {
+            filter_property: {
+                block: null,
+                lot: null,
+                status: 'Reserved',
                 page: 1,
                 search: ''
             },
             paginateData: null,
+            showEditProperty: false,
+            selectedProperty: {},
         }
     },
 
@@ -182,6 +165,12 @@ export default {
     },
 
     methods: {
+        pluck(array, key) {
+            return array.map(function(obj) {
+                return obj[key];
+            });
+        },
+        
         getStatuses() {
             Property.statuses(this.search, this.$route.query.id).then((response) => {
                 if (response.data.length) {
@@ -191,38 +180,65 @@ export default {
         },
 
         getProperties() {
-            Property.locationProperties(this.search, this.$route.query.id).then((response) => {
+            Property.locationProperties(this.filter_property, this.$route.query.id).then((response) => {
                 if (response.data.data.length) {
-                    // console.log(response.data.data)
-                    // this.properties = response.data
                     this.location = response.data.data[0].location.location
-
-                    this.paginateData = response.data
+                    this.locationId = response.data.data[0].location.id
                     this.properties = response.data.data
+                    this.blocks = response.data.data[0].blocks
                     this.loaded = true
                     this.loading = false
+
+                    if (response.data?.links) {
+                        this.paginateData = response.data
+                    } else {
+                        this.paginateData = null
+                    }
                 }
             });
         },
 
+        getPropertiesLots() {
+            Property.getLots({block: this.filter_property.block}, this.locationId).then((response) => {
+                this.lots = response.data
+            });
+        },
+
         paginate(pageNumber) {
-            this.search.page = pageNumber
+            this.filter_property.page = pageNumber
             this.getProperties();
         },
 
         searchProperty(value) {
             this.properties = []
-            this.search.page = 1
-            this.search.search = value
+            this.filter_property.page = 1
+            this.filter_property.search = value
 
             this.getProperties()
         },
 
-        selectFilter(value) {
-            this.properties = []
-            this.search.page = 1
-            this.search.search = value
+        selectBlock() {
+            this.filter_property.lot = null
+            this.filter_property.status = null
+            this.getPropertiesLots()
+        },
+
+        selectLot() {
             this.getProperties()
+        },
+
+        selectFilter() {
+            this.properties = []
+            this.filter_property.block = null
+            this.filter_property.lot = null
+            this.filter_property.page = 1
+
+            this.getProperties()
+        },
+
+        showUpdateProperty(item) {
+            this.showEditProperty = true
+            this.selectedProperty= item
         }
     },
 }

@@ -37,6 +37,7 @@ class PaymentResource extends JsonResource
             'property' => $this->reservation->property->full_property,
             'contract_price' => $this->reservation->contract_price,
             'balance' => $this->reservation->contract_price,
+            'buyer' => $this->buyer,
             'file_name' => $this->image,
             'file_url' => $file_url,
         ];

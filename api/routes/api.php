@@ -57,6 +57,8 @@ Route::middleware('auth:sanctum')
 
         Route::get('/locations/{location}/properties', [LocationController::class, 'getLocationProperties']);
 
+        Route::get('/locations/{location}/lots', [LocationController::class, 'getLocationLots']);
+
         
         
         Route::get('/reservations', [ReservationController::class, 'index']);

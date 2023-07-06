@@ -171,6 +171,10 @@ export default {
             type: Object,
             default: () => {}
         },
+        buyerSlug: {
+            type: String,
+            default: ''
+        },
         errors: {
             type: Object,
             default: () => {}
@@ -264,7 +268,6 @@ export default {
 
     created () {
         if (this.payment) {
-            console.log(this.payment)
             this.selectedPayment = this.payment
             if (this.payment.file_name) {
                 this.selectedPayment.file_name = new File([this.payment.file_url], this.payment.file_name, {
@@ -303,6 +306,8 @@ export default {
         getProperty () {
             if (this.$route.params?.id) {
                 this.getBuyer(this.$route.params?.id)
+            } else {
+                this.getBuyer(this.buyerSlug)
             }
 
             if (this.payment) {

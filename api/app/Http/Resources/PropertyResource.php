@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class PropertyResource extends JsonResource
 {
+    private static $blocks;
     /**
      * Transform the resource into an array.
      *
@@ -40,6 +41,15 @@ class PropertyResource extends JsonResource
             'term' => $this->term,
             'location' => $this->location,
             'status' => $this->status,
+            'blocks' => self::$blocks,
         ];
+    }
+
+    //I made custom function that returns collection type
+    public static function customCollection($resource, $blocks): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    {
+        //you can add as many params as you want.
+        self::$blocks = $blocks;
+        return parent::collection($resource);
     }
 }
