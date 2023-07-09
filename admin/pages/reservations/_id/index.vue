@@ -558,10 +558,10 @@ export default {
 
         deleteReservation (reservation) {
             Swal.fire({
+                icon: 'warning',
                 title: 'Are you sure you want to delete this property?',
                 showCancelButton: true,
                 confirmButtonText: 'Yes',
-                icon: 'warning',
             }).then((result) => {
                 if (result.isConfirmed) {
                     Reservations.removeReservation({id: reservation.id}).then((response) => {
@@ -680,10 +680,10 @@ export default {
 
         deletePayment (payment) {
             Swal.fire({
+                icon: 'warning',
                 title: 'Are you sure you want to delete this payment?',
                 showCancelButton: true,
                 confirmButtonText: 'Yes',
-                icon: 'warning',
             }).then((result) => {
                 if (result.isConfirmed) {
                     Reservations.removePayment(this.buyer.slug, {id: payment.payment_id}).then((response) => {

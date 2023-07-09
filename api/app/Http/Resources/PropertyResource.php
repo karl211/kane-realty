@@ -17,12 +17,28 @@ class PropertyResource extends JsonResource
     public function toArray($request)
     {
         $file = null;
+        $active_color = null;
         $file_path = 'properties/' . $this->id . '/' . $this->photo;
 
         if ($this->photo) {
             $file = Storage::disk('s3')->temporaryUrl($file_path, now()->addMinutes(2));
         } else {
             $file = url('/images/default-property.gif');
+        }
+
+        switch ($this->status) {
+            case 'Available':
+                $active_color = 'green';
+                break;
+            case 'Reserved':
+                $active_color = 'orange';
+                break;
+            case 'Cancelled':
+                $active_color = 'red';
+                break;
+            case 'For Assume':
+                $active_color = 'blue';
+                break;
         }
 
         return [
@@ -42,6 +58,8 @@ class PropertyResource extends JsonResource
             'location' => $this->location,
             'status' => $this->status,
             'blocks' => self::$blocks,
+            'edit_status' => false,
+            'active_color' => $active_color,
         ];
     }
 

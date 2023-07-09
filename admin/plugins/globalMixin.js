@@ -89,7 +89,11 @@ const mixin = {
         formatAmount (amount) {
             if (!amount) return null
 
-            return amount.replaceAll(',', '')
+            if (typeof amount === 'string') {
+                return amount.replaceAll(',', '')
+            }
+
+            return amount
         },
 
         url (key) {

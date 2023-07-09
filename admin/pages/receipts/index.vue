@@ -280,6 +280,7 @@ export default {
         },
         deletePayment(item) {
             Swal.fire({
+                icon: 'warning',
                 title: 'Do you want to delete this payment?',
                 showCancelButton: true,
                 confirmButtonText: 'Yes',

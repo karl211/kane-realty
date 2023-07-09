@@ -17,7 +17,6 @@
                             <v-col cols="12">
                                 <v-card
                                     class="m-auto"
-                                    min-height="830px"
                                 >
                                     <v-card-text class="text-left">
                                         <v-row>
@@ -92,7 +91,7 @@
                                             </v-col>
                                         </v-row>
                                         <v-row>
-                                            <v-col cols="3">
+                                            <v-col cols="6">
                                                 <v-text-field
                                                     v-model="form.default_monthly_amortization"
                                                     v-mask="currencyMask"
@@ -109,8 +108,8 @@
                                             <v-col cols="3">
                                                 <v-text-field
                                                     v-model="form.term"
+                                                    v-mask="currencyMask"
                                                     label="Term"
-                                                    v-mask="'####'"
                                                     required
                                                     class="required"
                                                     dense
@@ -119,8 +118,20 @@
                                                     :error-messages="error.term"
                                                 ></v-text-field>
                                             </v-col>
+                                            <v-col cols="3">
+                                                <v-text-field
+                                                    v-model="form.lot_size"
+                                                    label="Lot size"
+                                                    required
+                                                    class="required"
+                                                    dense
+                                                    outlined
+                                                    hide-details="auto"
+                                                    :error-messages="error.lot_size"
+                                                ></v-text-field>
+                                            </v-col>
                                         </v-row>
-                                        <v-row>
+                                        <!-- <v-row>
                                             <v-col cols="12">
                                                 <v-text-field
                                                     v-model="form.discount"
@@ -134,21 +145,10 @@
                                                     :error-messages="error.discount"
                                                 ></v-text-field>
                                             </v-col>
-                                        </v-row>
+                                        </v-row> -->
                                         <v-row>
-                                            <v-col cols="4">
-                                                <v-text-field
-                                                    v-model="form.lot_size"
-                                                    label="Lot size"
-                                                    required
-                                                    class="required"
-                                                    dense
-                                                    outlined
-                                                    hide-details="auto"
-                                                    :error-messages="error.lot_size"
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="4">
+                                            
+                                            <!-- <v-col cols="4">
                                                 <v-text-field
                                                     v-model="form.floor_area"
                                                     label="Floor area"
@@ -169,9 +169,9 @@
                                                     hide-details="auto"
                                                     :error-messages="error.model"
                                                 ></v-text-field>
-                                            </v-col>
+                                            </v-col> -->
                                         </v-row>
-                                        <v-row>
+                                        <!-- <v-row>
                                             <v-col cols="12">
                                                 <v-textarea
                                                     v-model="form.description"
@@ -184,7 +184,7 @@
                                                     :error-messages="error.description"
                                                 ></v-textarea>
                                             </v-col>
-                                        </v-row>
+                                        </v-row> -->
                                         <v-row>
                                         <v-col cols="12">
                                                 <v-file-input
@@ -212,43 +212,79 @@
                         </v-row>
                     </v-container>
                 </v-form>
-                
+                <div class="d-flex justify-end mr-10">
+                    <v-btn
+                        class="ml-2"
+                        elevation="0"
+                        color="warning"
+                        @click="close"
+                    >
+                        Cancel
+                    </v-btn>
+                    <v-btn
+                        class="ml-2"
+                        elevation="0"
+                        color="primary"
+                        @click="submit"
+                    >
+                        Submit
+                    </v-btn>
+                </div>
+                <br>
                 
             </v-card>
-            <div class="d-flex justify-end">
-                <v-btn
-                    class="ml-2"
-                    elevation="0"
-                    color="warning"
-                    @click="cancel"
-                >
-                    Cancel
-                </v-btn>
-                <v-btn
-                    class="ml-2"
-                    elevation="0"
-                    color="primary"
-                    @click="submit"
-                >
-                    Submit
-                </v-btn>
-            </div>
-            <br>
+           
             
     </v-dialog>
 </template>
 <script>
+import Swal from 'sweetalert2'
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { Property } from '../../services/properties';
 export default {
     name: "EditProperty",
     props: {
-        value: Boolean,
+        value: {
+            type: Boolean,
+            default: false
+        },
+
+        property: {
+            type: Object,
+            default: () => {}
+        },
+
+        statuses: {
+            type: Array,
+            default: () => []
+        },
     },
 
     data: vm => ({
+        currencyMask: createNumberMask({
+            prefix: '',
+            allowDecimal: false,
+            includeThousandsSeparator: true,
+            allowNegative: false,
+            allowLeadingZeroes: false,
+        }),
+
+        activeColor: 'red',
+
         error: {},
         form: {
             location_id: null,
             location: null,
+            lot: null,
+            block: null,
+            phase: null,
+            term: null,
+            lot_size: null,
+            default_monthly_amortization: null,
+            contract_price: null,
+            discount: null,
+            is_edit_block_lot: false,
+            
             status: 'active',
         },
     }),
@@ -267,6 +303,37 @@ export default {
     watch: {
         value(data) {
             this.dialog = data
+
+      
+        },
+        property(data) {
+            this.form.location = data.location.location
+            this.form.block = data.block
+            this.form.lot = data.lot
+            this.form.phase = data.phase
+            this.form.term = data.term
+            this.form.lot_size = data.lot_size
+            
+            this.currencyMask = null
+            this.form.default_monthly_amortization = data.default_monthly_amortization
+            this.form.contract_price = data.contract_price
+            this.form.discount = data.discount
+            this.form.status = data.status
+
+            this.selectStatus(data.status)
+
+            this.$nextTick(() => {
+                this.currencyMask = createNumberMask({
+                    prefix: '',
+                    allowDecimal: false,
+                    includeThousandsSeparator: true,
+                    allowNegative: false,
+                    allowLeadingZeroes: false,
+                })
+            })
+
+            
+         
         },
         'form.contract_price'(val) {
             this.clear()
@@ -279,16 +346,90 @@ export default {
         },
     },
 
+    created() {
+        
+    },
+
     methods: {
         close() {
             this.$emit('close');
         },
 
-        cancel () {
-            
+        selectStatus (data) {
+            switch (data) {
+                case 'Available':
+                    this.activeColor = 'green'
+                    break;
+                case 'Reserved':
+                    this.activeColor = 'orange'
+                    break;
+                case 'Cancelled':
+                    this.activeColor = 'red'
+                    break;
+                case 'For Assume':
+                    this.activeColor = 'blue'
+                    break;
+            }
         },
 
         submit () {
+            const formData = new FormData()
+
+            this.form.default_monthly_amortization = this.formatAmount(this.form.default_monthly_amortization)
+            this.form.contract_price = this.formatAmount(this.form.contract_price)
+            
+            if (parseInt(this.form.block) !== this.property.block || parseInt(this.form.lot) !== this.property.lot) {
+                this.form.is_edit_block_lot = true
+            } else {
+                this.form.is_edit_block_lot = false
+            }
+
+            Object.entries(this.form).forEach(([key, obj]) => {
+                if (obj) {
+                    if (key === 'image') {
+                        formData.append(key, obj);
+                    } else {
+                        formData.append(key, JSON.stringify(obj));
+                    }
+                }
+            })
+
+            // formData.append('buyer_id', this.selectedProperty.buyer.id);
+
+            Property.update(this.property.id, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then((response) => {
+                if (response.data) {
+                    Swal.fire({
+                        title: 'Done!',
+                        text: 'Successfully updated',
+                        confirmButtonText: 'Okay',
+                        icon: 'success',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.close()
+
+                            this.$emit('refresh');
+                        } 
+                    })
+                }
+            }).catch(error => {
+                // Handle error
+                if (error.response) {
+                    Swal.fire(
+                        'Ops.',
+                        error.response.data.message,
+                        'warning'
+                    )
+                    this.errors = error.response.data.errors
+                }
+            })
+
+
+
+
             // this.currencyMask = createNumberMask({
             //     prefix: '',
             //     allowDecimal: false,
@@ -342,7 +483,7 @@ export default {
             //     }
             // })
         },
-    }
+    },
 
 }
 </script>

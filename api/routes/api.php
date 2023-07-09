@@ -56,6 +56,7 @@ Route::middleware('auth:sanctum')
         Route::post('/locations', [LocationController::class, 'store']);
 
         Route::get('/locations/{location}/properties', [LocationController::class, 'getLocationProperties']);
+        
 
         Route::get('/locations/{location}/lots', [LocationController::class, 'getLocationLots']);
 
@@ -71,6 +72,7 @@ Route::middleware('auth:sanctum')
         
         Route::post('/reservations/delete', [ReservationController::class, 'destroy']);
 
+        Route::post('/reservations/{buyer:slug}/property', [ReservationController::class, 'updateOrCreateProperty']);
         Route::post('/reservations/{buyer:slug}/property', [ReservationController::class, 'updateOrCreateProperty']);
 
         Route::post('/reservations/{buyer:slug}/document', [ReservationController::class, 'updateDocument']);
@@ -88,6 +90,12 @@ Route::middleware('auth:sanctum')
         Route::get('/properties/statuses', [PropertyController::class, 'getStatuses']);
 
         Route::post('/properties', [PropertyController::class, 'store']);
+
+        Route::post('/properties/{property}', [PropertyController::class, 'updateProperty']);
+
+        Route::post('/properties/{property}/delete', [PropertyController::class, 'destroy']);
+
+        Route::post('/properties/{property}/status', [PropertyController::class, 'updateStatus']);
 
         // Route::get('/sales-managers', [UserController::class, 'getSalesManagers']);
 

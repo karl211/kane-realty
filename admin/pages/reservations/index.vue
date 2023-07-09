@@ -184,6 +184,7 @@ export default {
 
         deleteReservation(item) {
             Swal.fire({
+                icon: 'warning',
                 title: 'Do you want to delete this reservation?',
                 showCancelButton: true,
                 confirmButtonText: 'Yes',

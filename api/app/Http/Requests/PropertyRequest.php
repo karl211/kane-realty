@@ -81,12 +81,13 @@ class PropertyRequest extends FormRequest
                 }),
             ],
             'lot_size' => 'required',
-            'description' => 'required',
+            
             'contract_price' => 'required',
             'default_monthly_amortization' => 'required',
             'term' => 'required',
             'status' => 'required',
             'photo' => 'max:1000',
+            // 'description' => 'required',
         ];
     }
 
