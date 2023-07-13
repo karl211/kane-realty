@@ -70,6 +70,7 @@
                     />
                 </td>
                 <td>Block {{ item.block }}, Lot {{ item.lot }} <span v-if="item.phase">, Phase {{ item.phase }}</span></td>
+                <td>{{ item.reservation_owner }}</td>
                 <td>{{ item.lot_size }}</td>
                 <td>{{ '₱' + Number(item.contract_price).toLocaleString() }}</td>
                 <td>{{ '₱' + Number(item.default_monthly_amortization).toLocaleString() }}</td>
@@ -156,6 +157,7 @@ export default {
             headers: [
                 { text: "Image" , align: "left" },
                 { text: "Property" , align: "left" },
+                { text: "Buyer" , align: "left" },
                 { text: "Lot size" , align: "left" },
                 // { text: "Floor Area" , align: "left" },
                 { text: "Contract Price" , align: "left" },

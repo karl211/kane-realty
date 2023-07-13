@@ -56,6 +56,7 @@ class PropertyResource extends JsonResource
             'default_monthly_amortization' => $this->default_monthly_amortization,
             'term' => $this->term,
             'location' => $this->location,
+            'reservation_owner' => (count($this->reservations)) ? $this->reservations->first()->buyer->profile->full_name : '',
             'status' => $this->status,
             'blocks' => self::$blocks,
             'edit_status' => false,

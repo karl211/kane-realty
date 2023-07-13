@@ -63,7 +63,7 @@ class Property extends Model
 
     public function reservations()
     {
-        return $this->belongsTo(Reservation::class, 'property_id');
+        return $this->hasMany(Reservation::class, 'property_id');
     }
 
     public function scopeSearch($query, $search)
