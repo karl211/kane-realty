@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Location;
+use App\Models\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -29,16 +30,6 @@ class LocationController extends Controller
             ->paginate(20);
             
         return LocationResource::collection($locations);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -69,36 +60,35 @@ class LocationController extends Controller
 
     public function getLocationProperties(Location $location, Request $request)
     {
-        $properties = $location->properties()
-            ->whereNotIn('status', ['Agents', 'Church'])
-            ->search(request('search'))
-            ->paginate(10);
-
-        return PropertyResource::collection($properties);
+        $blocks = $location->properties()->pluck('block')->unique()->values();
         
+        if ($request->block != 'null' && $request->lot != 'null') {
+            $properties = $location->properties()
+                ->with(['reservations' => function($query) {
+                    $query->withoutGlobalScope('default_branch')->latest();
+                    $query->with('buyer');
+                }])
+                ->whereNotIn('status', ['Agents', 'Church'])
+                ->where('block', $request->block)
+                ->where('lot', $request->lot)
+                ->get();
+        } else {
+            $properties = $location->properties()
+                ->with(['reservations' => function($query) {
+                    $query->withoutGlobalScope('default_branch')->latest();
+                    $query->with('buyer');
+                }])
+                ->whereNotIn('status', ['Agents', 'Church'])
+                ->where('status', $request->status)
+                ->paginate(10);
+        }
+
+        return PropertyResource::customCollection($properties, $blocks);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function getLocationLots(Location $location, Request $request)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        return $location->properties()->where('block', $request->block)->pluck('lot')->unique()->values();
     }
 
     /**

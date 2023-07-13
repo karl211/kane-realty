@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PropertyRequest;
+use App\Http\Requests\UpdatePropertyRequest;
 
 class PropertyController extends Controller
 {
@@ -37,15 +38,6 @@ class PropertyController extends Controller
         return $statuses->pluck('status');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -73,40 +65,59 @@ class PropertyController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Property  $property
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Property $property)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Property  $property
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Property $property)
-    {
-        //
-    }
-
+   
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Property  $property
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Property $property)
+    public function updateProperty(Property $property, UpdatePropertyRequest $request)
     {
-        //
+        $this->authorize('property_edit');
+
+        try {
+            DB::beginTransaction();
+
+            $property = $request->save($property);
+
+            DB::commit();
+
+            return response()->json([
+                'data'  => $property,
+                'message' => 'Successfully updated'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
+        
     }
 
+    public function updateStatus(Property $property, Request $request)
+    {
+        $this->authorize('property_edit');
+
+        try {
+            DB::beginTransaction();
+
+            $property = $property->update(['status' => $request->status]);
+
+            DB::commit();
+
+            return response()->json([
+                'data'  => $property,
+                'message' => 'Successfully updated'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
+    }
+    
     /**
      * Remove the specified resource from storage.
      *
@@ -115,6 +126,22 @@ class PropertyController extends Controller
      */
     public function destroy(Property $property)
     {
-        //
+        $this->authorize('property_delete');
+        
+        try {
+            DB::beginTransaction();
+
+            $property->delete();
+            
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Successfully deleted'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
     }
 }

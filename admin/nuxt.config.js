@@ -103,7 +103,7 @@ export default {
       prefix: 'auth.',
       options: {
         path: '/',
-        maxAge: 60 * 60 * 24 // 24 Hours
+        expires: 60 * 60 * 24 // 24 Hours
       }
     }
   },

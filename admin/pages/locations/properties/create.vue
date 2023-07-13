@@ -86,7 +86,7 @@
                                         </v-col>
                                     </v-row>
                                     <v-row>
-                                        <v-col cols="3">
+                                        <v-col cols="2">
                                             <v-text-field
                                                 v-model="form.default_monthly_amortization"
                                                 v-mask="currencyMask"
@@ -100,7 +100,7 @@
                                                 :error-messages="error.default_monthly_amortization"
                                             ></v-text-field>
                                         </v-col>
-                                        <v-col cols="3">
+                                        <v-col cols="2">
                                             <v-text-field
                                                 v-model="form.term"
                                                 label="Term"
@@ -113,8 +113,20 @@
                                                 :error-messages="error.term"
                                             ></v-text-field>
                                         </v-col>
+                                        <v-col cols="2">
+                                            <v-text-field
+                                                v-model="form.lot_size"
+                                                label="Lot size"
+                                                required
+                                                class="required"
+                                                dense
+                                                outlined
+                                                hide-details="auto"
+                                                :error-messages="error.lot_size"
+                                            ></v-text-field>
+                                        </v-col>
                                     </v-row>
-                                    <v-row>
+                                    <!-- <v-row>
                                         <v-col cols="6">
                                             <v-text-field
                                                 v-model="form.discount"
@@ -128,21 +140,10 @@
                                                 :error-messages="error.discount"
                                             ></v-text-field>
                                         </v-col>
-                                    </v-row>
+                                    </v-row> -->
                                     <v-row>
-                                        <v-col cols="2">
-                                            <v-text-field
-                                                v-model="form.lot_size"
-                                                label="Lot size"
-                                                required
-                                                class="required"
-                                                dense
-                                                outlined
-                                                hide-details="auto"
-                                                :error-messages="error.lot_size"
-                                            ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="2">
+                                        
+                                        <!-- <v-col cols="2">
                                             <v-text-field
                                                 v-model="form.floor_area"
                                                 label="Floor area"
@@ -152,8 +153,8 @@
                                                 hide-details="auto"
                                                 :error-messages="error.floor_area"
                                             ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="2">
+                                        </v-col> -->
+                                        <!-- <v-col cols="2">
                                             <v-text-field
                                                 v-model="form.model"
                                                 label="Model"
@@ -163,9 +164,9 @@
                                                 hide-details="auto"
                                                 :error-messages="error.model"
                                             ></v-text-field>
-                                        </v-col>
+                                        </v-col> -->
                                     </v-row>
-                                    <v-row>
+                                    <!-- <v-row>
                                         <v-col cols="6">
                                             <v-textarea
                                                 v-model="form.description"
@@ -178,7 +179,7 @@
                                                 :error-messages="error.description"
                                             ></v-textarea>
                                         </v-col>
-                                    </v-row>
+                                    </v-row> -->
                                     <v-row>
                                        <v-col cols="6">
                                             <v-file-input
@@ -240,7 +241,7 @@ export default {
         form: {
             location_id: null,
             location: null,
-            status: 'active',
+            status: 'Available',
         },
 
     }),
