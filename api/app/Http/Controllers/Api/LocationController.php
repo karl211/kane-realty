@@ -33,16 +33,6 @@ class LocationController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -70,17 +60,12 @@ class LocationController extends Controller
 
     public function getLocationProperties(Location $location, Request $request)
     {
-        // return Property::has('reservations')->with('reservations')->where('location_id', 8)->first();
-        // return $location->properties()->first();
         $blocks = $location->properties()->pluck('block')->unique()->values();
-
         
         if ($request->block != 'null' && $request->lot != 'null') {
-
             $properties = $location->properties()
                 ->with(['reservations' => function($query) {
                     $query->withoutGlobalScope('default_branch')->latest();
-
                     $query->with('buyer');
                 }])
                 ->whereNotIn('status', ['Agents', 'Church'])
@@ -98,7 +83,6 @@ class LocationController extends Controller
                 ->paginate(10);
         }
 
-        
         return PropertyResource::customCollection($properties, $blocks);
     }
 
@@ -106,19 +90,6 @@ class LocationController extends Controller
     {
         return $location->properties()->where('block', $request->block)->pluck('lot')->unique()->values();
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    
 
     /**
      * Remove the specified resource from storage.

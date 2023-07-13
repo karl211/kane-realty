@@ -394,8 +394,6 @@ export default {
                 }
             })
 
-            // formData.append('buyer_id', this.selectedProperty.buyer.id);
-
             Property.update(this.property.id, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -416,7 +414,6 @@ export default {
                     })
                 }
             }).catch(error => {
-                // Handle error
                 if (error.response) {
                     Swal.fire(
                         'Ops.',
@@ -426,62 +423,6 @@ export default {
                     this.errors = error.response.data.errors
                 }
             })
-
-
-
-
-            // this.currencyMask = createNumberMask({
-            //     prefix: '',
-            //     allowDecimal: false,
-            //     includeThousandsSeparator: true,
-            //     allowNegative: false,
-            //     allowLeadingZeroes: false
-            // })
-            // const formData = new FormData()
-
-            // this.form.contract_price = this.formatAmount(this.form.contract_price)
-            // this.form.default_monthly_amortization = this.formatAmount(this.form.default_monthly_amortization)
-            // this.form.discount = this.formatAmount(this.form.discount)
-
-            // Object.entries(this.form).forEach(([key, obj]) => {
-            //     if (obj) {
-            //         if (key === 'photo') {
-            //             formData.append(key, obj);
-            //         } else {
-            //             formData.append(key, JSON.stringify(obj));
-            //         }
-            //     }
-            // })
-
-            // Property.create(formData, {
-            //     headers: {
-            //         'Content-Type': 'multipart/form-data'
-            //     }
-            // }).then((response) => {
-            //     if (response.data) {
-            //         Swal.fire({
-            //             title: 'Done!',
-            //             text: 'Successfully added',
-            //             confirmButtonText: 'Okay',
-            //             icon: 'success',
-            //         }).then((result) => {
-            //             if (result.isConfirmed) {
-            //                 this.$router.push({path: `/locations/properties?id=${this.form.location_id}`});
-            //             }
-            //         })
-            //     }
-            // }).catch(error => {
-            //     // Handle error
-            //     if (error.response) {
-            //         Swal.fire(
-            //             'Ops.',
-            //             'Something went wrong',
-            //             'warning'
-            //         )
-
-            //         this.error = error.response.data.errors
-            //     }
-            // })
         },
     },
 

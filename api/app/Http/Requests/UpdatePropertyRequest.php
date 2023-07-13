@@ -81,34 +81,5 @@ class UpdatePropertyRequest extends FormRequest
             'default_monthly_amortization' => $this->default_monthly_amortization,
             'contract_price' => $this->contract_price
         ]);
-        // $amount = (int) json_decode($this->amount);
-
-        // $data = $this->all();
-        // return $data;
-        // if ($this->hasFile('image')) {
-        //     if ($this->payment->image) {
-        //         Storage::disk('s3')->delete('payments/' . $this->buyer->id . '/' . $this->mode_of_payment . '/' . $this->payment->image);
-        //     }
-            
-        //     $file = $this->file('image');
-        //     $filename = $file->getClientOriginalName();
-        //     $file->storeAs('payments/' . $this->buyer->id . '/' . $this->mode_of_payment, $filename, 's3');
-
-        //     $data['image'] = $filename;
-        // }
-        
-        // $total_payments = (int) $this->reservation->payments()->total() + $amount;
-
-        // if ($total_payments >= $this->reservation->contract_price) {
-        //     $this->reservation->update([
-        //         'status' => 'Fully Paid'
-        //     ]);
-
-        //     $this->reservation->property->update([
-        //         'status' => 'Fully Paid'
-        //     ]);
-        // }
-
-        // return $this->payment->update($data);
     }
 }
