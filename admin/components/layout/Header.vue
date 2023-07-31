@@ -334,7 +334,12 @@ export default {
         },
 
         selectLocation (value) {
+            const findLocation = this.locations.find(function(data) {
+                return (data.value === value)
+            })
+            
             localStorage.setItem('location', parseInt(value))
+            localStorage.setItem('location_name', findLocation.text)
 
             location.reload()
         },

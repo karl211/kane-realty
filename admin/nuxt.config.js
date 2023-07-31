@@ -27,6 +27,7 @@ export default {
     // '~/plugins/services.js',
     '~/plugins/globalMixin.js',
     '~/plugins/vmask.js',
+    '~/plugins/print.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

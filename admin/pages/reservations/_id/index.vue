@@ -5,6 +5,8 @@
                 <BuyerInfo :buyer="buyer"/>
             </v-col>
             <v-col sm="12" md="9" lg="9">
+                
+           
                 <v-card
                     v-if="buyer"
                     class="mx-auto max-card-h"
@@ -13,6 +15,7 @@
                         <div class="container pb-0">
                             <div class="d-flex justify-space-between">
                                 <h3 class="ml-1">Properties</h3>
+                                
                                 <v-dialog
                                     v-model="dialog"
                                     width="800px"
@@ -119,6 +122,17 @@
                                             </v-card-text>
                                         </v-col>
                                     </v-row>
+                                    <!-- <v-btn
+                                        class="ml-auto mb-5"
+                                        elevation="0"
+                                        color="info"
+                                        v-print="printObj"
+                                    >
+                                        <v-icon>mdi-clipboard-text-clock-outline</v-icon> 
+                                    </v-btn> -->
+                                    <div class="soa-property" v-print="printObj" @click="showSOA(item)">
+                                        <v-icon >mdi-clipboard-text-clock-outline</v-icon>
+                                    </div>
                                     <div class="pencil-property" @click="editProperty(item)">
                                         <v-icon >mdi-pencil-plus-outline</v-icon>
                                     </div>
@@ -400,10 +414,26 @@ export default {
             totalPayment: 0,
             buyer: null,
             documents: [],
+            selectedReservation: {},
             selectedProperty: {},
             selectedPayment: {},
             buyerDocuments: [],
             buyerReservations: [],
+
+            printLoading: true,
+            printObj: {
+                asyncUrl (reslove, vue) {
+                    localStorage.setItem( 'selected_reservation', JSON.stringify(vue.selectedReservation) );
+                    const url = `http://localhost:3000/reservations/${vue.buyer.slug}/print-soa`
+                    setTimeout(() => {
+                        reslove(url)
+                    }, 100)
+                },
+                preview: true,
+                previewTitle: 'SOA', 
+                previewPrintBtnLabel: 'Print',
+             
+            },
 
             errors: {},
             form: {
@@ -548,6 +578,10 @@ export default {
                     this.errors = error.response.data.errors
                 }
             })
+        },
+
+        showSOA (item) {
+            this.selectedReservation = item
         },
 
         editProperty (item) {
@@ -718,6 +752,10 @@ export default {
             })
         },
 
+        printContent() {
+
+        },
+
         updatePayment () {
             const formData = new FormData()
 
@@ -798,6 +836,12 @@ export default {
         top: 10px;
     }
 
+    .soa-property {
+        position: absolute;
+        right: 80px;
+        top: 20px;
+    }
+
     .pencil-property {
         position: absolute;
         right: 45px;
@@ -809,6 +853,8 @@ export default {
         right: 20px;
         top: 20px;
     }
+
+    
 
     .property-header .mdi-chevron-down {
         right: 20px;
