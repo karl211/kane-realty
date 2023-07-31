@@ -172,6 +172,11 @@ class ReservationController extends Controller
         return new BuyerResource($buyer_details);
     }
 
+    public function showPrint()
+    {
+        return 'success';
+    }
+
     public function download(User $buyer)
     {
         $file_path = 'buyers/644/birth_or_marriage_certificate/property-img-default.gif';
