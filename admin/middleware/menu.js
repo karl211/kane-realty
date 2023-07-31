@@ -31,6 +31,7 @@ export default function(context) {
                         adminRoutes.push('reservations-create');
                         adminRoutes.push('reservations-id');
                         adminRoutes.push('reservations-id-update');
+                        adminRoutes.push('reservations-id-print-soa');
                     }
                     else if (menu === 'receipt') {
                         adminRoutes.push('receipts');

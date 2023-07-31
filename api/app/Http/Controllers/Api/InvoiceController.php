@@ -20,6 +20,7 @@ class InvoiceController extends Controller
         $this->authorize('invoice_access');
         
         $reservations = Reservation::with('buyer.profile', 'property', 'payments')
+            ->withoutGlobalScope('default_branch')
             ->with(['payments' => function($query) {
                 $query->orderBy('paid_at', 'asc');
             }])
