@@ -5,8 +5,6 @@
                 <BuyerInfo :buyer="buyer"/>
             </v-col>
             <v-col sm="12" md="9" lg="9">
-                
-           
                 <v-card
                     v-if="buyer"
                     class="mx-auto max-card-h"
@@ -122,14 +120,7 @@
                                             </v-card-text>
                                         </v-col>
                                     </v-row>
-                                    <!-- <v-btn
-                                        class="ml-auto mb-5"
-                                        elevation="0"
-                                        color="info"
-                                        v-print="printObj"
-                                    >
-                                        <v-icon>mdi-clipboard-text-clock-outline</v-icon> 
-                                    </v-btn> -->
+                               
                                     <div class="soa-property" v-print="printObj" @click="showSOA(item)">
                                         <v-icon >mdi-clipboard-text-clock-outline</v-icon>
                                     </div>
@@ -750,10 +741,6 @@ export default {
                     })
                 }
             })
-        },
-
-        printContent() {
-
         },
 
         updatePayment () {
