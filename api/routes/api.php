@@ -68,6 +68,8 @@ Route::middleware('auth:sanctum')
 
         Route::get('/reservations/{buyer:slug}', [ReservationController::class, 'show']);
 
+        Route::get('/reservations/{buyer:slug}/print-soa', [ReservationController::class, 'showPrint']);
+
         Route::get('/reservations/{buyer:slug}/document/download', [ReservationController::class, 'download']);
         
         Route::post('/reservations/delete', [ReservationController::class, 'destroy']);
